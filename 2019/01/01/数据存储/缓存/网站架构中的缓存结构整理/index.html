@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>数据存储/缓存/网站架构中的缓存结构整理 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="网站架构中的缓存                                                                                              image               网站架构缓存如图可分为： 客户端缓存  页面缓存 将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。   浏览">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据存储&#x2F;缓存&#x2F;网站架构中的缓存结构整理">
+<meta property="og:url" content="https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="网站架构中的缓存                                                                                              image               网站架构缓存如图可分为： 客户端缓存  页面缓存 将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。   浏览">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/F0430B67472F4B11B8577A56CC026CA4?method=download&shareKey=8d33adf1c1a85fbb1ed7c5d80c67f852">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBb567791a999bb7f27b16a79d0c258432?method=download&shareKey=d9fe97b682b4e9bcef1909cd8093a87f">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/C2C6FCFDC10942B6A3532E6F0928E455?method=download&shareKey=c554dacfc5193c29d4b35682aa1226d9">
+<meta property="article:published_time" content="2019-01-01T13:16:21.593Z">
+<meta property="article:modified_time" content="2020-02-22T07:38:51.420Z">
+<meta property="article:author" content="zcy-fover">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/F0430B67472F4B11B8577A56CC026CA4?method=download&shareKey=8d33adf1c1a85fbb1ed7c5d80c67f852">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">数据存储/缓存/网站架构中的缓存结构整理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">数据存储/缓存/网站架构中的缓存结构整理</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-01-01T13:16:21.593Z" itemprop="datePublished" class="page-time">
+  2019-01-01
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#网站架构中的缓存"><span class="post-toc-number">1.</span> <span class="post-toc-text">网站架构中的缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网站架构缓存如图可分为："><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">网站架构缓存如图可分为：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端缓存"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">客户端缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网络中缓存"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">网络中缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务端缓存"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">服务端缓存</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-数据存储/缓存/网站架构中的缓存结构整理"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">数据存储/缓存/网站架构中的缓存结构整理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-01-01 21:16:21" datetime="2019-01-01T13:16:21.593Z"  itemprop="datePublished">2019-01-01</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="网站架构中的缓存"><a href="#网站架构中的缓存" class="headerlink" title="网站架构中的缓存"></a>网站架构中的缓存</h2><blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/F0430B67472F4B11B8577A56CC026CA4?method=download&shareKey=8d33adf1c1a85fbb1ed7c5d80c67f852" alt="image" title="">
+                </div>
+                <div class="image-caption">image</div>
+            </figure>
+
+<h4 id="网站架构缓存如图可分为："><a href="#网站架构缓存如图可分为：" class="headerlink" title="网站架构缓存如图可分为："></a>网站架构缓存如图可分为：</h4><blockquote>
+<h4 id="客户端缓存"><a href="#客户端缓存" class="headerlink" title="客户端缓存"></a>客户端缓存</h4><blockquote>
+<ul>
+<li>页面缓存<blockquote>
+<p>将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。</p>
+</blockquote>
+</li>
+<li>浏览器缓存</li>
+</ul>
+<blockquote>
+<p>HTTP1.0：与服务器约定规则进行，在服务器侧设置Expires的HTTP头来告诉客户端在重新请求文件之前多久是安全的，可以使用if-midified-since的条件请求来清空缓存，比较文件最初的下载时间和最后的更新时间，如果文件没有改变可以用304-Not Modified应答客户端</p>
+<p>HTTP1.1：缓存系统被形式化引入了e-Tag标签，e-Tag标签是文件或者对象的唯一标识，当询问服务器某一个资源的e-Tag标签是否有效，有效会生成304-Not Modified；否则返回200提供正确的文件</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/WEBb567791a999bb7f27b16a79d0c258432?method=download&shareKey=d9fe97b682b4e9bcef1909cd8093a87f" alt="e-Tag流程图" title="">
+                </div>
+                <div class="image-caption">e-Tag流程图</div>
+            </figure>
+
+<p>Cache-Control/Expires和Last-Modified/ETag一期使用时，Cache-Control/Expires的优先级要高于后者。即当本地缓存根据Cache-Control/Expires判断还在有效期内时，就不会在去服务器询问修改时间和实体标识了。</p>
+<p>在html页面可以添加（并不是所有浏览器都支持）</p>
+<pre><code class="html"><span class="tag">&lt;<span class="name">META</span> <span class="attr">HTTP-EQUIV</span>=<span class="string">"Pragma"</span> <span class="attr">CONTENT</span>=<span class="string">"no-cache"</span>&gt;</span></code></pre>
+</blockquote>
+<ul>
+<li>APP上缓存</li>
+</ul>
+<blockquote>
+<p>数据库缓存：把文件的相关信息（URL、路径、下载时间、过期时间）等放到数据库中，下次查询先从数据库中查询做对比</p>
+<p>文件缓存：使用文件操作的API获取文件的最后修改时间。图片和其他配置类文件的缓存时间不一样。图片的缓存时间可能可以持续到下次清空缓存，但是配置文件可能会被更新；在不同网络环境下缓存的更新时间也可以不一样</p>
+</blockquote>
+</blockquote>
+<h4 id="网络中缓存"><a href="#网络中缓存" class="headerlink" title="网络中缓存"></a>网络中缓存</h4><blockquote>
+<ul>
+<li>WEB代理缓存</li>
+</ul>
+<blockquote>
+<p>正向代理</p>
+<p>反向代理：客户端向代理服务发送请求，反向代理自己判断向何处发送请求，然后将从源服务获取到的内容返回给客户端</p>
+<p>透明代理：客户端根本不需要知道有代理服务器的存在，又代理服务器改变客户端的请求报文，并传送真实的IP地址</p>
+<p>匿名代理：加密的透明代理</p>
+</blockquote>
+<ul>
+<li>边缘缓存</li>
+</ul>
+<blockquote>
+<p>反向代理服务和用户来源于同一个网络，用户访问反向代理服务就会得到较高质量的响应，这种反向代理缓存叫做边缘缓存</p>
+<p>边缘缓存的商业化服务-CDN</p>
+<p>CDN缓存也是通过HTTP响应头的Cache-Control:max-age字段来设置CDN边缘节点的数据缓存时间，当客户端向CDN节点请求数据时，CDN回先判断缓存时间是否过期，没有过期则将缓存返回给客户端，过期则像服务器请求数据并更新本地缓存。</p>
+</blockquote>
+</blockquote>
+<h4 id="服务端缓存"><a href="#服务端缓存" class="headerlink" title="服务端缓存"></a>服务端缓存</h4><blockquote>
+<ul>
+<li>数据库缓存</li>
+</ul>
+<blockquote>
+<p>query cache：作用于MySQL实例，主要针对于select语句，MySQL将接收到的select语句以字符串进行hash，然后在query cache中进行查找，如果有就返回query cache的内容。</p>
+<p>query cache：需要query_cache_size和query_cache_type；前者设置缓存大小，后者表示在那种场景下使用（0-OFF，1-ON，2-DEMAND）</p>
+<p>Qcache inserts表示多少次未命中然后插入；Qcache lowmem prunes值大则说明缓存不够；Qcache hits值非常大，则说明使用缓存较频繁；Qcache free blocks表明缓存区的碎片，如果较多需要清理.    </p>
+</blockquote>
+<blockquote>
+<p>InnoDB缓存：innodb_buffer_pool_size设置缓存InnoDB索引及数据块的内存区域大小；table_cache设置高速缓存的数量。</p>
+</blockquote>
+<ul>
+<li>平台级缓存</li>
+</ul>
+<blockquote>
+<p>EhCache：</p>
+<blockquote>
+<ul>
+<li>轻量快速：线程机制为大型高并发系统设计</li>
+<li>良性伸缩：数据可以伸缩到数G字节，节点可以到数百个</li>
+<li>简洁灵活：运行时缓存设置，存活时间、空闲时间、内存和缓存存放的最大数目可以在运行时修改</li>
+<li>标准支持：</li>
+<li>强扩展性：节点发现，冗余器和监听器可插件化</li>
+<li>数据持久：缓存的数据在机器重启后可以在磁盘上获取</li>
+<li>缓存监听：提供对缓存事件之后的处理机制</li>
+<li>分布式缓存：支持高性能的分布式缓存，兼具灵活性和扩展性</li>
+</ul>
+</blockquote>
+</blockquote>
+<ul>
+<li>应用级缓存</li>
+</ul>
+<blockquote>
+<p>Redis：</p>
+</blockquote>
+<blockquote>
+<p>应用缓存技术：</p>
+<ul>
+<li>缓存命中：缓存中有这一对象，则使用缓存的数据</li>
+<li>没有命中：cache miss ，缓存中还有空间的时候，没有命中的对象就会被放入缓存中</li>
+<li>存储成本：没有命中缓存，需要从数据库中取出数据放入缓存，这个过程消耗的时间和空间叫做存储成本</li>
+<li>缓存失效：存储在缓存中的数据要被更新时，则原数据就失效了</li>
+<li>替代策略：当缓存已经满了，有新的数据来，需要从缓存中去除一条旧的数据放入新的数据，如何去除如何插入新的需要有替代策略</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>替代策略：</p>
+<ul>
+<li>Least-Recently-Used（LRU）：替换掉最近最少请求的对象</li>
+<li>Least-Frequently-Used（LFU）：替换掉访问次数最少的对象</li>
+<li>Least-Recently-Used 2（LRU2）：把最近访问两次的对象放入缓存，会把最近两次使用最少的缓存对象去除，需要跟踪对象两次，访问负载会增加</li>
+<li>Two  Queues（2Q）：把被访问的数据放到KRU的缓存中，如果这个对象在被访问一次，就把这个对象放到第二个、更大的LRU缓存中，使用多级缓存</li>
+<li>SIZE：替换占用空间最大的对象，这样会导致某些小对象可能一直存在与缓存中</li>
+<li>LRU-Threshold：不缓存超过某一大小的对象，其他与LRU相同</li>
+<li>Log(size)+LRU：替换最大的对象，size相同时按照LRU处理</li>
+<li>Hyper-G：LFU的改进，同时考虑上一次访问时间和大小</li>
+<li>Pitkow/Recker：替换最近最少使用的对象，除非所有对象都是今天使用的；如果都是今天则替换掉最大的对象</li>
+<li>Lowest-Latency-First：替换下载时间最少的文件</li>
+<li>Hybrid Hybrid：减少平均延迟，对缓存中的每个文档计算一个保留效用，保留效用最小的对象会被替换掉</li>
+<li>Lowest Relative Value（LRV）：计算保留效用，替换保留效用最低的对象</li>
+<li>Adaptive Replacement Cache（APC）：介于LRU和LFU中间，由两个LRU组成，第一个LRU包含最近只被使用过一次的，第二个包含最近被使用过两次的，以此得到新的和常用的对象；APC可以自我调节，访问负载较小</li>
+<li>Most Recently Used（MRU）：MRU与LRU是相对的，移除最近被最多使用的对象；（减少因为计算寻找最少最近的耗时）</li>
+<li>First in First out（FIFO）：通过队列跟踪缓存对象，最先进入的对象最先被踢走</li>
+<li>Random Cache：随意替换，效果比FIFO好，有些情况比LRU好</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>云缓存服务：动态扩容、数据多备、自动容灾、成本较低</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<div style="text-align:center;margin-top:50px;margin-bottom:50px;">
+    <img src="https://note.youdao.com/yws/api/personal/file/C2C6FCFDC10942B6A3532E6F0928E455?method=download&shareKey=c554dacfc5193c29d4b35682aa1226d9" />
+</div>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-02-22T07:38:51.420Z" itemprop="dateUpdated">2020-02-22 15:38:51</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" target="_blank" rel="external">https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/&title=《数据存储/缓存/网站架构中的缓存结构整理》 — 冲鸭&pic=https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/&title=《数据存储/缓存/网站架构中的缓存结构整理》 — 冲鸭&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《数据存储/缓存/网站架构中的缓存结构整理》 — 冲鸭&url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/&via=https://zcy-fover.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/01/01/net-work/okhttp/OKHTTP%E5%AD%A6%E4%B9%A0/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">net-work/okhttp/OKHTTP学习</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/01/01/net-work/http/HTTP2.0%E7%9A%84%E4%BB%B7%E5%80%BC%E5%9C%A8%E5%93%AA%E9%87%8C/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">net-work/http/HTTP2.0的价值在哪里</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/&title=《数据存储/缓存/网站架构中的缓存结构整理》 — 冲鸭&pic=https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/&title=《数据存储/缓存/网站架构中的缓存结构整理》 — 冲鸭&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《数据存储/缓存/网站架构中的缓存结构整理》 — 冲鸭&url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/&via=https://zcy-fover.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

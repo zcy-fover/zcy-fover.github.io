@@ -17,6 +17,8 @@
     <title>冲鸭</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
+    <meta name="theme-color" content="#3F51B5">
+    
     
     <meta name="keywords" content="">
     <meta property="og:type" content="website">
@@ -27,8 +29,8 @@
 <meta property="article:author" content="zcy-fover">
 <meta name="twitter:card" content="summary">
     
-    <link rel="shortcut icon" href="/">
-    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
 
     <!-- custom head -->
@@ -44,19 +46,54 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/)">
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/">
+          <img src="https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4">
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">zcy-fover</h5>
-          <a href="mailto:undefined" class="mail">
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
         </hgroup>
       </div>
     </div>
     <div class="scroll-wrap flex-col">
       <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                简历
+              </a>
+            </li>
         
       </ul>
     </div>
@@ -71,6 +108,20 @@
         </a>
         <div class="flex-col header-title ellipsis">冲鸭</div>
         
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
         
     </div>
 </header>
@@ -121,7 +172,12 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Java 的引用与回收Java 中引用类型中主要包含了...
+        Java 的引用与回收Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本篇不涉及）。
+强引用：通过 new 创建的引用，被强引用指向的对象，不会被 gc 回收。
+1Object ref = new Object();
+
+软引用：通过 SoftReference 包裹的引用，内存不足时，如果没有强引用指向它则被 gc 回收。
+1SoftReference weakRef = ...
     
 
         <a href="/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="post-more waves-effect waves-button">
@@ -160,7 +216,9 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        OkHttpClient3 架构简介OkHttp 旨在...
+        OkHttpClient3 架构简介OkHttp 旨在提供简单、稳定、高效的 HTTP Client 服务，并且支持 HTTP 2.0 以及 WebSocket。
+总体架构分 6 层Protocols Layer 涵盖了 OkHttp 支持的所有“功能”，实现了复杂的协议通讯和 TSL 握手与验证。
+Connection Layer 为“稳定、高效”而努力。除了单纯的实现了链路通讯，还实现了...
     
 
         <a href="/2019/01/20/net-work/okhttp/OkHttpClient3%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B/" class="post-more waves-effect waves-button">
@@ -241,7 +299,17 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        README2019 has bean arrived...
+        README2019 has bean arrived, tick, tick…
+OkHttpClient3
+OkHttpClient3 架构简介
+OkHttpClient3 连接池模型
+
+Java
+Java 的引用与回收
+Thread wait &amp; sleep
+线程的一生
+
+
     
 
         <a href="/2019/01/20/README/" class="post-more waves-effect waves-button">
@@ -322,7 +390,12 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        OkHttpClient3 连接池模型OkHttp 的...
+        OkHttpClient3 连接池模型OkHttp 的连接池与 JDBC 连接池有所不同。JDBC 的连接池往往面向单一目标服务器，而 OkHttp 中，多数情况下 HTTP 请求需要面向多台不同的服务器，因此 OkHttp 的连接池需要面向多目标。
+
+                
+                    
+                    
+           ...
     
 
         <a href="/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" class="post-more waves-effect waves-button">
@@ -362,7 +435,23 @@
 
     
         
-Linux内核将所有外设看作文件，文件的读写操作会返...
+Linux内核将所有外设看作文件，文件的读写操作会返回一个文件描述符fd（file descriptor）
+socket的响应描述符为socketfd
+描述符就是一个数字指向内核中的一个结构体（文件区域、路径属性等）
+
+
+
+
+阻塞IO模型
+非阻塞IO模型
+IO复用模型
+信号驱动IO模型
+异步IO
+
+
+
+所有文件操作阻塞执行，执行完一个在执行下一个
+多个文件操作可以一起处理，各自应用进程轮询...
     
 
         <a href="/2019/01/05/net-work/netty/Linux%E7%BD%91%E7%BB%9CIO%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B/" class="post-more waves-effect waves-button">
@@ -402,7 +491,16 @@ Linux内核将所有外设看作文件，文件的读写操作会返...
 
     
         Redis 数据结构
-扁平化的特点，不存在数据库中列表...
+扁平化的特点，不存在数据库中列表查询一类的操作
+
+数据结构
+
+
+
+Value对象的通用数据结构
+
+
+1234567typedef struct redisObject &#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int refcount;   ...
     
 
         <a href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" class="post-more waves-effect waves-button">
@@ -446,7 +544,18 @@ Linux内核将所有外设看作文件，文件的读写操作会返...
 
 OKHTTP系统架构模型
 
-  ...
+                
+                    
+                    
+                
+                OKHTTP系统架构模型（王召）
+            
+
+线程池
+
+                
+                    
+      ...
     
 
         <a href="/2019/01/01/net-work/okhttp/OKHTTP%E5%AD%A6%E4%B9%A0/" class="post-more waves-effect waves-button">
@@ -488,6 +597,18 @@ OKHTTP系统架构模型
         网站架构中的缓存
 
                 
+                    
+                    
+                
+                image
+            
+
+网站架构缓存如图可分为：
+客户端缓存
+
+页面缓存
+将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。
+
 ...
     
 
@@ -515,6 +636,15 @@ OKHTTP系统架构模型
         <footer class="footer">
     <div class="top">
         
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
 
         <p>
             
@@ -522,7 +652,7 @@ OKHTTP系统架构模型
         </p>
     </div>
     <div class="bottom">
-        <p><span>zcy-fover &copy; 2020</span>
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -536,21 +666,106 @@ OKHTTP系统架构模型
 <a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
 
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zcy-fover.github.io/page/4/&title=冲鸭&pic=https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zcy-fover.github.io/page/4/&title=冲鸭&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zcy-fover.github.io/page/4/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=冲鸭&url=https://zcy-fover.github.io/page/4/&via=https://zcy-fover.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zcy-fover.github.io/page/4/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zcy-fover.github.io/page/4/" alt="微信分享二维码">
+</div>
+
+
+
+
     <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: , REWARD: false };
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 </script>
 
-<script src="/js/main.min.js?v=1.7.2"></script>
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
 
 
 
 
 
 
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
 
 
 

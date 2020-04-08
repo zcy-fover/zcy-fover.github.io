@@ -17,6 +17,8 @@
     <title>冲鸭</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
+    <meta name="theme-color" content="#3F51B5">
+    
     
     <meta name="keywords" content="">
     <meta property="og:type" content="website">
@@ -27,8 +29,8 @@
 <meta property="article:author" content="zcy-fover">
 <meta name="twitter:card" content="summary">
     
-    <link rel="shortcut icon" href="/">
-    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
 
     <!-- custom head -->
@@ -44,19 +46,54 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/)">
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/">
+          <img src="https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4">
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">zcy-fover</h5>
-          <a href="mailto:undefined" class="mail">
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
         </hgroup>
       </div>
     </div>
     <div class="scroll-wrap flex-col">
       <ul class="nav">
+        
+            <li class="waves-block waves-effect active">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect active">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                简历
+              </a>
+            </li>
         
       </ul>
     </div>
@@ -71,6 +108,20 @@
         </a>
         <div class="flex-col header-title ellipsis">冲鸭</div>
         
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
         
     </div>
 </header>
@@ -121,7 +172,8 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Welcome to Hexo! This is yo...
+        Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+Qu...
     
 
         <a href="/2020/04/06/hello-world/" class="post-more waves-effect waves-button">
@@ -160,7 +212,21 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        慢查询及优化查询的执行过程：客户端，到服务端后：会话连...
+        慢查询及优化查询的执行过程：客户端，到服务端后：会话连接、SQL分析、SQL 优化、生成执行计划、执行后返回结果。执行是整个生命周期最重要的阶段。
+查询分析 EXPLAIN
+
+
+属性
+含义
+
+
+
+id
+查询中执行 select 子句或操作表的顺序，Id 相同执行顺序由上向下；id 越大优先级越高越先执行
+
+
+select_type
+select 子句查询类型，主要区别普通查询、联合查询、子查...
     
 
         <a href="/2020/03/27/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/06%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%8F%8A%E4%BC%98%E5%8C%96/" class="post-more waves-effect waves-button">
@@ -200,7 +266,8 @@
 
     
         索引方便存储引擎快速查找，索引可以包含一列或多列。
-索...
+索引的类型B-Tree 索引即是 BTree，在不同的存储引擎底层可会有不同的实现，NDB 存储引擎内部使用 T-Tree 结构存储；InnoDB 使用的是 B+Tree。 BTree对索引列是顺序存储的， BTree可以加快访问数据的速度，使存储引擎不在需要全表扫描，从索引的根节点开始搜索。
+可以使用  BTree 索引的查询类型1234...
     
 
         <a href="/2020/03/27/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/05%E9%AB%98%E6%80%A7%E8%83%BD%E7%B4%A2%E5%BC%95/" class="post-more waves-effect waves-button">
@@ -239,7 +306,9 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        mysql执行计划​       在企业的应用场景中，...
+        mysql执行计划​       在企业的应用场景中，为了知道优化SQL语句的执行，需要查看SQL语句的具体执行过程，以加快SQL语句的执行效率。
+​       可以使用explain+SQL语句来模拟优化器执行SQL查询语句，从而知道mysql是如何处理sql语句的。
+​       官网地址： https://dev.mysql.com/doc/refman/5.5/en/explai...
     
 
         <a href="/2020/03/24/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/mysql%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/" class="post-more waves-effect waves-button">
@@ -279,7 +348,10 @@
 
     
         TIPS
-ON DUPLICATE KEY UPDAT...
+ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录；
+示例：
+
+1INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLIC...
     
 
         <a href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/MySQL%20%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/" class="post-more waves-effect waves-button">
@@ -318,7 +390,8 @@ ON DUPLICATE KEY UPDAT...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        范式与反范式Schema 设计太多的列MySQL 存储...
+        范式与反范式Schema 设计太多的列MySQL 存储 API 引擎在工作的时候需要在服务器层和存储引擎层之间通过行缓冲格式拷贝数据，然后在服务器层将缓冲内容解码为各个列。但是这个过程代价是比较昂贵的，列越多代价就越大。MyISAM 的定长行结构实际上与服务器层的行结构刚好匹配，所以不需要转换；但是 MyISAM 的边长行结构与 InnoDB 的行结构总是需要转换。
+太多的关联关联太多会导致...
     
 
         <a href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/04%E8%8C%83%E5%BC%8F%E4%B8%8E%E5%8F%8D%E8%8C%83%E5%BC%8F/" class="post-more waves-effect waves-button">
@@ -357,7 +430,10 @@ ON DUPLICATE KEY UPDAT...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        MySQL 数据类型选择最优的数据类型更小的通常更好：...
+        MySQL 数据类型选择最优的数据类型更小的通常更好：选择满足数据范围的最小数据类型，因为他们可以占用更少的磁盘、内存和 CPU 缓存，处理时需要的 CPU 周期也更少；
+简单就好：简单的数据类型处理时需要更少的 CPU 周期；例如整型比字符操作代价更低；
+尽量避免 NULL 值：可为 NULL 的列使得索引、索引统计和值比较都更复杂；
+整数类型整数和实数可以用来存储整数，MySQL 有 T...
     
 
         <a href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/03MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="post-more waves-effect waves-button">
@@ -396,7 +472,12 @@ ON DUPLICATE KEY UPDAT...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        MySQL 性能剖析通常指完成某件任务所需要的时间度量...
+        MySQL 性能剖析通常指完成某件任务所需要的时间度量，也会考虑吞吐量、CPU利用率和可扩展性等等
+性能优化原则：
+性能即响应时间：性能优化就是在一定的工作负载下尽可能的降低响应时间；性能优化不是降低 CPU 使用率，降低资源消耗，CPU 和资源就是被用来消耗的，如果机器不超负载的情况下，尽量利用资源提高性能。
+无法测量就无法优化：要能分析出执行的时间消耗在什么地方，这样才能谈优化
+
+性能剖...
     
 
         <a href="/2020/03/17/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/02MySQL%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90/" class="post-more waves-effect waves-button">
@@ -435,7 +516,13 @@ ON DUPLICATE KEY UPDAT...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        MySQL基准测试基准测试是观察系统在不同压力下的行为...
+        MySQL基准测试基准测试是观察系统在不同压力下的行为，评估系统的容量，掌握哪些变化是重要的，或者观察系统是如何处理不同的数据。他的主要问题就是他不是真实的压力测试，在正式的生产环境或者压力测试中，影响条件是多变的。
+基准测试的策略
+集成式：针对整个系统的整体测试
+单组件式：单独测试 MySQL
+
+测试指标吞吐量：单位时间内的事务处理量。TPS、TPM指标等
+响应时间或延迟：测试任务所用的整...
     
 
         <a href="/2020/03/16/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/01Mysql%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/" class="post-more waves-effect waves-button">
@@ -475,7 +562,20 @@ ON DUPLICATE KEY UPDAT...
 
     
         Head First设计模式OO基础
-抽象、封装、多态...
+抽象、封装、多态、继承
+设计原则
+
+找出应用中可能需要变化之处，把他们独立出来，不要和那些不需要变化的代码混合在一起；
+针对接口编程而不是针对实现编程
+多用组合少用继承
+开放关闭原则
+最少知识原则：对象之间的交互要尽可能的少
+
+
+策略模式
+定义了算法族，分别封装起来，让他们之间可以互相替换，在这种模式下可以让算法的变化独立于他们的使用者
+观察者模式
+定义...
     
 
         <a href="/2020/02/22/%E8%AE%BE%E8%AE%A1/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/Head%20First%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-more waves-effect waves-button">
@@ -502,6 +602,15 @@ ON DUPLICATE KEY UPDAT...
         <footer class="footer">
     <div class="top">
         
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
 
         <p>
             
@@ -509,7 +618,7 @@ ON DUPLICATE KEY UPDAT...
         </p>
     </div>
     <div class="bottom">
-        <p><span>zcy-fover &copy; 2020</span>
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -523,21 +632,106 @@ ON DUPLICATE KEY UPDAT...
 <a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
 
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zcy-fover.github.io/&title=冲鸭&pic=https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zcy-fover.github.io/&title=冲鸭&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zcy-fover.github.io/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=冲鸭&url=https://zcy-fover.github.io/&via=https://zcy-fover.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zcy-fover.github.io/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zcy-fover.github.io/" alt="微信分享二维码">
+</div>
+
+
+
+
     <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: , REWARD: false };
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 </script>
 
-<script src="/js/main.min.js?v=1.7.2"></script>
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
 
 
 
 
 
 
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
 
 
 
