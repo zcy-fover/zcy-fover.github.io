@@ -23,7 +23,7 @@
     <meta name="keywords" content="">
     <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/page/4/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="John Doe">
@@ -60,7 +60,7 @@
     <div class="scroll-wrap flex-col">
       <ul class="nav">
         
-            <li class="waves-block waves-effect active">
+            <li class="waves-block waves-effect">
               <a href="/"  >
                 <i class="icon icon-lg icon-home"></i>
                 主页
@@ -160,11 +160,11 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-hello-world"
+            <article id="post-java/Thread/线程的一生"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-04-06 18:11:50" datetime="2020-04-06T10:11:50.593Z"  itemprop="datePublished">2020-04-06</time>
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.701Z"  itemprop="datePublished">2019-01-20</time>
 
         
 
@@ -176,7 +176,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/04/06/hello-world/">Hello World</a>
+      <a class="post-title-link" href="/2019/01/20/java/Thread/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E7%94%9F/">java/Thread/线程的一生</a>
     </h3>
   
 
@@ -186,11 +186,20 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Qu...
+        线程的一生线程是 CPU 调度的基本单位。Java 中线程状态分为 6 种：
+
+New：创建状态
+Runnable：可运行状态
+Waiting：等待状态
+Timed Waiting：限时等待状态
+Blocking：阻塞状态
+Terminated：结束状态
+
+Thread.State 中介绍了各个状态的含义。
+Runable创建（new） 后的线程对象，调用 Thread.start() 方法...
     
 
-        <a href="/2020/04/06/hello-world/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/20/java/Thread/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E7%94%9F/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -200,11 +209,11 @@ Qu...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/06慢查询及优化"
+            <article id="post-net-work/okhttp/OkHttpClient3架构简介"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-27 11:51:48" datetime="2020-03-27T03:51:48.000Z"  itemprop="datePublished">2020-03-27</time>
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.700Z"  itemprop="datePublished">2019-01-20</time>
 
         
 
@@ -216,7 +225,7 @@ Qu...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/27/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/06%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%8F%8A%E4%BC%98%E5%8C%96/">数据存储/MySQL/06慢查询及优化</a>
+      <a class="post-title-link" href="/2019/01/20/net-work/okhttp/OkHttpClient3%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B/">net-work/okhttp/OkHttpClient3架构简介</a>
     </h3>
   
 
@@ -226,24 +235,12 @@ Qu...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        慢查询及优化查询的执行过程：客户端，到服务端后：会话连接、SQL分析、SQL 优化、生成执行计划、执行后返回结果。执行是整个生命周期最重要的阶段。
-查询分析 EXPLAIN
-
-
-属性
-含义
-
-
-
-id
-查询中执行 select 子句或操作表的顺序，Id 相同执行顺序由上向下；id 越大优先级越高越先执行
-
-
-select_type
-select 子句查询类型，主要区别普通查询、联合查询、子查...
+        OkHttpClient3 架构简介OkHttp 旨在提供简单、稳定、高效的 HTTP Client 服务，并且支持 HTTP 2.0 以及 WebSocket。
+总体架构分 6 层Protocols Layer 涵盖了 OkHttp 支持的所有“功能”，实现了复杂的协议通讯和 TSL 握手与验证。
+Connection Layer 为“稳定、高效”而努力。除了单纯的实现了链路通讯，还实现了...
     
 
-        <a href="/2020/03/27/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/06%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%8F%8A%E4%BC%98%E5%8C%96/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/20/net-work/okhttp/OkHttpClient3%E6%9E%B6%E6%9E%84%E7%AE%80%E4%BB%8B/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -253,11 +250,11 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/05高性能索引"
+            <article id="post-os/操作系统的线程管理"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-27 10:13:08" datetime="2020-03-27T02:13:08.000Z"  itemprop="datePublished">2020-03-27</time>
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.699Z"  itemprop="datePublished">2019-01-20</time>
 
         
 
@@ -269,7 +266,7 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/27/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/05%E9%AB%98%E6%80%A7%E8%83%BD%E7%B4%A2%E5%BC%95/">数据存储/MySQL/05高性能索引</a>
+      <a class="post-title-link" href="/2019/01/20/os/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/">os/操作系统的线程管理</a>
     </h3>
   
 
@@ -279,12 +276,13 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        索引方便存储引擎快速查找，索引可以包含一列或多列。
-索引的类型B-Tree 索引即是 BTree，在不同的存储引擎底层可会有不同的实现，NDB 存储引擎内部使用 T-Tree 结构存储；InnoDB 使用的是 B+Tree。 BTree对索引列是顺序存储的， BTree可以加快访问数据的速度，使存储引擎不在需要全表扫描，从索引的根节点开始搜索。
-可以使用  BTree 索引的查询类型1234...
+        操作系统的线程管理
+ 蛮荒之地，笔者正在火速开垦……
+
+
     
 
-        <a href="/2020/03/27/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/05%E9%AB%98%E6%80%A7%E8%83%BD%E7%B4%A2%E5%BC%95/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/20/os/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -294,11 +292,11 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/mysql执行计划"
+            <article id="post-README"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-24 20:49:05" datetime="2020-03-24T12:49:05.954Z"  itemprop="datePublished">2020-03-24</time>
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.693Z"  itemprop="datePublished">2019-01-20</time>
 
         
 
@@ -310,7 +308,7 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/24/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/mysql%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/">数据存储/MySQL/mysql执行计划</a>
+      <a class="post-title-link" href="/2019/01/20/README/">README</a>
     </h3>
   
 
@@ -320,12 +318,20 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        mysql执行计划​       在企业的应用场景中，为了知道优化SQL语句的执行，需要查看SQL语句的具体执行过程，以加快SQL语句的执行效率。
-​       可以使用explain+SQL语句来模拟优化器执行SQL查询语句，从而知道mysql是如何处理sql语句的。
-​       官网地址： https://dev.mysql.com/doc/refman/5.5/en/explai...
+        README2019 has bean arrived, tick, tick…
+OkHttpClient3
+OkHttpClient3 架构简介
+OkHttpClient3 连接池模型
+
+Java
+Java 的引用与回收
+Thread wait &amp; sleep
+线程的一生
+
+
     
 
-        <a href="/2020/03/24/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/mysql%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/20/README/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -335,11 +341,11 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/MySQL 内置函数"
+            <article id="post-java/Thread/何时需要线程中断"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-20 17:27:08" datetime="2020-03-20T09:27:08.000Z"  itemprop="datePublished">2020-03-20</time>
+        <time class="post-time" title="2019-01-05 15:47:47" datetime="2019-01-05T07:47:47.139Z"  itemprop="datePublished">2019-01-05</time>
 
         
 
@@ -351,7 +357,7 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/MySQL%20%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/">数据存储/MySQL/MySQL 内置函数</a>
+      <a class="post-title-link" href="/2019/01/05/java/Thread/%E4%BD%95%E6%97%B6%E9%9C%80%E8%A6%81%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD/">java/Thread/何时需要线程中断</a>
     </h3>
   
 
@@ -361,14 +367,13 @@ select 子句查询类型，主要区别普通查询、联合查询、子查...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        TIPS
-ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录；
-示例：
+        何时需要线程中断
+  蛮荒之地，笔者正在火速开垦……
 
-1INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLIC...
+
     
 
-        <a href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/MySQL%20%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/05/java/Thread/%E4%BD%95%E6%97%B6%E9%9C%80%E8%A6%81%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -378,11 +383,11 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/04范式与反范式"
+            <article id="post-net-work/okhttp/OkHttpClient3连接池模型"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-20 15:31:08" datetime="2020-03-20T07:31:08.000Z"  itemprop="datePublished">2020-03-20</time>
+        <time class="post-time" title="2019-01-05 15:47:47" datetime="2019-01-05T07:47:47.136Z"  itemprop="datePublished">2019-01-05</time>
 
         
 
@@ -394,7 +399,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/04%E8%8C%83%E5%BC%8F%E4%B8%8E%E5%8F%8D%E8%8C%83%E5%BC%8F/">数据存储/MySQL/04范式与反范式</a>
+      <a class="post-title-link" href="/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/">net-work/okhttp/OkHttpClient3连接池模型</a>
     </h3>
   
 
@@ -404,11 +409,15 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        范式与反范式Schema 设计太多的列MySQL 存储 API 引擎在工作的时候需要在服务器层和存储引擎层之间通过行缓冲格式拷贝数据，然后在服务器层将缓冲内容解码为各个列。但是这个过程代价是比较昂贵的，列越多代价就越大。MyISAM 的定长行结构实际上与服务器层的行结构刚好匹配，所以不需要转换；但是 MyISAM 的边长行结构与 InnoDB 的行结构总是需要转换。
-太多的关联关联太多会导致...
+        OkHttpClient3 连接池模型OkHttp 的连接池与 JDBC 连接池有所不同。JDBC 的连接池往往面向单一目标服务器，而 OkHttp 中，多数情况下 HTTP 请求需要面向多台不同的服务器，因此 OkHttp 的连接池需要面向多目标。
+
+                
+                    
+                    
+           ...
     
 
-        <a href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/04%E8%8C%83%E5%BC%8F%E4%B8%8E%E5%8F%8D%E8%8C%83%E5%BC%8F/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -418,11 +427,11 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/03MySQL数据类型"
+            <article id="post-net-work/netty/Linux网络IO模型简介"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-20 11:27:46" datetime="2020-03-20T03:27:46.000Z"  itemprop="datePublished">2020-03-20</time>
+        <time class="post-time" title="2019-01-05 14:54:02" datetime="2019-01-05T06:54:02.980Z"  itemprop="datePublished">2019-01-05</time>
 
         
 
@@ -434,7 +443,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/03MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">数据存储/MySQL/03MySQL数据类型</a>
+      <a class="post-title-link" href="/2019/01/05/net-work/netty/Linux%E7%BD%91%E7%BB%9CIO%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B/">net-work/netty/Linux网络IO模型简介</a>
     </h3>
   
 
@@ -444,13 +453,27 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        MySQL 数据类型选择最优的数据类型更小的通常更好：选择满足数据范围的最小数据类型，因为他们可以占用更少的磁盘、内存和 CPU 缓存，处理时需要的 CPU 周期也更少；
-简单就好：简单的数据类型处理时需要更少的 CPU 周期；例如整型比字符操作代价更低；
-尽量避免 NULL 值：可为 NULL 的列使得索引、索引统计和值比较都更复杂；
-整数类型整数和实数可以用来存储整数，MySQL 有 T...
+        
+Linux内核将所有外设看作文件，文件的读写操作会返回一个文件描述符fd（file descriptor）
+socket的响应描述符为socketfd
+描述符就是一个数字指向内核中的一个结构体（文件区域、路径属性等）
+
+
+
+
+阻塞IO模型
+非阻塞IO模型
+IO复用模型
+信号驱动IO模型
+异步IO
+
+
+
+所有文件操作阻塞执行，执行完一个在执行下一个
+多个文件操作可以一起处理，各自应用进程轮询...
     
 
-        <a href="/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/03MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/05/net-work/netty/Linux%E7%BD%91%E7%BB%9CIO%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -460,11 +483,11 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/02MySQL性能剖析"
+            <article id="post-数据存储/缓存/redis数据结构整理"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-17 20:06:20" datetime="2020-03-17T12:06:20.000Z"  itemprop="datePublished">2020-03-17</time>
+        <time class="post-time" title="2019-01-01 21:18:50" datetime="2019-01-01T13:18:50.746Z"  itemprop="datePublished">2019-01-01</time>
 
         
 
@@ -476,7 +499,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/17/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/02MySQL%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90/">数据存储/MySQL/02MySQL性能剖析</a>
+      <a class="post-title-link" href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/">数据存储/缓存/redis数据结构整理</a>
     </h3>
   
 
@@ -486,15 +509,20 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        MySQL 性能剖析通常指完成某件任务所需要的时间度量，也会考虑吞吐量、CPU利用率和可扩展性等等
-性能优化原则：
-性能即响应时间：性能优化就是在一定的工作负载下尽可能的降低响应时间；性能优化不是降低 CPU 使用率，降低资源消耗，CPU 和资源就是被用来消耗的，如果机器不超负载的情况下，尽量利用资源提高性能。
-无法测量就无法优化：要能分析出执行的时间消耗在什么地方，这样才能谈优化
+        Redis 数据结构
+扁平化的特点，不存在数据库中列表查询一类的操作
 
-性能剖...
+数据结构
+
+
+
+Value对象的通用数据结构
+
+
+1234567typedef struct redisObject &#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int refcount;   ...
     
 
-        <a href="/2020/03/17/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/02MySQL%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -504,11 +532,11 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/01Mysql基准测试"
+            <article id="post-net-work/okhttp/OKHTTP学习"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-03-16 11:47:26" datetime="2020-03-16T03:47:26.000Z"  itemprop="datePublished">2020-03-16</time>
+        <time class="post-time" title="2019-01-01 21:18:05" datetime="2019-01-01T13:18:05.057Z"  itemprop="datePublished">2019-01-01</time>
 
         
 
@@ -520,7 +548,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/03/16/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/01Mysql%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/">数据存储/MySQL/01Mysql基准测试</a>
+      <a class="post-title-link" href="/2019/01/01/net-work/okhttp/OKHTTP%E5%AD%A6%E4%B9%A0/">net-work/okhttp/OKHTTP学习</a>
     </h3>
   
 
@@ -530,16 +558,26 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        MySQL基准测试基准测试是观察系统在不同压力下的行为，评估系统的容量，掌握哪些变化是重要的，或者观察系统是如何处理不同的数据。他的主要问题就是他不是真实的压力测试，在正式的生产环境或者压力测试中，影响条件是多变的。
-基准测试的策略
-集成式：针对整个系统的整体测试
-单组件式：单独测试 MySQL
+        
+来自王老板的分享
 
-测试指标吞吐量：单位时间内的事务处理量。TPS、TPM指标等
-响应时间或延迟：测试任务所用的整...
+OKHTTP系统架构模型
+
+                
+                    
+                    
+                
+                OKHTTP系统架构模型（王召）
+            
+
+线程池
+
+                
+                    
+      ...
     
 
-        <a href="/2020/03/16/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/01Mysql%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/01/net-work/okhttp/OKHTTP%E5%AD%A6%E4%B9%A0/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -549,11 +587,11 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-设计/设计模式/Head First设计模式"
+            <article id="post-数据存储/缓存/网站架构中的缓存结构整理"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-02-22 16:10:13" datetime="2020-02-22T08:10:13.636Z"  itemprop="datePublished">2020-02-22</time>
+        <time class="post-time" title="2019-01-01 21:16:21" datetime="2019-01-01T13:16:21.593Z"  itemprop="datePublished">2019-01-01</time>
 
         
 
@@ -565,7 +603,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/02/22/%E8%AE%BE%E8%AE%A1/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/Head%20First%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计/设计模式/Head First设计模式</a>
+      <a class="post-title-link" href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/">数据存储/缓存/网站架构中的缓存结构整理</a>
     </h3>
   
 
@@ -575,24 +613,25 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Head First设计模式OO基础
-抽象、封装、多态、继承
-设计原则
+        网站架构中的缓存
 
-找出应用中可能需要变化之处，把他们独立出来，不要和那些不需要变化的代码混合在一起；
-针对接口编程而不是针对实现编程
-多用组合少用继承
-开放关闭原则
-最少知识原则：对象之间的交互要尽可能的少
+                
+                    
+                    
+                
+                image
+            
 
+网站架构缓存如图可分为：
+客户端缓存
 
-策略模式
-定义了算法族，分别封装起来，让他们之间可以互相替换，在这种模式下可以让算法的变化独立于他们的使用者
-观察者模式
-定义...
+页面缓存
+将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。
+
+...
     
 
-        <a href="/2020/02/22/%E8%AE%BE%E8%AE%A1/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/Head%20First%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-more waves-effect waves-button">
+        <a href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" class="post-more waves-effect waves-button">
             Continue reading...
         </a>
     </div>
@@ -606,7 +645,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
     
 <nav id="page-nav">
     <div class="inner">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/3/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">下一页</a>
     </div>
 </nav>
 
@@ -650,7 +689,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/&title=Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/page/4/&title=Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -660,22 +699,22 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/&title=Hexo&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/page/4/&title=Hexo&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/page/4/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Hexo&url=http://yoursite.com/&via=http://yoursite.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Hexo&url=http://yoursite.com/page/4/&via=http://yoursite.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/page/4/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -686,7 +725,7 @@ ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primar
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/page/4/" alt="微信分享二维码">
 </div>
 
 

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>middle-service/微服务/微服务随记 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="SpringCloud 学习示例项目 微服务特点 按业务划分为一个独立运行的程序，即服务单元 服务之间通过 http 协议通信 自动化部署 可用不同的编程语言 可用不同的存储技术 服务集中化管理 微服务是一个分布式系统微服务“微” 代码量 开发时间长短 业务大小CAP C（Consistency  一致性）：数据写入成功，之后读取读到的都是写入后的数据 A（Availability  可用性）：服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="middle-service&#x2F;微服务&#x2F;微服务随记">
+<meta property="og:url" content="http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="SpringCloud 学习示例项目 微服务特点 按业务划分为一个独立运行的程序，即服务单元 服务之间通过 http 协议通信 自动化部署 可用不同的编程语言 可用不同的存储技术 服务集中化管理 微服务是一个分布式系统微服务“微” 代码量 开发时间长短 业务大小CAP C（Consistency  一致性）：数据写入成功，之后读取读到的都是写入后的数据 A（Availability  可用性）：服">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/C2C6FCFDC10942B6A3532E6F0928E455?method=download&shareKey=c554dacfc5193c29d4b35682aa1226d9">
+<meta property="article:published_time" content="2020-02-22T07:58:59.550Z">
+<meta property="article:modified_time" content="2020-02-22T07:58:59.551Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/C2C6FCFDC10942B6A3532E6F0928E455?method=download&shareKey=c554dacfc5193c29d4b35682aa1226d9">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">John Doe</h5>
+          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/yscoder" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/ysweb" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">middle-service/微服务/微服务随记</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">middle-service/微服务/微服务随记</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-02-22T07:58:59.550Z" itemprop="datePublished" class="page-time">
+  2020-02-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#SpringCloud-学习示例项目"><span class="post-toc-number">1.</span> <span class="post-toc-text">SpringCloud 学习示例项目</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#微服务特点"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">微服务特点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#微服务“微”"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">微服务“微”</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CAP"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">CAP</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#微服务具有的功能"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">微服务具有的功能</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Zookeeper和Eureka"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">Zookeeper和Eureka</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#负载均衡"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">负载均衡</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Feign"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">Feign</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Hystrix"><span class="post-toc-number">1.8.</span> <span class="post-toc-text">Hystrix</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#设计原则"><span class="post-toc-number">1.8.1.</span> <span class="post-toc-text">设计原则</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Hystrix工作机制"><span class="post-toc-number">1.8.2.</span> <span class="post-toc-text">Hystrix工作机制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试"><span class="post-toc-number">1.8.3.</span> <span class="post-toc-text">测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Zuul"><span class="post-toc-number">1.9.</span> <span class="post-toc-text">Zuul</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#作用"><span class="post-toc-number">1.9.1.</span> <span class="post-toc-text">作用</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#微服务链路追踪-Sleuth"><span class="post-toc-number">1.10.</span> <span class="post-toc-text">微服务链路追踪 Sleuth</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Dapper-中的专业术语："><span class="post-toc-number">1.10.1.</span> <span class="post-toc-text">Dapper 中的专业术语：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Zipkin"><span class="post-toc-number">1.11.</span> <span class="post-toc-text">Zipkin</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#微服务监控"><span class="post-toc-number">1.12.</span> <span class="post-toc-text">微服务监控</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#"><span class="post-toc-number">1.12.1.</span> <span class="post-toc-text"></span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Spring-Boot-Security"><span class="post-toc-number">1.13.</span> <span class="post-toc-text">Spring Boot Security</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安全"><span class="post-toc-number">1.13.1.</span> <span class="post-toc-text">安全</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-middle-service/微服务/微服务随记"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">middle-service/微服务/微服务随记</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-02-22 15:58:59" datetime="2020-02-22T07:58:59.550Z"  itemprop="datePublished">2020-02-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="SpringCloud-学习示例项目"><a href="#SpringCloud-学习示例项目" class="headerlink" title="SpringCloud 学习示例项目"></a>SpringCloud 学习示例项目</h2><hr>
+<h3 id="微服务特点"><a href="#微服务特点" class="headerlink" title="微服务特点"></a>微服务特点</h3><ul>
+<li>按业务划分为一个独立运行的程序，即服务单元</li>
+<li>服务之间通过 http 协议通信</li>
+<li>自动化部署</li>
+<li>可用不同的编程语言</li>
+<li>可用不同的存储技术</li>
+<li>服务集中化管理</li>
+<li>微服务是一个分布式系统<h3 id="微服务“微”"><a href="#微服务“微”" class="headerlink" title="微服务“微”"></a>微服务“微”</h3></li>
+<li>代码量</li>
+<li>开发时间长短</li>
+<li>业务大小<h3 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h3></li>
+<li>C（Consistency  一致性）：数据写入成功，之后读取读到的都是写入后的数据</li>
+<li>A（Availability  可用性）：服务的可用性</li>
+<li>P（Partition-tolerance  分区容错性）：单台或多台服务出现问题后，其他正常的服务仍可以正常提供服务<h3 id="微服务具有的功能"><a href="#微服务具有的功能" class="headerlink" title="微服务具有的功能"></a>微服务具有的功能</h3></li>
+<li>服务的注册和发现</li>
+<li>服务的负载均衡</li>
+<li>服务的容错</li>
+<li>服务的网关</li>
+<li>服务配置的统一管理</li>
+<li>链路追踪</li>
+<li>实时日志<h3 id="Zookeeper和Eureka"><a href="#Zookeeper和Eureka" class="headerlink" title="Zookeeper和Eureka"></a>Zookeeper和Eureka</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>Zookeeper</th>
+<th>Eureka</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CAP</td>
+<td>满足CP</td>
+<td>满足AP</td>
+</tr>
+<tr>
+<td>服务注册</td>
+<td>当 master 节点 down 掉，剩余节点会重新选举 leader ，耗时30~120s，选取期间整个集群不可用，服务瘫痪</td>
+<td>各个节点平等，当请求一个节点失败时会自动切换至另一个节点，但是不保证各个节点的强一致性 Eureka 还有一种自我保护机制，如果在 15 分钟内超过 85% 的节点都没有正常的心跳，那么 Eureka 就认为客户端与注册中心出现了网络故障，此时会出现以下几种情况： 1.Eureka 不再从注册列表中移除因为长时间没收到心跳而应该过期的服务 2. Eureka 仍然能够接受新服务的注册和查询请求，但是不会被同步到其它节点上(即保证当前节点依然可用) 3.当网络稳定时，当前实例新的注册信息会被同步到其它节点中</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><ul>
+<li>将负载分摊到多个执行单元上，常见的两种方式</li>
+</ul>
+<blockquote>
+<ul>
+<li>独立进程单元，通过负载均衡策略，将请求发送到不同的执行单元上，例如 Nginx</li>
+<li>将负载均衡以代码逻辑的形式封装到服务消费者的客户端上，服务消费者维护了一份服务提供者的信息列表，通过负载均衡策略将请求分摊给多个服务提供者</li>
+</ul>
+</blockquote>
+<h3 id="Feign"><a href="#Feign" class="headerlink" title="Feign"></a>Feign</h3><ul>
+<li>简化 Java Http 客户端远程调用</li>
+<li>Feign 采用的是http网络交互，可以采用<code>feign-httpclient</code>或者<code>okhttp</code>做网络请求框架，只需要在pom中添加相关依赖即可。</li>
+<li>Feign中负载均衡也是通过Ribbon来实现的。</li>
+<li>Feign请求过程</li>
+</ul>
+<blockquote>
+<ul>
+<li>通过 @EnableFeignClients 注解开启FeignClient功能；</li>
+<li>根据Feign的规则实现接口，并在接口上面加上 @FeignClient 注解；</li>
+<li>程序启动自动扫描 @FeignClient 注解的类，并注入到IoC容器；</li>
+<li>当接口的方法被调用时，通过JDK代理生成具体的 requestTemplate 对象，生成 http 请求的 request 对象；</li>
+<li>将 request 对象交给 Client 去处理，可以使用 HttpUrlConnection 、HttpClient 或 OkHttp；</li>
+<li>最后 Client 被封装到 LoadBalanceClient 类，这个类结合 Ribbon 实现负载均衡。</li>
+</ul>
+</blockquote>
+<ul>
+<li>Feign 可以直接配置 Hystrix 熔断器</li>
+</ul>
+<h3 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a>Hystrix</h3><ul>
+<li><p>通过隔离服务的访问点组织联动故障，提供故障的解决方案，提高整个分布式系统的弹性</p>
+</li>
+<li><h4 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h4></li>
+</ul>
+<blockquote>
+<ul>
+<li>防止单个服务的故障耗尽整个那个服务的 Servlet 容器的线程资源</li>
+<li>快速失败机制，当某个服务出现故障，则调用该服务的线程快速失败而不是线程等待</li>
+<li>提供回退方案，请求发生故障时，按照提供的方案回退</li>
+<li>使用熔断机制，防止故障扩大影响到其他服务</li>
+<li>利用监控组件实时监控熔断器的状态</li>
+</ul>
+</blockquote>
+<ul>
+<li><h4 id="Hystrix工作机制"><a href="#Hystrix工作机制" class="headerlink" title="Hystrix工作机制"></a>Hystrix工作机制</h4></li>
+</ul>
+<blockquote>
+<ul>
+<li>当某个API服务在一定时间内失败的次数大于设定阀值，触发熔断器打开，这时请求该API服务的接口会执行快速失败逻辑（即回退方案）。</li>
+<li>处于打开状态的熔断器，一段时间后，会处于半打开半关闭状态，将一定数量的请求执行正常逻辑，剩余的请求执行快速失败逻辑，如果执行正常逻辑的请求失败了，则熔断器继续打开，如果成功了，则熔断器关闭。</li>
+</ul>
+</blockquote>
+<ul>
+<li><h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4></li>
+</ul>
+<blockquote>
+<p>执行请求中，断开两个服务提供方的其中一个，在短时间内的请求上仍然可以负载到 done 掉的服务上。在停止两个服务提供方后则会执行 fallback 配置的方法。</p>
+</blockquote>
+<h3 id="Zuul"><a href="#Zuul" class="headerlink" title="Zuul"></a>Zuul</h3><ul>
+<li><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4></li>
+</ul>
+<blockquote>
+<ul>
+<li>Zuul、Ribbon 以及 Eureka 结合，可以实现智能路由和负载均衡，Zuul能够将请求流量按照某种策略分发到集群状态的多个服务实例；</li>
+<li>网关将所有的服务 API 接口统一聚合，并统一对外暴露。外界系统无需关注内部服务，也保护了内部的微服务单元避免敏感信息对外暴露；</li>
+<li>服务网关做用户身份认证和权限控制，防止非法请求操作API接口；</li>
+<li>网关实现监控功能，实时日志输出，对请求做记录；</li>
+<li>网关可以实现流量监控，在高流量的情况下，实现降级；</li>
+<li>API 接口从内部服务分离处理，方便做测试</li>
+</ul>
+</blockquote>
+<h3 id="微服务链路追踪-Sleuth"><a href="#微服务链路追踪-Sleuth" class="headerlink" title="微服务链路追踪 Sleuth"></a>微服务链路追踪 Sleuth</h3><ul>
+<li><h4 id="Dapper-中的专业术语："><a href="#Dapper-中的专业术语：" class="headerlink" title="Dapper 中的专业术语："></a>Dapper 中的专业术语：</h4></li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>Span</strong>：基本工作单元，发送一个远程调用服务就会产生一个 Span，Span 是一个64位的 ID， Span 包含了摘要、时间戳事件、Span 的 ID 以及进程的 ID 。</li>
+<li><strong>Trace</strong>：有一系列 Span 组成，呈树状结构。请求一个微服务系统的 API 接口，这个 API 接口需要调用多个微服务单元，每调用一个新的微服务单元都会产生一个 Span ，所有由这个请求产生的 Span 组成了这个 Trace。</li>
+<li><strong>Annotation</strong>：用于记录一个事件，一些核心注解用户定义一个请求的开始和结束：<ul>
+<li>cs-Client Sent：客户端发送一个请求，描述 Span 的开始</li>
+<li>sr-Server Received：服务端获得请求并准备开始处理它，用 sr 减去 cs 时间戳，就是网络传输的时间</li>
+<li>ss-Server Sent：服务端发送响应，该注解表明请求处理的完成，用 ss 减去 sr 的时间戳就是服务端处理的时间长度</li>
+<li>cr-Client Received：客户端接受响应，此时 Span 结束，用 cr 减去 cs 的时间戳，就得到整个请求的耗时。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li><h3 id="Zipkin"><a href="#Zipkin" class="headerlink" title="Zipkin"></a>Zipkin</h3></li>
+</ul>
+<blockquote>
+<ul>
+<li>使用 RabbitMQ 传输链路数据，默认使用 Http 上传数据到 zipkin-server 的。</li>
+<li>可以使用 MySql、Elasticsearch 存储链路数据，如果在Elasticsearch中存储数据，可以利用 Kibana 展示数据。</li>
+</ul>
+</blockquote>
+<h3 id="微服务监控"><a href="#微服务监控" class="headerlink" title="微服务监控"></a>微服务监控</h3><ul>
+<li><h4 id=""><a href="#" class="headerlink" title=""></a></h4></li>
+</ul>
+<h3 id="Spring-Boot-Security"><a href="#Spring-Boot-Security" class="headerlink" title="Spring Boot Security"></a>Spring Boot Security</h3><ul>
+<li><h4 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h4></li>
+</ul>
+<blockquote>
+<p><strong>认证</strong>：认证主体，可以在应用程序中执行操作的用户、设备或其他系统</p>
+<p><strong>授权</strong>：拥有什么权限，允许已认证的主体执行某一项操作</p>
+</blockquote>
+<div style="text-align:center;margin-top:50px;margin-bottom:50px;">
+    <img src="https://note.youdao.com/yws/api/personal/file/C2C6FCFDC10942B6A3532E6F0928E455?method=download&shareKey=c554dacfc5193c29d4b35682aa1226d9" />
+</div>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2020-02-22T07:58:59.551Z" itemprop="dateUpdated">2020-02-22 15:58:59</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/" target="_blank" rel="external">http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="John Doe">
+            John Doe
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/&title=《middle-service/微服务/微服务随记》 — Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/&title=《middle-service/微服务/微服务随记》 — Hexo&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《middle-service/微服务/微服务随记》 — Hexo&url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/02/22/middle-service/apm/Skywalking/Skywalking%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">middle-service/apm/Skywalking/Skywalking环境搭建</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/02/22/middle-service/mycat/Mycat%20%E5%88%86%E7%89%87%E9%85%8D%E7%BD%AE/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">middle-service/mycat/Mycat 分片配置</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>John Doe &copy; 2015 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/&title=《middle-service/微服务/微服务随记》 — Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/&title=《middle-service/微服务/微服务随记》 — Hexo&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《middle-service/微服务/微服务随记》 — Hexo&url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2020/02/22/middle-service/%E5%BE%AE%E6%9C%8D%E5%8A%A1/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9A%8F%E8%AE%B0/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

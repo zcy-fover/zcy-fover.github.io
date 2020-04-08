@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>net-work/okhttp/OkHttpClient3连接池模型 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="OkHttpClient3 连接池模型OkHttp 的连接池与 JDBC 连接池有所不同。JDBC 的连接池往往面向单一目标服务器，而 OkHttp 中，多数情况下 HTTP 请求需要面向多台不同的服务器，因此 OkHttp 的连接池需要面向多目标。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="net-work&#x2F;okhttp&#x2F;OkHttpClient3连接池模型">
+<meta property="og:url" content="http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="OkHttpClient3 连接池模型OkHttp 的连接池与 JDBC 连接池有所不同。JDBC 的连接池往往面向单一目标服务器，而 OkHttp 中，多数情况下 HTTP 请求需要面向多台不同的服务器，因此 OkHttp 的连接池需要面向多目标。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/assets/jdbc_ok_connections.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/assets/streams_and_cnn.jpg">
+<meta property="og:image" content="https://i.creativecommons.org/l/by-nc/4.0/88x31.png">
+<meta property="og:image" content="http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/assets/support.jpg">
+<meta property="article:published_time" content="2019-01-05T07:47:47.136Z">
+<meta property="article:modified_time" content="2019-01-05T07:47:47.137Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/assets/jdbc_ok_connections.jpg">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">John Doe</h5>
+          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/yscoder" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/ysweb" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">net-work/okhttp/OkHttpClient3连接池模型</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">net-work/okhttp/OkHttpClient3连接池模型</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-01-05T07:47:47.136Z" itemprop="datePublished" class="page-time">
+  2019-01-05
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#OkHttpClient3-连接池模型"><span class="post-toc-number">1.</span> <span class="post-toc-text">OkHttpClient3 连接池模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#获取连接"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">获取连接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-2-连接复用"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">HTTP 2 连接复用</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#连接销毁"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">连接销毁</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#获取连接-amp-创建连接"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">获取连接 &amp; 创建连接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#获取连接-1"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">获取连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#创建连接"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">创建连接</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#线程安全"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">线程安全</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Connection-Pool-的共享变量"><span class="post-toc-number">1.4.1.</span> <span class="post-toc-text">Connection Pool 的共享变量</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Connctons"><span class="post-toc-number">1.4.2.</span> <span class="post-toc-text">Connctons</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RouteDataBase"><span class="post-toc-number">1.4.3.</span> <span class="post-toc-text">RouteDataBase</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cleanupRunning"><span class="post-toc-number">1.4.4.</span> <span class="post-toc-text">cleanupRunning</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Tick-Tick"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">Tick, Tick</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展阅读"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">扩展阅读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#版权声明"><span class="post-toc-number">1.7.</span> <span class="post-toc-text">版权声明</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-net-work/okhttp/OkHttpClient3连接池模型"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">net-work/okhttp/OkHttpClient3连接池模型</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-01-05 15:47:47" datetime="2019-01-05T07:47:47.136Z"  itemprop="datePublished">2019-01-05</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="OkHttpClient3-连接池模型"><a href="#OkHttpClient3-连接池模型" class="headerlink" title="OkHttpClient3 连接池模型"></a>OkHttpClient3 连接池模型</h1><p>OkHttp 的连接池与 JDBC 连接池有所不同。JDBC 的连接池往往面向<strong>单一目标</strong>服务器，而 OkHttp 中，多数情况下 HTTP 请求需要面向多台不同的服务器，因此 OkHttp 的连接池需要面向<strong>多目标</strong>。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="assets/jdbc_ok_connections.jpg" alt="客户端与服务器关系图" title="">
+                </div>
+                <div class="image-caption">客户端与服务器关系图</div>
+            </figure>
+
+<h2 id="获取连接"><a href="#获取连接" class="headerlink" title="获取连接"></a>获取连接</h2><p><code>StreamAllocation#findConnections()</code>方法用于获取一个<strong>连接（RealConnection，本文简称 cnn）</strong>，cnn 可能来自线程池，创建新连接。</p>
+<h3 id="HTTP-2-连接复用"><a href="#HTTP-2-连接复用" class="headerlink" title="HTTP 2 连接复用"></a>HTTP 2 连接复用</h3><blockquote>
+<p>OkHttp 的连接复用与连接的创建和回收过程关联紧密，并且还涉及到了一个大角色——<code>StreamAllocation</code></p>
+</blockquote>
+<p>HTTP 2.0 中，一个连接可以同时发送多个请求。所以 OkHttp 需要解决：如何让一个连接被多个线程使用，同时要确保线程安全，以及准确及时的回收<strong>空闲连接</strong>。</p>
+<p>cnn 的复用是通过 <code>StreamAllocation</code> 实现的。<code>StreamAllocation</code> 可以看作是 cnn 的一个“分身”，一个 cnn 拥有众多的 <code>StreamAllocation</code>。用户使用连接的时，会获取 <code>StreamAllocation</code>，从而获取它背后真正的 cnn与服务器通讯。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="assets/streams_and_cnn.jpg" alt="StreamAllocation和Connection关系图" title="">
+                </div>
+                <div class="image-caption">StreamAllocation和Connection关系图</div>
+            </figure>
+
+<p>下面从 Java 层面展示了两者的关系。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* RealConnection class */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">RealConnection</span> <span class="keyword">extends</span> <span class="title">Http2Connection</span>.<span class="title">Listener</span> <span class="keyword">implements</span> <span class="title">Connection</span> </span>&#123;</span><br><span class="line">    <span class="comment">/** Current streams carried by this connection. */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> List&lt;Reference&lt;StreamAllocation&gt;&gt; allocations = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* StreamAllocation class */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamAllocation</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> RealConnection connection;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个 cnn 拥有一组 <code>StreamAllocation</code> 软连接集合， <code>StreamAllocation</code> 持有唯一一个 cnn。当<strong>用户</strong>获取一个连接时，会向特定的一个 <code>StreamAllocation</code> 发出申请，然后返回一个真正当连接。多个线程间可能会从不同的 <code>StreamAllocation</code> 获取同一个 cnn。一个线程持有一个<strong>唯一</strong>  <code>StreamAllocation</code>。</p>
+<blockquote>
+<p> 这里的用户是广义的，泛指连接的需求方，通常是一个线程。而并非真实的一个用户。</p>
+</blockquote>
+<h2 id="连接销毁"><a href="#连接销毁" class="headerlink" title="连接销毁"></a>连接销毁</h2><blockquote>
+<p>我们采用“倒叙”的方式铺开连接池的管理，从销毁讲起，后面还包括：连接的获取、连接的创建和线程安全保障</p>
+</blockquote>
+<p>cnn 维护在 <code>ConnectionPool#connections</code> 中，数据结构如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnectionPool</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Deque&lt;RealConnection&gt; connections = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>完成这个清理工作的，是一个线程，它的处理方式很简单：</p>
+<ol>
+<li><p>connection pool 中没有任何<strong>空闲连接</strong>时，线程关闭</p>
+</li>
+<li><p>connection pool 中没有<strong>待清理</strong>的连接时，线程等待（waiting，默认等待 5 min）</p>
+</li>
+<li><p>connection pool 中存在<strong>需要清理</strong>的连接时，执行清理任务</p>
+</li>
+<li><p>当有新的 cnn 加入到 connection pool 时，清理线程开启。</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnectionPool</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(RealConnection connection)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">assert</span> (Thread.holdsLock(<span class="keyword">this</span>));</span><br><span class="line">        <span class="keyword">if</span> (!cleanupRunning) &#123;</span><br><span class="line">            cleanupRunning = <span class="keyword">true</span>;</span><br><span class="line">            <span class="comment">// start the cleanup thread</span></span><br><span class="line">            executor.execute(cleanupRunnable);</span><br><span class="line">        &#125;</span><br><span class="line">        connections.add(connection);</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>连接池清理工作包括：<strong>寻找无效连接</strong>和<strong>销毁无效连接</strong>，空闲连接的判断是第一步的核心。</p>
+<p>cnn 维护了一个 <code>StreamAllocation</code> <strong>软连接集合</strong>用于对连接的使用情况进行追踪与计数。当没有任何线程使用 cnn 时，无法从集合中获取<strong>未被回收</strong>的 <code>StreamAllocation</code> 对象 。通过这样当方式，我们可以轻松的判断：”当前连接是否是处于空闲状态？“。</p>
+<p>OkHttp 是允许部分空闲连接的存在的，只有<strong>超过最大空闲连接数量（maxIdleConnections）</strong>或者<strong>空闲时间过长的连接（keepAliveDurationNs）</strong>，才被定义为“无效连接“，然后被清理线程销毁。</p>
+<p>如同我们猜想的一样，<strong>销毁</strong>的最后一步，一定是将 cnn 从 <code>connections</code> 移除，并关闭 socket。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnectionPool</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">cleanup</span><span class="params">(<span class="keyword">long</span> now)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> (longestIdleDurationNs &gt;= <span class="keyword">this</span>.keepAliveDurationNs</span><br><span class="line">        	|| idleConnectionCount &gt; <span class="keyword">this</span>.maxIdleConnections) &#123;</span><br><span class="line">            <span class="comment">// 1. remove cnn from connections</span></span><br><span class="line">            connections.remove(longestIdleConnection);</span><br><span class="line">        &#125;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// 2. close socket</span></span><br><span class="line">        <span class="comment">// Close, ignoring any uncheck exceptions. Does nothing if socket is null.</span></span><br><span class="line">        closeQuietly(longestIdleConnection.socket());</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结束了上面过程，简单梳理一下。清理连接的整体思路是：通过 <code>cleanupRunnable</code> 线程来执行清理任务，通过线程等待的方式不断的执行。<code>StreamAllocation</code> 软连接集合的引入，追踪了连接的被使用情况，解决了“空闲连接”定义的问题。该思路与 gc 回收算法中的“引用计数”算法大致相同。清理线程将无效的连接销毁，完成清理任务。</p>
+<h2 id="获取连接-amp-创建连接"><a href="#获取连接-amp-创建连接" class="headerlink" title="获取连接 &amp; 创建连接"></a>获取连接 &amp; 创建连接</h2><p>获取连接的过程包含了连接的创建。获取连接最初是由 <code>ConnectInterceptor</code> 拦截器发起的。拦截器模式是 OkHttp 整体流程的主干，贯穿了整体请求与响应流程，<a href="./OkHttpClient3架构简介.md">OkHttpClient3 架构简介</a> 包含了 OkHttp 拦截器在整体架构中的地位与应用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* ConnectInterceptor class */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnectInterceptor</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Response <span class="title">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// get a new stream</span></span><br><span class="line">        HttpCodec httpCodec = streamAllocation.newStream(client, chain, doExtensiveHealthChecks);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* StreamAllocation class */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> HttpCodec <span class="title">newStream</span><span class="params">(...)</span> </span>&#123;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// find a connection</span></span><br><span class="line">          RealConnection resultConnection = findHealthyConnection(connectTimeout, readTimeout,</span><br><span class="line">		  ...</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> RouteException(e);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>OkHttp 优先尝试从 <code>ConnectionPool</code> 中获取连接，获取成功后计数加 1；如果获取失败，会创建一个新的连接，并将新连接加入到 connections 中，计数加 1。</p>
+<p>计数过程是把 <code>StreamAllocation</code> 对象加入到 cnn 的“影子”集合中，<code>StreamAllocation#acquire()</code> 完成了这项工作。</p>
+<h3 id="获取连接-1"><a href="#获取连接-1" class="headerlink" title="获取连接"></a>获取连接</h3><p>获取 cnn 就是遍历 connections ，找到一个“合适”的连接返回。OkHttp 要求 HTTP 1.x 中，一个 cnn 最多拥有 1 个 Stream，HTTP 2.0 中可以拥有多个（默认为 Integer.MAX_VALUE）。合适连接要求如下：</p>
+<ol>
+<li>steam 没有达到创建的上限</li>
+<li>host 相同</li>
+</ol>
+<p>计数加 1，并将合适的 cnn 成功返回给用户，完成 HTTP 请求。</p>
+<blockquote>
+<p>这里合适连接的要求，仅停留在 HTTP 1.x，HTTP 2.0 获取连接做了一些<strong>协议上</strong>的处理，不是本篇重点，这里不详述。</p>
+</blockquote>
+<h3 id="创建连接"><a href="#创建连接" class="headerlink" title="创建连接"></a>创建连接</h3><p>当从 <code>ConnectionPool</code> 获取连接失败后，会选择创建新的连接。并将新的连接加入到 <code>connections</code> 中，计数加 1。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamAllocation</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> RealConnection <span class="title">findConnection</span><span class="params">(...)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        RealConnection result = <span class="keyword">null</span>;</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// create new RealConnection</span></span><br><span class="line">        result = <span class="keyword">new</span> RealConnection(connectionPool, selectedRoute);</span><br><span class="line">        <span class="comment">// add stream to connection allocations</span></span><br><span class="line">        acquire(result, <span class="keyword">false</span>);</span><br><span class="line">        ...</span><br><span class="line">        <span class="comment">// Pool the connection.</span></span><br><span class="line">        Internal.instance.put(connectionPool, result);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>连接的获取与创建过程，通过创建对象，并将新创建的对象加入到连接池中，计数加 1。本质上来看是连接池的连接容器（<code>Deque&lt;RealConnection&gt;</code>）的 <code>add()</code> 和计数器计数。</p>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><blockquote>
+<p>本节所介绍的线程安全仅仅是有关连接池的线程安全。更多线程模型介绍在 <a href="./OkHttpClient3线程模型.md">OkHttpClient3 线程模型</a>。</p>
+</blockquote>
+<p>线程安全的核心是解决 <strong>共享资源在竞争条件下的状态不确定</strong> 问题。解决过程中的关键一步在于：找出可能处于竞争条件的共享变量。</p>
+<p>其中，被 <code>final</code> 修饰的基础变量、<code>Unmofied</code> 容器、无访问通路的私有变量和局部变量，任何情况下都处于非竞争条件。更多关于线程的介绍在 <a href="./操作系统的线程管理.md">操作系统的线程管理</a>。</p>
+<blockquote>
+<p> <strong>竞争条件（Race Condition， 又称竞太条件）</strong>：多个进程读写共享资源，最终的结果取决于进程运行的一个精确的时序，这样的情形称之为<strong>竞争条件</strong>，例如：缓冲区的并发访问问题。</p>
+</blockquote>
+<h3 id="Connection-Pool-的共享变量"><a href="#Connection-Pool-的共享变量" class="headerlink" title="Connection Pool 的共享变量"></a>Connection Pool 的共享变量</h3><p><code>ConnectionPool</code> 作为 <code>OkHttpClient</code> 的一个 <code>final</code> 成员，随着 <code>OkHttpClient</code> 的创建而创建。一个 <code>OkHttpClient</code> 持有唯一一个 <code>ConnectionPool</code>，即 <code>ConnectionPool</code> 相对于 <code>OkHttpClient</code> 是单例模式。</p>
+<p>OkHttp 的连接池类中，成员信息如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ConnectionPool</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Executor executor = <span class="keyword">new</span> ThreadPoolExecutor(...);</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> maxIdleConnections;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">long</span> keepAliveDurationNs;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Runnable cleanupRunnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Deque&lt;RealConnection&gt; connections = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    <span class="keyword">final</span> RouteDatabase routeDatabase = <span class="keyword">new</span> RouteDatabase();</span><br><span class="line">    <span class="keyword">boolean</span> cleanupRunning;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，共享变量有三个：</p>
+<ul>
+<li><code>connections</code>：缓存连接，在线程<strong>创建</strong>、<strong>获取</strong>、<strong>销毁</strong>时使用</li>
+<li><code>routeDatabase</code>：缓存失败的链路，监视器类</li>
+<li><code>cleanupRunning</code>：清理线程开启的标志</li>
+</ul>
+<h3 id="Connctons"><a href="#Connctons" class="headerlink" title="Connctons"></a>Connctons</h3><p>OkHttp 在任何地方都使用了对象锁来保证访问 connections 的正确性，由于 <code>ConnetionPool</code> 对于 <code>OkHttpClient</code> 而言是单例，对象锁可以解决并发冲突。</p>
+<h3 id="RouteDataBase"><a href="#RouteDataBase" class="headerlink" title="RouteDataBase"></a>RouteDataBase</h3><p>一个 HTTP URL 根据 DNS 解析的结果往往会存在多条 HTTP <strong>链路（Route）</strong>，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.1.1.1 www.abc.com</span><br><span class="line">1.1.1.2 www.abc.com</span><br></pre></td></tr></table></figure>
+
+<p>OkHttp 维护来一个失败链路的黑明单，用于记录和规避连接失败的场景，提升连接的成功率。为了保证并发安全，OkHttp 采用了<strong>监视器模式</strong>实现该类。</p>
+<h3 id="cleanupRunning"><a href="#cleanupRunning" class="headerlink" title="cleanupRunning"></a>cleanupRunning</h3><p>cleanupRuning 变量只在 <code>put()</code> 和 <code>cleanup()</code> 方法中用到，这两方法均使用了对象锁来保证。</p>
+<h2 id="Tick-Tick"><a href="#Tick-Tick" class="headerlink" title="Tick, Tick"></a>Tick, Tick</h2><p>本篇文档偏重于讲解 OkHttp 线程模型的“骨骼”，其中的细节没有过多的涉及。目的是了解连接池的核心——<strong>安全高效的获取连接和回收连接</strong>，这是最有“营养”的部分。关于 HTTP 的协议、代理、路由等，没有停留太久，这些不是本篇的重点。更多的介绍在 <a href="HTTP2.0的价值在哪里.md">HTTP 2.0 的价值在哪里</a>。</p>
+<p>照猫画虎，笔者仿照 OkHttp3 连接池模型写了一个 <a href="./samples/okhttp/connection-pool/">Demo</a>，欢迎各位大牛探讨与斧正。</p>
+<h2 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h2><p><a href="./Thread-wait-sleep.md">Thread wait &amp; sleep</a></p>
+<p><a href="./OkHttpClient3架构简介">OkHttpClient3 架构简介</a></p>
+<p><a href="./Java的引用与回收.md">Java 的引用与回收</a></p>
+<p><a href="./OkHttpClient3线程模型.md">OkHttpClient3 线程模型</a></p>
+<p><a href="./操作系统的线程管理.md">操作系统的线程管理</a></p>
+<p><a href="HTTP2.0的价值在哪里.md">HTTP 2.0 的价值在哪里</a></p>
+<h2 id="版权声明"><a href="#版权声明" class="headerlink" title="版权声明"></a>版权声明</h2><p><a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a>本作品采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。</p>
+<p align="center">
+  <img src="assets/support.jpg" width="240px"/><br />感谢支持！
+</p>
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2019-01-05T07:47:47.137Z" itemprop="dateUpdated">2019-01-05 15:47:47</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" target="_blank" rel="external">http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="John Doe">
+            John Doe
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/&title=《net-work/okhttp/OkHttpClient3连接池模型》 — Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/&title=《net-work/okhttp/OkHttpClient3连接池模型》 — Hexo&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《net-work/okhttp/OkHttpClient3连接池模型》 — Hexo&url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/01/05/java/Thread/%E4%BD%95%E6%97%B6%E9%9C%80%E8%A6%81%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">java/Thread/何时需要线程中断</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/01/05/net-work/netty/Linux%E7%BD%91%E7%BB%9CIO%E6%A8%A1%E5%9E%8B%E7%AE%80%E4%BB%8B/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">net-work/netty/Linux网络IO模型简介</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>John Doe &copy; 2015 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/&title=《net-work/okhttp/OkHttpClient3连接池模型》 — Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/&title=《net-work/okhttp/OkHttpClient3连接池模型》 — Hexo&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《net-work/okhttp/OkHttpClient3连接池模型》 — Hexo&url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/01/05/net-work/okhttp/OkHttpClient3%E8%BF%9E%E6%8E%A5%E6%B1%A0%E6%A8%A1%E5%9E%8B/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
