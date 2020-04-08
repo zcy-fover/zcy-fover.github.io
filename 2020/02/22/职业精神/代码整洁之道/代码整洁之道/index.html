@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>职业精神/代码整洁之道/代码整洁之道 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="#《代码整洁之道》  勒布朗法则：稍后等于永不。  第一章  整洁代码1、糟糕代码的原因 在我自己来看，写出糟糕代码可能是以下几个原因：  编程经验不够，没有意识到代码整洁的重要性，处于功能实现即可完成任务的阶段； 有“整洁代码、优化代码”的意识，在具体编程时，由于项目进度和时间的原因，没有时间去思考如何优化，如何使代码整洁。最后只能草草了事，完成任务即可。想着可以后续继续优化，但只是停留在这想法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="职业精神&#x2F;代码整洁之道&#x2F;代码整洁之道">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="#《代码整洁之道》  勒布朗法则：稍后等于永不。  第一章  整洁代码1、糟糕代码的原因 在我自己来看，写出糟糕代码可能是以下几个原因：  编程经验不够，没有意识到代码整洁的重要性，处于功能实现即可完成任务的阶段； 有“整洁代码、优化代码”的意识，在具体编程时，由于项目进度和时间的原因，没有时间去思考如何优化，如何使代码整洁。最后只能草草了事，完成任务即可。想着可以后续继续优化，但只是停留在这想法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/0F4900F572324F36B3E61138387133ED?method=download&shareKey=69f16bfb706cc3cd9216f7159243f66a">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/0A4E97760DBD4B3E96C1BBAC50EF0055?method=download&shareKey=e94b38a7af0d5bf9370a847afb8f5c72">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/6957B2074516409CB8E307FFB504E865?method=download&shareKey=84b30ad4c8ba71ced1453e9cbae2daad">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/E2BD041522914D82A5DDE3A4DD6EB206?method=download&shareKey=5aecf43ba139e90014155e4674b73740">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/6EACC9AB08134A558A1B5598B8633E08?method=download&shareKey=2b7a2890211f06d7227b15495eda8495">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/F2C2AA03773245F7AB0EE5DC6BF7C932?method=download&shareKey=2cf7854300efc43250e71ff7c695447b">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/C2C6FCFDC10942B6A3532E6F0928E455?method=download&shareKey=c554dacfc5193c29d4b35682aa1226d9">
+<meta property="article:published_time" content="2020-02-22T08:07:46.828Z">
+<meta property="article:modified_time" content="2020-02-22T08:07:46.830Z">
+<meta property="article:author" content="zcy-fover">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/0F4900F572324F36B3E61138387133ED?method=download&shareKey=69f16bfb706cc3cd9216f7159243f66a">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">职业精神/代码整洁之道/代码整洁之道</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">职业精神/代码整洁之道/代码整洁之道</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-02-22T08:07:46.828Z" itemprop="datePublished" class="page-time">
+  2020-02-22
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第一章-整洁代码"><span class="post-toc-number">1.</span> <span class="post-toc-text">第一章  整洁代码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、糟糕代码的原因"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">1、糟糕代码的原因</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、整洁代码"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">2、整洁代码</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第二章-有意义的命名"><span class="post-toc-number">2.</span> <span class="post-toc-text">第二章  有意义的命名</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、文件命名"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">1、文件命名</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、方法命名"><span class="post-toc-number">2.0.2.</span> <span class="post-toc-text">2、方法命名</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3、属性命名"><span class="post-toc-number">2.0.3.</span> <span class="post-toc-text">3、属性命名</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第三章-函数"><span class="post-toc-number">3.</span> <span class="post-toc-text">第三章 函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第四章-注释"><span class="post-toc-number">4.</span> <span class="post-toc-text">第四章 注释</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、好注释："><span class="post-toc-number">4.0.1.</span> <span class="post-toc-text">1、好注释：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、坏注释"><span class="post-toc-number">4.0.2.</span> <span class="post-toc-text">2、坏注释</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第五章-代码格式"><span class="post-toc-number">5.</span> <span class="post-toc-text">第五章 代码格式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第六章-对象和数据结构"><span class="post-toc-number">6.</span> <span class="post-toc-text">第六章 对象和数据结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、影藏对象，暴露操作"><span class="post-toc-number">6.0.1.</span> <span class="post-toc-text">1、影藏对象，暴露操作</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第七章-错误处理"><span class="post-toc-number">7.</span> <span class="post-toc-text">第七章 错误处理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第八章-边界"><span class="post-toc-number">8.</span> <span class="post-toc-text">第八章 边界</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第九章-单元测试"><span class="post-toc-number">9.</span> <span class="post-toc-text">第九章 单元测试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、重视测试"><span class="post-toc-number">9.0.1.</span> <span class="post-toc-text">1、重视测试</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、测试的F-I-R-S-T规则"><span class="post-toc-number">9.0.2.</span> <span class="post-toc-text">2、测试的F.I.R.S.T规则</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第十章-类"><span class="post-toc-number">10.</span> <span class="post-toc-text">第十章 类</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第十一章-系统"><span class="post-toc-number">11.</span> <span class="post-toc-text">第十一章 系统</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第十七章-味道与启发"><span class="post-toc-number">12.</span> <span class="post-toc-text">第十七章 味道与启发</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1、注释"><span class="post-toc-number">12.0.1.</span> <span class="post-toc-text">1、注释</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2、环境"><span class="post-toc-number">12.0.2.</span> <span class="post-toc-text">2、环境</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3、函数"><span class="post-toc-number">12.0.3.</span> <span class="post-toc-text">3、函数</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#4、一般性问题"><span class="post-toc-number">12.0.4.</span> <span class="post-toc-text">4、一般性问题</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#6、Java"><span class="post-toc-number">12.0.5.</span> <span class="post-toc-text">6、Java</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#7、名称"><span class="post-toc-number">12.0.6.</span> <span class="post-toc-text">7、名称</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#8、测试"><span class="post-toc-number">12.0.7.</span> <span class="post-toc-text">8、测试</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-职业精神/代码整洁之道/代码整洁之道"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">职业精神/代码整洁之道/代码整洁之道</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-02-22 16:07:46" datetime="2020-02-22T08:07:46.828Z"  itemprop="datePublished">2020-02-22</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>#《代码整洁之道》</p>
+<blockquote>
+<p>勒布朗法则：稍后等于永不。</p>
+</blockquote>
+<h3 id="第一章-整洁代码"><a href="#第一章-整洁代码" class="headerlink" title="第一章  整洁代码"></a>第一章  整洁代码</h3><h5 id="1、糟糕代码的原因"><a href="#1、糟糕代码的原因" class="headerlink" title="1、糟糕代码的原因"></a>1、糟糕代码的原因</h5><blockquote>
+<p>在我自己来看，写出糟糕代码可能是以下几个原因：</p>
+<ul>
+<li>编程经验不够，没有意识到代码整洁的重要性，处于功能实现即可完成任务的阶段；</li>
+<li>有“整洁代码、优化代码”的意识，在具体编程时，由于项目进度和时间的原因，没有时间去思考如何优化，如何使代码整洁。最后只能草草了事，完成任务即可。想着可以后续继续优化，但只是停留在这想法上了。</li>
+<li>力不从心，有优化代码的想法，但是不知道该如何进行优化、整洁。或者是不知道如何深层次的进行优化。</li>
+</ul>
+</blockquote>
+<h5 id="2、整洁代码"><a href="#2、整洁代码" class="headerlink" title="2、整洁代码"></a>2、整洁代码</h5><blockquote>
+<p>在Bjarne Stroustrup认为，整洁代码：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/0F4900F572324F36B3E61138387133ED?method=download&shareKey=69f16bfb706cc3cd9216f7159243f66a" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+</blockquote>
+<blockquote>
+<p>在Grady Booch看来，整洁代码为：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/0A4E97760DBD4B3E96C1BBAC50EF0055?method=download&shareKey=e94b38a7af0d5bf9370a847afb8f5c72" alt="整洁代码2" title="">
+                </div>
+                <div class="image-caption">整洁代码2</div>
+            </figure>
+</blockquote>
+<blockquote>
+<p>Dave Thomas认为：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/6957B2074516409CB8E307FFB504E865?method=download&shareKey=84b30ad4c8ba71ced1453e9cbae2daad" alt="整洁代码3" title="">
+                </div>
+                <div class="image-caption">整洁代码3</div>
+            </figure>
+</blockquote>
+<blockquote>
+<p>Michael Feathers认为：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/E2BD041522914D82A5DDE3A4DD6EB206?method=download&shareKey=5aecf43ba139e90014155e4674b73740" alt="整洁代码4" title="">
+                </div>
+                <div class="image-caption">整洁代码4</div>
+            </figure>
+</blockquote>
+<blockquote>
+<p>Ron Jeffries认为：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/6EACC9AB08134A558A1B5598B8633E08?method=download&shareKey=2b7a2890211f06d7227b15495eda8495" alt="整洁代码5" title="">
+                </div>
+                <div class="image-caption">整洁代码5</div>
+            </figure>
+</blockquote>
+<h3 id="第二章-有意义的命名"><a href="#第二章-有意义的命名" class="headerlink" title="第二章  有意义的命名"></a>第二章  有意义的命名</h3><h5 id="1、文件命名"><a href="#1、文件命名" class="headerlink" title="1、文件命名"></a>1、文件命名</h5><blockquote>
+<p>文件一般包括类、配置文件和资源文件。文件的命名一般是名次或者名次短语。</p>
+</blockquote>
+<h5 id="2、方法命名"><a href="#2、方法命名" class="headerlink" title="2、方法命名"></a>2、方法命名</h5><blockquote>
+<p>这种类型的命名一般是动词或者动词短语。方法一般是为解决某个问题或者处理某种逻辑而存在的，在命名上最好是体现出这个方法的作用</p>
+</blockquote>
+<h5 id="3、属性命名"><a href="#3、属性命名" class="headerlink" title="3、属性命名"></a>3、属性命名</h5><blockquote>
+<p>普通属性可以使用驼峰式；静态变量属性最好使用A_B_C式的。命名使用英语单词，避免中英混杂，名字最好可以体现这个属性所表达的意义。</p>
+</blockquote>
+<h3 id="第三章-函数"><a href="#第三章-函数" class="headerlink" title="第三章 函数"></a>第三章 函数</h3><blockquote>
+<ol>
+<li>函数应当尽量的短；</li>
+<li>函数的缩进层级最多应当为2级，注意在if、else、while、for等语句块里面应当只是一个函数调用，不应再嵌套；</li>
+<li>函数应当只做好一件事。（看一个函数是否还可以拆分）</li>
+<li>函数名称上面也叙述过了，不要担心函数名称长度。长而具有描述性的名称是可以被接受的，命名的风格要保持一致；</li>
+<li>函数的参数应当尽可能的少，最多为三个；</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>函数的书写功底也并非一日之功，想写出高效简洁就可以写出来的，是需要有一定的代码积累，有一定的编程架构思想，懂得功能分解才能达到的境界，不然也只是部分优化或者不完全优化，达不到一个高标准。</p>
+</blockquote>
+<h3 id="第四章-注释"><a href="#第四章-注释" class="headerlink" title="第四章 注释"></a>第四章 注释</h3><blockquote>
+<p>以前在自己看来，多写点注视应该总是没错的，对自己看代码或者后面的开发者看总是有益无害的。但是看了本书之后，纠结于以后到底要不要写注释，且现在来看自己以前写的都是烂注释，书中对于注释要求甚是严格：</p>
+</blockquote>
+<h5 id="1、好注释："><a href="#1、好注释：" class="headerlink" title="1、好注释："></a>1、好注释：</h5><blockquote>
+<ul>
+<li>提供法律信息</li>
+<li>提供代码的有效信息</li>
+<li>说明意图，解释代码的意图，或者是输出什么结果</li>
+<li>可以阐释代码的结果，以进行比对，但是务必要保证注释的正确性，避免风险</li>
+<li>有警示作用的代码，提醒读者或者此处需要注意什么问题</li>
+<li>利用TODO或者FIX注释，标识将来需要完成或者完善的功能</li>
+</ul>
+</blockquote>
+<h5 id="2、坏注释"><a href="#2、坏注释" class="headerlink" title="2、坏注释"></a>2、坏注释</h5><blockquote>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/F2C2AA03773245F7AB0EE5DC6BF7C932?method=download&shareKey=2cf7854300efc43250e71ff7c695447b" alt="坏注释" title="">
+                </div>
+                <div class="image-caption">坏注释</div>
+            </figure>
+</blockquote>
+<h3 id="第五章-代码格式"><a href="#第五章-代码格式" class="headerlink" title="第五章 代码格式"></a>第五章 代码格式</h3><h3 id="第六章-对象和数据结构"><a href="#第六章-对象和数据结构" class="headerlink" title="第六章 对象和数据结构"></a>第六章 对象和数据结构</h3><h5 id="1、影藏对象，暴露操作"><a href="#1、影藏对象，暴露操作" class="headerlink" title="1、影藏对象，暴露操作"></a>1、影藏对象，暴露操作</h5><blockquote>
+<p>过程式代码难以添加数据结构，因为必须修改所有的函数；面向对象代码难以添加新函数，因为需要修改所有的类。</p>
+</blockquote>
+<h3 id="第七章-错误处理"><a href="#第七章-错误处理" class="headerlink" title="第七章 错误处理"></a>第七章 错误处理</h3><blockquote>
+<p> 1、避免使用返回错误码，利用异常处理错误</p>
+<p> 2、使用catch finally去捕获异常，使用不可控异常，在方法上抛出异常，会违背接口设计的开放必和原则，在它的继承和使用方法上都得抛出该异常，在底层如果修改了代码，可能会影响到其他的方法调用</p>
+<p> 3、最好在代码中给出异常可能发生的环境</p>
+</blockquote>
+<h3 id="第八章-边界"><a href="#第八章-边界" class="headerlink" title="第八章 边界"></a>第八章 边界</h3><blockquote>
+<p>没看太懂</p>
+</blockquote>
+<h3 id="第九章-单元测试"><a href="#第九章-单元测试" class="headerlink" title="第九章 单元测试"></a>第九章 单元测试</h3><h5 id="1、重视测试"><a href="#1、重视测试" class="headerlink" title="1、重视测试"></a>1、重视测试</h5><blockquote>
+<p>在项目团队中，如果不是有要求，我想应该是没有几分人会去主动写测试类的。所以首先有这个意识很重要。项目中也有测试团队这也许导致了开发有所依赖，所以不去编写测试代码或者是随意编写测试代码。但实际上编写简洁、整洁的测试代码是对自己的代码的检验，也是一种责任的体现，团队中每个环节、每个人都能超标保证自己的任务的质量，不去依赖下一个环节，项目的质量就会提高。</p>
+</blockquote>
+<h5 id="2、测试的F-I-R-S-T规则"><a href="#2、测试的F-I-R-S-T规则" class="headerlink" title="2、测试的F.I.R.S.T规则"></a>2、测试的F.I.R.S.T规则</h5><blockquote>
+<ul>
+<li><strong>快速(Fast):</strong> 测试代码的逻辑不应太过复杂，能够快速运行，如果测试代码运行过慢，可能就不会频繁进行测试了；</li>
+<li>*<em>独立(Independent): *</em>每个测试方法测试类应当独立，彼此之间不能有依赖，某个测试不能成为下一个测试的依赖条件，这会导致测试很复杂；</li>
+<li><strong>可重复(Repeatable):</strong> 测试不应该依赖环境，在任何环境中都应当测试通过，当测试不能在任意环境中重复测试时，说明代码中存在导致其失败的接口；</li>
+<li><strong>自足验证(Self-Validating):</strong> 么个测试方法运行都应当有true或false输出，测试者不应当通过查询日志或主观判断进行验证。</li>
+<li><strong>及时(Timely):</strong> 测试应及时编写，单元测试应当在使其通过的生产代码之前编写。否则生产代码编写好之后可能会由于生产代码的逻辑复杂就不会去编写测试代码了。</li>
+</ul>
+</blockquote>
+<h3 id="第十章-类"><a href="#第十章-类" class="headerlink" title="第十章 类"></a>第十章 类</h3><h3 id="第十一章-系统"><a href="#第十一章-系统" class="headerlink" title="第十一章 系统"></a>第十一章 系统</h3><blockquote>
+<p>“一开始就做对系统”是不可能的，我们应当只去实现用户当前的需求，然后对系统重构，实现新的用户需求。但是在我认为，在我们有了大数据之后，我们应该去探索、预测用户的需求，一味被动等待用户有了需求在去实现就有点落后了。</p>
+</blockquote>
+<h3 id="第十七章-味道与启发"><a href="#第十七章-味道与启发" class="headerlink" title="第十七章 味道与启发"></a>第十七章 味道与启发</h3><h5 id="1、注释"><a href="#1、注释" class="headerlink" title="1、注释"></a>1、注释</h5><blockquote>
+<ul>
+<li>不恰当的信息：注释只应当描述有关代码和设计的技术性信息</li>
+<li>废弃的注释：应当即使删除掉或者更新</li>
+<li>冗余的注释</li>
+<li>糟糕的注释：写注释应当和写代码一样，要思考一下</li>
+<li>注释掉的代码：应当及时删除</li>
+</ul>
+</blockquote>
+<h5 id="2、环境"><a href="#2、环境" class="headerlink" title="2、环境"></a>2、环境</h5><blockquote>
+<ul>
+<li>需要多少步才能实现构建：应当使用单个命令签出系统，并用单个指令构建，系统的构建不应当是分小步或者是繁琐的。</li>
+<li>需要多少步才能做到的测试：单元测试应当可以在一个指令下全部运行。</li>
+</ul>
+</blockquote>
+<h5 id="3、函数"><a href="#3、函数" class="headerlink" title="3、函数"></a>3、函数</h5><blockquote>
+<ul>
+<li>过多的参数：一个函数的参数应当少于3个，多余三个时应当被封装成为一个对象；</li>
+<li>输出参数：输出单数违反直觉，可以直接改变对象的状态</li>
+<li>表示参数：函数中的标识参数过多说明函数做了不止一件事</li>
+<li>死函数：没有被调用的函数应当删除掉</li>
+</ul>
+</blockquote>
+<h5 id="4、一般性问题"><a href="#4、一般性问题" class="headerlink" title="4、一般性问题"></a>4、一般性问题</h5><blockquote>
+<ul>
+<li>一个源文件存在多种语言：一个源文件的语言种类应当尽可能的少，降低文件的复杂性</li>
+<li>明显的行为未被实现：函数的实现应当按照其描述或名字定义所形容的实现</li>
+<li>不正确的边界行为：边界行为要靠编辑测试去发现不应当靠直觉</li>
+<li>忽视安全：警告也有可能造成程序运行的错误，对于安全机制和警告应当去处理而不是视而不见</li>
+<li>重复：代码中又重复说明代码还有可以优化和抽象的地方</li>
+<li>在错误的抽象层级上的代码：抽象类和派生类的界限需要根据设计划分清楚</li>
+<li>基类依赖于派生类：</li>
+<li>信息过多：</li>
+<li>死代码：删除系统中存在的死代码</li>
+<li>垂直分割：变量函数的定义和位置，应当遵循前面章节所描述的</li>
+<li>前后不一致：同类型的变量或方法取名定义时在系统中应当是一致的</li>
+<li>混淆视听：没有实现的构造器、没有用到的变量、没有调用的函数、没有信息量的注释；这些都应当被疑除掉。</li>
+<li>人为耦合：声明函数、变量和常量应当有统一的地方，而不是信手拈来的位置</li>
+<li>选择算子参数：</li>
+<li>晦涩的意图：代码要尽可能有表达力</li>
+<li>位置错误的权责：</li>
+<li>不恰当的静态方法：一般情况下尽量使用非静态函数，除非该函数没必要使用多态</li>
+<li>使用解释性变量：</li>
+<li>函数名称应该表达其行为：</li>
+<li>理解算法;</li>
+<li>用多态代替if\else和switch\case</li>
+<li>遵循标准约定：</li>
+<li>用命名变量代替魔术数：</li>
+<li>准确：消除代码的不确定性</li>
+<li>结构基于约定：</li>
+<li>封装条件：通常if和while语句内的判断条件如果过多都是可以封装成为一个函数的</li>
+<li>避免否定性条件：肯定是条件要比否定式条件好理解</li>
+<li>函数只该做一件事：</li>
+<li>掩蔽时序耦合：当调用函数的执行是有顺序的时候，可以通过调用显示执行</li>
+<li>别随意</li>
+<li>封装边界条件：编辑处理的代码应当集中在一处，不应散落在代码中</li>
+<li>函数应该只在一个抽象层级上</li>
+<li>在较高层级放置可配置数据</li>
+<li>避免传递浏览</li>
+</ul>
+</blockquote>
+<h5 id="6、Java"><a href="#6、Java" class="headerlink" title="6、Java"></a>6、Java</h5><blockquote>
+<ul>
+<li>通过使用通配符避免过长的导入清单</li>
+<li>不要继承变量</li>
+<li>常量和枚举</li>
+</ul>
+</blockquote>
+<h5 id="7、名称"><a href="#7、名称" class="headerlink" title="7、名称"></a>7、名称</h5><blockquote>
+<ul>
+<li>采用描述性名称</li>
+<li>名称应与抽象层级相符</li>
+<li>尽可能使用标准命名法</li>
+<li>无歧义的名称</li>
+<li>为较大作用范围选用较长的名字</li>
+<li>避免编码</li>
+<li>函数名称应当与函数功能相符，不应当有副作用</li>
+</ul>
+</blockquote>
+<h5 id="8、测试"><a href="#8、测试" class="headerlink" title="8、测试"></a>8、测试</h5><blockquote>
+<ul>
+<li>测试不足：测试的覆盖率没有达到100%，就是不足</li>
+<li>使用测试覆盖率的工具</li>
+<li>别略过小测试</li>
+<li>被忽略的测试就是对不确定事物的疑问</li>
+<li>边界条件的测试</li>
+<li>全面测试相近的缺陷</li>
+<li>测试失败的模式有启发性</li>
+<li>测试覆盖率的模式有启发性</li>
+<li>测试应该快速</li>
+</ul>
+</blockquote>
+<div style="text-align:center;margin-top:50px;margin-bottom:50px;">
+    <img src="https://note.youdao.com/yws/api/personal/file/C2C6FCFDC10942B6A3532E6F0928E455?method=download&shareKey=c554dacfc5193c29d4b35682aa1226d9" />
+</div>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-02-22T08:07:46.830Z" itemprop="dateUpdated">2020-02-22 16:07:46</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" target="_blank" rel="external">https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/&title=《职业精神/代码整洁之道/代码整洁之道》 — 冲鸭&pic=https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/&title=《职业精神/代码整洁之道/代码整洁之道》 — 冲鸭&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《职业精神/代码整洁之道/代码整洁之道》 — 冲鸭&url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/&via=https://zcy-fover.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/02/22/%E8%AE%BE%E8%AE%A1/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/Head%20First%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">设计/设计模式/Head First设计模式</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/02/22/middle-service/apm/Skywalking/Skywalking%E4%BB%8B%E7%BB%8D/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">middle-service/apm/Skywalking/Skywalking介绍</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/&title=《职业精神/代码整洁之道/代码整洁之道》 — 冲鸭&pic=https://note.youdao.com/yws/api/personal/file/E76EFC1A788A4C99B0203665B2A9A8E2?method=download&shareKey=2d6c0dd26daaab254074e500756a3af4" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/&title=《职业精神/代码整洁之道/代码整洁之道》 — 冲鸭&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《职业精神/代码整洁之道/代码整洁之道》 — 冲鸭&url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/&via=https://zcy-fover.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://zcy-fover.github.io/2020/02/22/%E8%81%8C%E4%B8%9A%E7%B2%BE%E7%A5%9E/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
