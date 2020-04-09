@@ -148,6 +148,139 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-java/Thread/Thread-wait-sleep"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.702Z"  itemprop="datePublished">2019-01-20</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2019/01/20/java/Thread/Thread-wait-sleep/">java/Thread/Thread-wait-sleep</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Thread wait &amp; sleepThread wait线程等待（Waiting） 是线程的状态之一。通过 Thread.wait() 进入等待状态的线程会自动放弃 对象锁（Monitor），然后进入线程等待状态。当其他线程调用 notify() 或 notifyAll() ，等待线程进入可运行状态（Runnable），等待 CPU 调度。线程的一生介绍了线程状态间切换的过程。
+...
+    
+
+        <a href="/2019/01/20/java/Thread/Thread-wait-sleep/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-java/Thread/线程的一生"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.701Z"  itemprop="datePublished">2019-01-20</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2019/01/20/java/Thread/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E7%94%9F/">java/Thread/线程的一生</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        线程的一生线程是 CPU 调度的基本单位。Java 中线程状态分为 6 种：
+
+New：创建状态
+Runnable：可运行状态
+Waiting：等待状态
+Timed Waiting：限时等待状态
+Blocking：阻塞状态
+Terminated：结束状态
+
+Thread.State 中介绍了各个状态的含义。
+Runable创建（new） 后的线程对象，调用 Thread.start() 方法...
+    
+
+        <a href="/2019/01/20/java/Thread/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E7%94%9F/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-java/jvm/Java的引用与回收"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.701Z"  itemprop="datePublished">2019-01-20</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/">java/jvm/Java的引用与回收</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Java 的引用与回收Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本篇不涉及）。
+强引用：通过 new 创建的引用，被强引用指向的对象，不会被 gc 回收。
+1Object ref = new Object();
+
+软引用：通过 SoftReference 包裹的引用，内存不足时，如果没有强引用指向它则被 gc 回收。
+1SoftReference weakRef = ...
+    
+
+        <a href="/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-net-work/okhttp/OkHttpClient3架构简介"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -468,144 +601,6 @@ OKHTTP系统架构模型
     
 
         <a href="/2019/01/01/net-work/okhttp/OKHTTP%E5%AD%A6%E4%B9%A0/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-数据存储/缓存/网站架构中的缓存结构整理"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2019-01-01 21:16:21" datetime="2019-01-01T13:16:21.593Z"  itemprop="datePublished">2019-01-01</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/">数据存储/缓存/网站架构中的缓存结构整理</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        网站架构中的缓存
-
-                
-                    
-                    
-                
-                image
-            
-
-网站架构缓存如图可分为：
-客户端缓存
-
-页面缓存
-将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。
-
-...
-    
-
-        <a href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-net-work/okhttp/OkHttpClient3线程模型"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2019-01-01 21:02:10" datetime="2019-01-01T13:02:10.914Z"  itemprop="datePublished">2019-01-01</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2019/01/01/net-work/okhttp/OkHttpClient3%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/">net-work/okhttp/OkHttpClient3线程模型</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        OkHttpClient3 线程模型
- 蛮荒之地，笔者正在火速开垦……
-
-
-    
-
-        <a href="/2019/01/01/net-work/okhttp/OkHttpClient3%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-net-work/http/HTTP2.0的价值在哪里"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2019-01-01 21:02:10" datetime="2019-01-01T13:02:10.914Z"  itemprop="datePublished">2019-01-01</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2019/01/01/net-work/http/HTTP2.0%E7%9A%84%E4%BB%B7%E5%80%BC%E5%9C%A8%E5%93%AA%E9%87%8C/">net-work/http/HTTP2.0的价值在哪里</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        HTTP 2.0 的价值在哪里
- 蛮荒之地，笔者正在火速开垦……
-
-
-    
-
-        <a href="/2019/01/01/net-work/http/HTTP2.0%E7%9A%84%E4%BB%B7%E5%80%BC%E5%9C%A8%E5%93%AA%E9%87%8C/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
