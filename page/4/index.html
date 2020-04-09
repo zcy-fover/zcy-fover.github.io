@@ -72,14 +72,14 @@
             <li class="waves-block waves-effect">
               <a href="/tags"  >
                 <i class="icon icon-lg icon-tags"></i>
-                Tags
+                标签
               </a>
             </li>
         
             <li class="waves-block waves-effect">
               <a href="/categories"  >
                 <i class="icon icon-lg icon-th-list"></i>
-                Categories
+                分类
               </a>
             </li>
         
@@ -188,6 +188,50 @@
         </li>
     
         <li class="post-list-item fade">
+            <article id="post-java/jvm/Java的引用与回收"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.701Z"  itemprop="datePublished">2019-01-20</time>
+
+        
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/">java/jvm/Java的引用与回收</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Java 的引用与回收Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本篇不涉及）。
+强引用：通过 new 创建的引用，被强引用指向的对象，不会被 gc 回收。
+1Object ref = new Object();
+
+软引用：通过 SoftReference 包裹的引用，内存不足时，如果没有强引用指向它则被 gc 回收。
+1SoftReference weakRef = ...
+    
+
+        <a href="/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-java/Thread/线程的一生"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -228,50 +272,6 @@ Runable创建（new） 后的线程对象，调用 Thread.start() 方法...
     
 
         <a href="/2019/01/20/java/Thread/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E7%94%9F/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-java/jvm/Java的引用与回收"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2019-01-20 14:38:22" datetime="2019-01-20T06:38:22.701Z"  itemprop="datePublished">2019-01-20</time>
-
-        
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/">java/jvm/Java的引用与回收</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        Java 的引用与回收Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本篇不涉及）。
-强引用：通过 new 创建的引用，被强引用指向的对象，不会被 gc 回收。
-1Object ref = new Object();
-
-软引用：通过 SoftReference 包裹的引用，内存不足时，如果没有强引用指向它则被 gc 回收。
-1SoftReference weakRef = ...
-    
-
-        <a href="/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
