@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>数据存储/MySQL/06 查询及优化-上 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL,索引,查询,查询优化">
+    <meta name="description" content="慢查询及优化查询的执行过程：客户端，到服务端后：会话连接、SQL分析、SQL 优化、生成执行计划、执行后返回结果。执行是整个生命周期最重要的阶段。 查询分析 EXPLAIN   属性 含义    id 查询中执行 select 子句或操作表的顺序，Id 相同执行顺序由上向下；id 越大优先级越高越先执行   select_type select 子句查询类型，主要区别普通查询、联合查询、子查询等复">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据存储&#x2F;MySQL&#x2F;06 查询及优化-上">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/04/18/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/06%20%E6%9F%A5%E8%AF%A2%E5%8F%8A%E4%BC%98%E5%8C%96-%E4%B8%8A/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="慢查询及优化查询的执行过程：客户端，到服务端后：会话连接、SQL分析、SQL 优化、生成执行计划、执行后返回结果。执行是整个生命周期最重要的阶段。 查询分析 EXPLAIN   属性 含义    id 查询中执行 select 子句或操作表的顺序，Id 相同执行顺序由上向下；id 越大优先级越高越先执行   select_type select 子句查询类型，主要区别普通查询、联合查询、子查询等复">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBecd6654d5d2586335eaa84d07396b27f?method=download&shareKey=8e62b5af757ec7ab3585e206b25a01c4">
+<meta property="article:published_time" content="2020-04-18T03:29:37.484Z">
+<meta property="article:modified_time" content="2020-04-18T05:00:24.452Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="索引">
+<meta property="article:tag" content="查询">
+<meta property="article:tag" content="查询优化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://note.youdao.com/yws/api/personal/file/WEBecd6654d5d2586335eaa84d07396b27f?method=download&shareKey=8e62b5af757ec7ab3585e206b25a01c4">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://q8izqhi2s.bkt.clouddn.com/WechatIMG9.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">数据存储/MySQL/06 查询及优化-上</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">数据存储/MySQL/06 查询及优化-上</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-04-18T03:29:37.484Z" itemprop="datePublished" class="page-time">
+  2020-04-18
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#慢查询及优化"><span class="post-toc-number">1.</span> <span class="post-toc-text">慢查询及优化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询分析-EXPLAIN"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">查询分析 EXPLAIN</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#select-type"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">select_type</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#type"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">type</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ref"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">ref</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Extra"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">Extra</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#慢查询"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">慢查询</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#不需要的数据"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">不需要的数据</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#扫描额外的记录"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">扫描额外的记录</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询的执行过程"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">查询的执行过程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#通信协议"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">通信协议</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#查询状态"><span class="post-toc-number">1.3.1.1.</span> <span class="post-toc-text">查询状态</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查询缓存"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">查询缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查询优化处理"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">查询优化处理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#语法解析器和预处理"><span class="post-toc-number">1.3.3.1.</span> <span class="post-toc-text">语法解析器和预处理</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#查询优化器"><span class="post-toc-number">1.3.3.2.</span> <span class="post-toc-text">查询优化器</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#数据和索引的统计信息"><span class="post-toc-number">1.3.3.3.</span> <span class="post-toc-text">数据和索引的统计信息</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#执行关联查询"><span class="post-toc-number">1.3.3.4.</span> <span class="post-toc-text">执行关联查询</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#执行计划"><span class="post-toc-number">1.3.3.5.</span> <span class="post-toc-text">执行计划</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#关联查询优化器"><span class="post-toc-number">1.3.3.6.</span> <span class="post-toc-text">关联查询优化器</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#排序优化"><span class="post-toc-number">1.3.3.7.</span> <span class="post-toc-text">排序优化</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#查询执行引擎"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">查询执行引擎</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#返回结果给客户端"><span class="post-toc-number">1.3.5.</span> <span class="post-toc-text">返回结果给客户端</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#重构查询方式"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">重构查询方式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#一个复杂查询还是多个简单查询"><span class="post-toc-number">1.4.1.</span> <span class="post-toc-text">一个复杂查询还是多个简单查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#切分查询"><span class="post-toc-number">1.4.2.</span> <span class="post-toc-text">切分查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分解关联查询"><span class="post-toc-number">1.4.3.</span> <span class="post-toc-text">分解关联查询</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-数据存储/MySQL/06 查询及优化-上"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">数据存储/MySQL/06 查询及优化-上</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-04-18 11:29:37" datetime="2020-04-18T03:29:37.484Z"  itemprop="datePublished">2020-04-18</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="慢查询及优化"><a href="#慢查询及优化" class="headerlink" title="慢查询及优化"></a>慢查询及优化</h2><p>查询的执行过程：客户端，到服务端后：会话连接、SQL分析、SQL 优化、生成执行计划、执行后返回结果。执行是整个生命周期最重要的阶段。</p>
+<h3 id="查询分析-EXPLAIN"><a href="#查询分析-EXPLAIN" class="headerlink" title="查询分析 EXPLAIN"></a>查询分析 EXPLAIN</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>查询中执行 select 子句或操作表的顺序，Id 相同执行顺序由上向下；id 越大优先级越高越先执行</td>
+</tr>
+<tr>
+<td>select_type</td>
+<td>select 子句查询类型，主要区别普通查询、联合查询、子查询等复杂查询</td>
+</tr>
+<tr>
+<td>table</td>
+<td>数据库中表名称，行数据是关于哪张表，可能不一定是真实的表名称</td>
+</tr>
+<tr>
+<td>partitions</td>
+<td>分区表命中的分区情况，非分区表该字段为空</td>
+</tr>
+<tr>
+<td>type</td>
+<td>访问类型，对表的访问方式</td>
+</tr>
+<tr>
+<td>possible_keys</td>
+<td>使用哪个索引能找到记录即该查询可以利用的索引。查询的列上若存在索引会被列出。如果没有则显示 NULL</td>
+</tr>
+<tr>
+<td>key</td>
+<td>实际查询过程中用到的索引，一定包含在 possible_keys 中，如果没有则显示 NULL</td>
+</tr>
+<tr>
+<td>key_len</td>
+<td>索引使用的字节数，如果是单列索引则是整个索引长度；如果是多列索引，则具体用到多少列索引就算多少</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>列与索引的比较，表的连接匹配条件，哪些列或常量被用于查找索引列上的值</td>
+</tr>
+<tr>
+<td>rows</td>
+<td>估算结果集行数</td>
+</tr>
+<tr>
+<td>filtered</td>
+<td>返回的结果行和需要扫描读到的行数的比值</td>
+</tr>
+<tr>
+<td>Extra</td>
+<td>解决查询的详细信息</td>
+</tr>
+</tbody></table>
+<h4 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a>select_type</h4><ul>
+<li><strong>simple</strong>：简单的 select 查询，查询中不包含子查询或者 union</li>
+<li><strong>primary</strong>：子查询中最外层查询，查询中包含任何复杂的子部分，最外层被标记</li>
+<li><strong>subquery</strong>：在 select 或 where 列表中包含子查询，结果不依赖外部查询</li>
+<li><strong>dependent subquery</strong>：子查询中第一个 select，依赖外部查询</li>
+<li><strong>uncacheable subquery</strong>：一个子查询的结果不能被缓存，必须重新评估外链接第一行</li>
+<li><strong>derived</strong>：在 from 列表中的子查询，MySQL 会递归执行这些子查询，然后把结果集放在临时表中</li>
+<li><strong>union</strong>：如果第二个 select 出现在 union 之后，则被标记为 union；如果 union 包含在 from 子句的子查询中，外层 select 被标记为 derived</li>
+<li><strong>union result</strong>：union 的结果，union 语句中第二个 select 后面的所有的 select</li>
+<li><strong>dependent union</strong>：union 中第二个或后面的 select 语句</li>
+</ul>
+<h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><ul>
+<li><strong>system</strong>：表中仅有一行，const 连接类型的特殊情况</li>
+<li><strong>const</strong>：通过索引一次就找到，const 用于比较主键索引和唯一索引，如果将主键放在了 where 条件中，MySQL 可以将其转换为常量</li>
+<li><strong>eq_ref</strong>：唯一性索引扫描，对于每个索引键表中只会有一行记录与之匹配</li>
+<li><strong>ref</strong>：非唯一性索引扫描，返回匹配某个单独值的所有行，本质上也是一种索引访问，它返回所有匹配某个单独值的行，可能会找多个符合条件的行，属于查找和扫描的混合体</li>
+<li><strong>ref_or_null</strong>：与 ref 类似，增加了 null 值比较</li>
+<li><strong>range</strong>：使用索引的范围扫描，见于使用 =, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;, BETWEEN, IN()或者like等运算符的查询中</li>
+<li><strong>index</strong>：遍历索引树，不需要读取数据行，例如只通过覆盖索引就查找到目标数据</li>
+<li><strong>all</strong>：全表扫描，然后在服务层根据条件过滤返回需要的记录</li>
+<li><strong>fulltext</strong>：全文索引，优先级较高，如果全文索引和普通索引同时存在，MySQL 会优先使用全文索引</li>
+<li><strong>index_merge</strong>：查询使用了两个以上的索引，最后取交集或者并集</li>
+<li><strong>unique_subquery</strong>：用于 where 中的 in 形式子查询，子查询返回不重复唯一值</li>
+<li><strong>index_subquery</strong>：用于 in 形式的子查询使用到了辅助索引或常数列表，子查询可能返回重复值，可以使用索引将子查询去重</li>
+</ul>
+<h4 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h4><p>常数等值查询显示 const，连接表查询显示驱动表的关联字段，使用了表达式、函数、条件列发生内部隐式转换显示 func</p>
+<h4 id="Extra"><a href="#Extra" class="headerlink" title="Extra"></a>Extra</h4><ul>
+<li><strong>distinct</strong>：在 select 使用了 distinct 关键字</li>
+<li><strong>no table used</strong>：不带 from 子句的查询或者 from dual</li>
+<li>使用 not in() 形式子查询或者 not exist 连接查询，这种叫做反连接。一般连接查询是先查内表再查外表，这种是先查外表再查内表</li>
+<li><strong>using filesort</strong>：排序时无法使用到索引，常见于 ORDER BY 和  GROUP BY 语句中</li>
+<li><strong>using index</strong>：查询时不需要回表，直接通过索引就可以查询</li>
+<li><strong>using where</strong>：存储引擎返回的记录不满足查询条件，需要在服务层通过条件过滤</li>
+<li><strong>using join buffer</strong>：使用了连接缓存，减少内表的循环数量以及顺序的扫描查询</li>
+<li><strong>using sort_union</strong>：表示使用 and 的各个索引的条件时，该信息表示是从处理结果获取交集</li>
+<li><strong>using_union</strong>：表示使用 or 连接各个使用索引的条件时，该信息表示从处理结果获取并集</li>
+<li><strong>using sort_union</strong>：表示使用 and 连接查询信息量大时，先查询主键，然后进行排序合并后，才能读取记录并返回。</li>
+<li><strong>using sort_intersection</strong>：表示使用 or 连接查询信息量大时，先查询主键，然后进行排序合并后，才能读取记录并返回。</li>
+<li><strong>firstmatch(td_name)</strong>：常见于 where 子句还有 in() 类查询，内表数据量大可能出现</li>
+<li><strong>loosescan(m…n)</strong>：在 in() 类型的子查询中，子查询返回的可能有重复记录</li>
+</ul>
+<h3 id="慢查询"><a href="#慢查询" class="headerlink" title="慢查询"></a>慢查询</h3><p>查询性能最基本的原因是访问不必要或者太多的数据。主要通过两个步骤来分析：应用是否检索了大量超过实际需要的数据，包括太多的行数据或者列数据；服务层是否在分析大量超过实际需要的行。</p>
+<h4 id="不需要的数据"><a href="#不需要的数据" class="headerlink" title="不需要的数据"></a>不需要的数据</h4><ul>
+<li><strong>查询不需要的记录：</strong>利用 <code>limit</code> 优化自己需要的记录行</li>
+<li><strong>多表关联时返回全部列：</strong>注意多表关联的情况，一般可能只需要关联表的某个字段而不是全部字段</li>
+<li><strong>取出全部列：</strong>使用了 <code>SELECT *</code>，可能情况比较少。使用 * 会让优化器无法利用覆盖索引完成优化，取出实际需要的列即可</li>
+<li><strong>重复查询相同的数据：</strong>执行相同的查询、返回相同的数据。考虑合理利用缓存</li>
+</ul>
+<h4 id="扫描额外的记录"><a href="#扫描额外的记录" class="headerlink" title="扫描额外的记录"></a>扫描额外的记录</h4><p>主要是在查询执行过程中是否扫描了过多的行数据，考虑是否可以优化</p>
+<ul>
+<li><strong>响应时间：</strong>响应时间主要包括两部分：服务时间和排队时间，服务时间是指数据库处理这个查询花费的具体时间，排队时间是服务器要等待某些资源没有没有执行查询的时间</li>
+<li><strong>扫描的行数和返回的行数：</strong>最好的情况就是扫描的行就是需要的返回的行，避免无用的行扫描</li>
+<li><strong>扫描的行数和访问类型：</strong>EXPLAIN 的 type 列反映了访问类型(全表扫描、索引扫描、范围扫描、唯一索引扫描、常数引用)。所以可以让 MySQL 以高效、扫描行数少的方式找到需要的记录</li>
+</ul>
+<p>MySQL 应用 WHERE 条件的场景：</p>
+<ul>
+<li>在索引中使用 WHERE 条件在存储引擎层过滤不匹配的记录</li>
+<li>使用索引覆盖扫描来返回记录，在 EXTRA (using index) 。直接从索引中返回结果这是在服务器层完成不需要回表查询</li>
+<li>从数据表中返回结果，过滤不满足条件的记录，在 EXTRA (using where) 。在服务层完成，先从数据表读出记录然后过滤</li>
+</ul>
+<p>如果发现需要扫描大量的行但是只返回少量的数据，可以从下面几个方面考虑优化：</p>
+<ul>
+<li>是否可以优化为从覆盖索引扫描，把需要的列放在覆盖索引中，查询索引时直接返回</li>
+<li>优化数据库、表结构</li>
+<li>优化查询 SQL</li>
+</ul>
+<h3 id="查询的执行过程"><a href="#查询的执行过程" class="headerlink" title="查询的执行过程"></a>查询的执行过程</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://note.youdao.com/yws/api/personal/file/WEBecd6654d5d2586335eaa84d07396b27f?method=download&shareKey=8e62b5af757ec7ab3585e206b25a01c4" alt="MySQL查询执行过程" title="">
+                </div>
+                <div class="image-caption">MySQL查询执行过程</div>
+            </figure>
+<h4 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h4><p>半双工通信协议。在同一时刻客户端和服务器只能有一方发送消息。这种通信简单快速，但是同一时刻只能是发送消息或者等待响应。双方传递数据包消息时服务器会通过 <code>max_allowed_packet</code> 控制客户端发送数据包的大小，如果查询太大服务器会拒绝或者抛出错误。但是如果服务器响应给客户端的数据如果太大，会分开为几个数据包发送，但是客户端不能拒收，如果太大导致客户端奔溃，此时客户端应该考虑加上 limit 限制。</p>
+<h5 id="查询状态"><a href="#查询状态" class="headerlink" title="查询状态"></a>查询状态</h5><p>整个连接，或者一个查询线程在某一个时刻都有一个状态，表示 MySQL 当前正在做什么。可以使用 <code>SHOW FULL PROCESSLIST</code> 查看。</p>
+<ul>
+<li><strong>Sleep</strong>：服务器线程正在等待客户端发送请求</li>
+<li><strong>Query</strong>：服务器线程正在执行查询或者将查询结果发送给客户端</li>
+<li><strong>Locked</strong>：在服务器层，正在等待表锁。在存储引擎级别实现的锁，例如 InnoDB 的行锁不会体现在线程状态中；但是 MyISAM 是会出现的状态</li>
+<li><strong>Analyzing and statistics</strong>：线程正在收集存储引擎的统计信息，生成查询的执行计划</li>
+<li><strong>Copy to tmp table [on disk]</strong>：线程正在执行查询，并将结果放到临时表中，此状态一般是正在执行 GROUP BY、文件排序或者 UNION 操作。如果后面有 on disk 标记，说明 MySQL 正在将临时表放到磁盘上</li>
+<li><strong>Sorting result</strong>：线程正在对结果集进行排序</li>
+<li><strong>Sending data</strong>：线程可能在多个状态间传递数据、生成结果集或者向客户端发送数据</li>
+</ul>
+<h4 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h4><p>查询缓存的配置开启，当一个查询请求到来时，会检查这个查询是否可以命中缓存中的数据。这个检查是通过大小写敏感的哈希查找实现。如果命中了缓存返回结果时 MySQL 会再检查用户是否有权限。如果从缓存中查询到结果则不会解析 SQL 语句生成执行计划等。</p>
+<h4 id="查询优化处理"><a href="#查询优化处理" class="headerlink" title="查询优化处理"></a>查询优化处理</h4><p>将 SQL 转换成一个执行计划，包括：解析 SQL、预处理、优化 SQL 执行计划</p>
+<h5 id="语法解析器和预处理"><a href="#语法解析器和预处理" class="headerlink" title="语法解析器和预处理"></a>语法解析器和预处理</h5><p>使用语法规则验证和解析查询，将 SQL 语句生成一颗对应的“解析树”。主要验证关键字是否合法，关键字顺序是否正确，符号是否匹配(引号、括号等)。<br>预处理器根据检查解析树是否合法，检查数据表和数据列是否存在，解析名字和别名是否有歧义。</p>
+<h5 id="查询优化器"><a href="#查询优化器" class="headerlink" title="查询优化器"></a>查询优化器</h5><p>将合法的语法树转化为执行计划。优化器就是找出其中最优的执行计划。MySQL 的优化器是基于成本选择最优的。最初是根据读取一个 4K 数据页的成本来计算，后来变成公式主要有：每个表或者索引的页面个数、索引的基数即索引的不同值、索引和数据行的长度、索引的分布情况几个维度的统计信息来计算。</p>
+<p>有很多原因会导致选择错误的执行计划：</p>
+<ul>
+<li>统计信息不准确</li>
+<li>执行计划的估算成本不能等同于实际执行的成本</li>
+<li>MySQL 选择的最优也只是基于成本模型最优，并不一定是最快的执行计划</li>
+<li>并没有考虑其他并发执行的查询，并发查询可能会影响当前的查询执行计划</li>
+<li>并不是所有都基于成本优化，也可能基于固定规则，例如存在全文索引的 MATCH() 子句，存在全文索引的时候就是用全文索引，不考虑其他索引是否更快</li>
+<li>不考虑不受其控制的成本，例如用户是否使用了自定义函数</li>
+</ul>
+<p>MySQL 有两个优化策略：静态优化、动态优化。静态优化相当于“编译时”优化，静态优化只执行一次；动态优化相当于“执行时”优化，在查询的每次执行时都会优化。MySQL 能够处理的优化：</p>
+<ul>
+<li>重新定义关联表的顺序</li>
+<li>将外连接转换为内连接，并不是所有的外连接都是以外连接的方式执行。根据 where 条件等有的可以转换为内连接</li>
+<li>使用等价变换规则</li>
+<li>优化 COUNT()、MIN()、MAX()，可以利用索引的性质来很快查询到对应数据：B-Tree索引的最左记录就是最小值，最右记录是最大值，如果是没有 where 条件的 COUNT(*) 在 MyISAM 引擎中专门有一个变量来存储行记录数</li>
+<li>预估并转化为常数，将可以转化为常数的表达式进行优化处理</li>
+<li>覆盖索引扫描</li>
+<li>子查询优化，避免多个查询对数据进行多次访问</li>
+<li>提前终止查询，例如使用了 limit，或者遇到不满足的条件立即终止</li>
+<li>等值传播</li>
+<li>列表 IN() 的比较，对 IN 列表中的数据先进行排序，然后二分查找来确定列表中的值是否满足条件<h5 id="数据和索引的统计信息"><a href="#数据和索引的统计信息" class="headerlink" title="数据和索引的统计信息"></a>数据和索引的统计信息</h5>统计信息由存储引擎实现，不同的存储引擎存储不同的统计信息<h5 id="执行关联查询"><a href="#执行关联查询" class="headerlink" title="执行关联查询"></a>执行关联查询</h5>MySQL 对任何关联查询都执行循环嵌套关联操作，先在一个表中循环取出单条数据，然后嵌套循环下一个表中寻找匹配的数据，直到找到所有匹配的行，然后根据匹配的所有行返回所需要的列。如果最后一个关联表无法找到更多的数据，则会返回上一层关联表继续寻找是否有匹配的记录，以此迭代执行。<h5 id="执行计划"><a href="#执行计划" class="headerlink" title="执行计划"></a>执行计划</h5>MySQL 会生成一颗查询的指令树，然后通过存储引擎执行这颗指令树然后返回查询结果<h5 id="关联查询优化器"><a href="#关联查询优化器" class="headerlink" title="关联查询优化器"></a>关联查询优化器</h5>优化多表关联查询的顺序，优化器通过评估不同顺序时的成本选择最优的顺序来执行。<h5 id="排序优化"><a href="#排序优化" class="headerlink" title="排序优化"></a>排序优化</h5>当不能使用索引进行排序时，MySQL 需要利用内存或者磁盘进行排序，这个过程叫做文件排序。如果排序的数据量小于“排序缓冲区”直接利用内存进行快速排序，如果超过了排序缓冲区，则将将数据分块，每个数据块独立使用快速排序，然后将排序结果放在磁盘上最后将结果合并。</li>
+<li><strong>两次传输排序(就版本使用)</strong>：读取行指针和需要排序的字段，进行排序然后读取对应的行数据。<strong>优点</strong>是排序缓冲区存储的数据较少，可以容纳更多的行进行排序；<strong>缺点</strong>要两次数据传输，第一次是读取行指针和排序字段，第二次是根据排序结果读取行数据，而且第二次排序后读取数据时不再是数据存储的顺序，产生大量的随机 I/O，导致数据传输的成本变高。</li>
+<li><strong>单次传输数据</strong>：先查询读取所有需要的列，然后进行排序，最后返回结果。这样做的优缺点就和上面相反。<strong>优点</strong>减少数据读取次数，对于 I/O 密集的应用可以提高效率；<strong>缺点</strong>行数据返回很多排序无关字段占用空间，如果数据量过大可能导致需要分块排序。</li>
+</ul>
+<p>在关联查询中，排序时如果排序字段都在自第一张表则在处理第一张表时就进行文件排序，其他情况都是先将关联查询结果放到临时表中然后然后再进行文件排序。如果有 limit 子句，也是先排序后使用 limit，MySQL 5.6 之后不再对所有结果排序，先丢掉不满足结果的数据然后再排序。</p>
+<h4 id="查询执行引擎"><a href="#查询执行引擎" class="headerlink" title="查询执行引擎"></a>查询执行引擎</h4><p>查询执行引擎根据生成的执行计划按步骤执行，通过调用存储引擎的接口来完成。</p>
+<h4 id="返回结果给客户端"><a href="#返回结果给客户端" class="headerlink" title="返回结果给客户端"></a>返回结果给客户端</h4><p>最后将查询结果返回给客户端，如果查询不需要返回结果给客户端，MySQL 也会返回查询的基本信息，影响的行数等。如果开启了查询缓存，也会将查询结果放到缓存中。</p>
+<p>服务端返回结果是增量、逐步返回的。这样处理服务端不需要存储太多结果，也避免一次性返回太多结果而消耗太多内存。</p>
+<p>结果集中的每一行会以一个满足 MySQL 服务端/客户端 通信协议的封包发送，然后通过 TCP 协议传输，TCP 协议传输时可能对封包缓存然后批量传输。</p>
+<h3 id="重构查询方式"><a href="#重构查询方式" class="headerlink" title="重构查询方式"></a>重构查询方式</h3><h4 id="一个复杂查询还是多个简单查询"><a href="#一个复杂查询还是多个简单查询" class="headerlink" title="一个复杂查询还是多个简单查询"></a>一个复杂查询还是多个简单查询</h4><p>多个简单查询考虑更多的是客户端/服务端连接、网络交互的影响，MySQL 对于连接-断开已经实现的很轻量级，现代网络速度也很快，所以多个简单查询不一定比复杂查询慢。</p>
+<h4 id="切分查询"><a href="#切分查询" class="headerlink" title="切分查询"></a>切分查询</h4><p>将大的查询切分为多个小查询(例如分页)</p>
+<h4 id="分解关联查询"><a href="#分解关联查询" class="headerlink" title="分解关联查询"></a>分解关联查询</h4><p>分解关联查询可以：</p>
+<ul>
+<li>利用缓存，缓存的效率更高</li>
+<li>查询分解后，单个查询可以减少锁的竞争</li>
+<li>在应用层做关联，可以更容易对数据库进行查分，做到高性能和可扩展</li>
+<li>拆分后可能会使得效率更高</li>
+<li>减少冗余记录的查询，在应用层做关联可以减少数据的重复查询，数据库层的关联查询很多情况下存在数据的重复访问。</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-04-18T05:00:24.452Z" itemprop="dateUpdated">2020-04-18 13:00:24</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="http://q8izqhi2s.bkt.clouddn.com/WechatIMG9.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%A5%E8%AF%A2/" rel="tag">查询</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" rel="tag">查询优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/04/18/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/06%20%E6%9F%A5%E8%AF%A2%E5%8F%8A%E4%BC%98%E5%8C%96-%E4%B8%8B/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">数据存储/MySQL/06 查询及优化-下</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/04/18/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E/11.%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">数据结构和算法/数据结构与算法之美/11.哈希算法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

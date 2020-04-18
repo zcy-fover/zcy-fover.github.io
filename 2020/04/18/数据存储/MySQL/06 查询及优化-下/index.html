@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>数据存储/MySQL/06 查询及优化-下 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL,索引,查询,查询优化">
+    <meta name="description" content="查询及优化查询优化器的局限性关联子查询在 where 条件中包含 IN() 的子查询语句，MySQL 执行时并不是先执行子查询然后执行外层查询。考虑使用 EXISTS() 来代替 UNION 的限制无法将限制条件下推到内层。如果利用 union 合并结果集，希望各个子句根据 limit 只取部分结果或者对结果集先排序在合并，那么需要在各个子句中分别使用 limit 或者排序。 索引合并优化wher">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据存储&#x2F;MySQL&#x2F;06 查询及优化-下">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/04/18/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/06%20%E6%9F%A5%E8%AF%A2%E5%8F%8A%E4%BC%98%E5%8C%96-%E4%B8%8B/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="查询及优化查询优化器的局限性关联子查询在 where 条件中包含 IN() 的子查询语句，MySQL 执行时并不是先执行子查询然后执行外层查询。考虑使用 EXISTS() 来代替 UNION 的限制无法将限制条件下推到内层。如果利用 union 合并结果集，希望各个子句根据 limit 只取部分结果或者对结果集先排序在合并，那么需要在各个子句中分别使用 limit 或者排序。 索引合并优化wher">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-18T03:29:39.402Z">
+<meta property="article:modified_time" content="2020-04-18T05:00:42.037Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="索引">
+<meta property="article:tag" content="查询">
+<meta property="article:tag" content="查询优化">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="http://q8izqhi2s.bkt.clouddn.com/WechatIMG9.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">数据存储/MySQL/06 查询及优化-下</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">数据存储/MySQL/06 查询及优化-下</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-04-18T03:29:39.402Z" itemprop="datePublished" class="page-time">
+  2020-04-18
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查询及优化"><span class="post-toc-number">1.</span> <span class="post-toc-text">查询及优化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询优化器的局限性"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">查询优化器的局限性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#关联子查询"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">关联子查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#UNION-的限制"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">UNION 的限制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#索引合并优化"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">索引合并优化</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#等值传递"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">等值传递</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#并行执行"><span class="post-toc-number">1.1.5.</span> <span class="post-toc-text">并行执行</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#哈希关联"><span class="post-toc-number">1.1.6.</span> <span class="post-toc-text">哈希关联</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#松散索引扫描"><span class="post-toc-number">1.1.7.</span> <span class="post-toc-text">松散索引扫描</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#最大值和最小值优化"><span class="post-toc-number">1.1.8.</span> <span class="post-toc-text">最大值和最小值优化</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#同表查询和更新"><span class="post-toc-number">1.1.9.</span> <span class="post-toc-text">同表查询和更新</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询优化器的提示"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">查询优化器的提示</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#优化特定类型的查询"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">优化特定类型的查询</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#优化-count-查询"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">优化 count() 查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#优化关联查询"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">优化关联查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#优化子查询"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">优化子查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#优化-group-by-和-distinct"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">优化 group by 和 distinct</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#优化-limit-分页"><span class="post-toc-number">1.3.5.</span> <span class="post-toc-text">优化 limit 分页</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#优化-SQL-CALC-FOUND-ROWS"><span class="post-toc-number">1.3.6.</span> <span class="post-toc-text">优化 SQL_CALC_FOUND_ROWS</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#优化-union-查询"><span class="post-toc-number">1.3.7.</span> <span class="post-toc-text">优化 union 查询</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#静态查询分析"><span class="post-toc-number">1.3.8.</span> <span class="post-toc-text">静态查询分析</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用用户自定义变量"><span class="post-toc-number">1.3.9.</span> <span class="post-toc-text">使用用户自定义变量</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-数据存储/MySQL/06 查询及优化-下"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">数据存储/MySQL/06 查询及优化-下</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-04-18 11:29:39" datetime="2020-04-18T03:29:39.402Z"  itemprop="datePublished">2020-04-18</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="查询及优化"><a href="#查询及优化" class="headerlink" title="查询及优化"></a>查询及优化</h2><h3 id="查询优化器的局限性"><a href="#查询优化器的局限性" class="headerlink" title="查询优化器的局限性"></a>查询优化器的局限性</h3><h4 id="关联子查询"><a href="#关联子查询" class="headerlink" title="关联子查询"></a>关联子查询</h4><p>在 where 条件中包含 IN() 的子查询语句，MySQL 执行时并不是先执行子查询然后执行外层查询。考虑使用 EXISTS() 来代替</p>
+<h4 id="UNION-的限制"><a href="#UNION-的限制" class="headerlink" title="UNION 的限制"></a>UNION 的限制</h4><p>无法将限制条件下推到内层。如果利用 union 合并结果集，希望各个子句根据 limit 只取部分结果或者对结果集先排序在合并，那么需要在各个子句中分别使用 limit 或者排序。</p>
+<h4 id="索引合并优化"><a href="#索引合并优化" class="headerlink" title="索引合并优化"></a>索引合并优化</h4><p>where 条件中包含多个复杂条件的时候，MySQL 可以访问单个表的多个索引以合并和交叉过滤的方式来定位需要查找的行</p>
+<h4 id="等值传递"><a href="#等值传递" class="headerlink" title="等值传递"></a>等值传递</h4><p>等值传递有可能造成额外的消耗。例如过大的 IN() 列表，而优化器发现存在 where、in 或者 using 子句，会将列表和另一个表的某列关联，这又可能导致优化和执行变慢。</p>
+<h4 id="并行执行"><a href="#并行执行" class="headerlink" title="并行执行"></a>并行执行</h4><p>MySQL 无法利用多核来执行查询</p>
+<h4 id="哈希关联"><a href="#哈希关联" class="headerlink" title="哈希关联"></a>哈希关联</h4><p>MySQL 的关联都是循环嵌套关联，不支持哈希关联。如果使用的是 Memory 存储引擎，使用的是哈希索引，关联也类似于哈希关联。</p>
+<h4 id="松散索引扫描"><a href="#松散索引扫描" class="headerlink" title="松散索引扫描"></a>松散索引扫描</h4><p>不支持松散索引扫描，无法按照不连续的方式扫描一个索引。MySQL 索引的扫描需要有一个起点和终点。</p>
+<h4 id="最大值和最小值优化"><a href="#最大值和最小值优化" class="headerlink" title="最大值和最小值优化"></a>最大值和最小值优化</h4><p>当 where 条件中的字段列没有索引时，此时不管求那个列的最值，都会进行全表扫描</p>
+<h4 id="同表查询和更新"><a href="#同表查询和更新" class="headerlink" title="同表查询和更新"></a>同表查询和更新</h4><p>MySQL 不允许在一个 SQL 中对同一张表同时进行查询和更新</p>
+<h3 id="查询优化器的提示"><a href="#查询优化器的提示" class="headerlink" title="查询优化器的提示"></a>查询优化器的提示</h3><ul>
+<li><strong>HIGH_PRIORITY、LOW_PRIORITY</strong>：标示语句的优先级，例如 <code>HIGH_PRIORITY</code> 用于 select 语句时，MySQL 会将该语句调度到所有正在等代表锁修改数据的语句之前。</li>
+<li><strong>DELAYED</strong>：对 insert 和 replace 有效，立即返回客户端然后将插入的行数据放到缓冲区在表空闲时将数据批量插入。适合于日志系统或者客户端大量写入并不需要等待插入结果的业务应用。这样会导致 <code>LAST_INSERT_ID()</code> 函数无法工作。</li>
+<li><strong>STRAIGHT_JOIN</strong>：放置在 select 关键字后让查询中所有的表按照在语句中出现的顺序进行关联；放在两个关联表的名字中间时固定其前后两个表的关联顺序。</li>
+<li><strong>SQL_SMALL_RESULT、SQL_BIG_RESULT</strong>：这两个提示只对 select 有效，告诉优化器对 group by 和 distinct 查询如何使用临时表及排序，结果集小放在内存临时表；结果集大建议放在磁盘临时表做排序。</li>
+<li><strong>SQL_BUFFER_RESULT</strong>：让查询优化器将查询结果放到临时表，然后尽可能快的释放表锁</li>
+<li><strong>SQL_CACHE、SQL_NO_CACHE</strong>：查询结果是否应该放在查询缓存中</li>
+<li><strong>SQL_CALC_FOUND_ROWS</strong>：会计算除去 limit 子句后这个查询需要返回的所有结果集总数，对实际查询结果不影响。</li>
+<li><strong>FOR UPDATE、LOCK IN SHARE MODE</strong>：控制了 select 语句的锁机制，只对实现了行锁存储引擎有效。</li>
+<li><strong>USING INDE、IGNORE INDEX、FORCE INDEX</strong>：使用或者不使用哪些索引来查询</li>
+</ul>
+<h3 id="优化特定类型的查询"><a href="#优化特定类型的查询" class="headerlink" title="优化特定类型的查询"></a>优化特定类型的查询</h3><h4 id="优化-count-查询"><a href="#优化-count-查询" class="headerlink" title="优化 count() 查询"></a>优化 count() 查询</h4><p>count() 聚合函数可以统计某个列值的数量，在统计列值要求非空(不统计NULL)；也可以统计行数，count(<em>) 统计结果集的行数，\</em> 并不会扩展成所有列，而是忽略所有列直接统计行数</p>
+<h4 id="优化关联查询"><a href="#优化关联查询" class="headerlink" title="优化关联查询"></a>优化关联查询</h4><ul>
+<li>确保 on 或者 using 子句的列上有索引</li>
+<li>确保任何的 group by 和 order by 表达式只涉及到一个表，这样 MySQL 才有可能利用索引来优化<h4 id="优化子查询"><a href="#优化子查询" class="headerlink" title="优化子查询"></a>优化子查询</h4><h4 id="优化-group-by-和-distinct"><a href="#优化-group-by-和-distinct" class="headerlink" title="优化 group by 和 distinct"></a>优化 group by 和 distinct</h4>都可以使用索引来优化，当无法使用索引时 group by 使用临时表或者文件排序来做分组<h4 id="优化-limit-分页"><a href="#优化-limit-分页" class="headerlink" title="优化 limit 分页"></a>优化 limit 分页</h4>当 offset 偏移量较大时，MySQL 需要扫描多条记录才能到达目标位置。考虑使用索引覆盖扫描，做一次关联操作再返回所需的列。<h4 id="优化-SQL-CALC-FOUND-ROWS"><a href="#优化-SQL-CALC-FOUND-ROWS" class="headerlink" title="优化 SQL_CALC_FOUND_ROWS"></a>优化 SQL_CALC_FOUND_ROWS</h4>在 limit 语句上加上这个提示，MySQL 就会不管结果是否实际需要都会扫描所有满足条件的行返回总数，而不是达到 limit 限制就停止。<h4 id="优化-union-查询"><a href="#优化-union-查询" class="headerlink" title="优化 union 查询"></a>优化 union 查询</h4>MySQL 通过创建填充临时表的方式来执行 union 查询，但是需要手工将 where、limit、order by 等子句下推到各个子查询中，以便优化器利用这些条件进行优化。如果不是要消除重复的行，则推荐使用 union all，如果没有没有 all，MySQL 会给临时表加上 DISTINCT 对临时表做唯一性检查，这样的代价是比较高的。<h4 id="静态查询分析"><a href="#静态查询分析" class="headerlink" title="静态查询分析"></a>静态查询分析</h4>解析查询日志、分析查询模式</li>
+</ul>
+<h4 id="使用用户自定义变量"><a href="#使用用户自定义变量" class="headerlink" title="使用用户自定义变量"></a>使用用户自定义变量</h4>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-04-18T05:00:42.037Z" itemprop="dateUpdated">2020-04-18 13:00:42</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="http://q8izqhi2s.bkt.clouddn.com/WechatIMG9.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%A5%E8%AF%A2/" rel="tag">查询</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/" rel="tag">查询优化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/04/18/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/06%20%E6%9F%A5%E8%AF%A2%E5%8F%8A%E4%BC%98%E5%8C%96-%E4%B8%8A/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">数据存储/MySQL/06 查询及优化-上</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

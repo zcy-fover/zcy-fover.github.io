@@ -20,7 +20,7 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="">
+    <meta name="keywords" content="MySQL,MySQL事务">
     <meta name="description" content="MySQL并发与事务并发控制MySQL 通过锁解决并发问题，一般有两种类型共享锁、排他锁，也叫读锁、写锁。 锁粒度加锁后就会影响系统的性能，需要在锁的性能损耗和数据安全性之间寻求平衡。 表锁用户写数据时需要先获得写锁，这会阻碍该表的所有的读写操作，读锁之间互不影响。写锁可以插到锁队列的读锁前面，反之则不行。 行级锁行级锁可以最大程度的支持并发处理，但这同时增大了锁的开销，MySQL 行级锁是在存储">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据存储&#x2F;MySQL&#x2F;MySQL并发与事务">
@@ -29,8 +29,10 @@
 <meta property="og:description" content="MySQL并发与事务并发控制MySQL 通过锁解决并发问题，一般有两种类型共享锁、排他锁，也叫读锁、写锁。 锁粒度加锁后就会影响系统的性能，需要在锁的性能损耗和数据安全性之间寻求平衡。 表锁用户写数据时需要先获得写锁，这会阻碍该表的所有的读写操作，读锁之间互不影响。写锁可以插到锁队列的读锁前面，反之则不行。 行级锁行级锁可以最大程度的支持并发处理，但这同时增大了锁的开销，MySQL 行级锁是在存储">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-01-20T08:59:40.000Z">
-<meta property="article:modified_time" content="2020-03-28T00:30:06.470Z">
+<meta property="article:modified_time" content="2020-04-18T05:01:05.156Z">
 <meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="MySQL事务">
 <meta name="twitter:card" content="summary">
     
         <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
@@ -242,7 +244,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-03-28T00:30:06.470Z" itemprop="dateUpdated">2020-03-28 08:30:06</time>
+    最后更新时间：<time datetime="2020-04-18T05:01:05.156Z" itemprop="dateUpdated">2020-04-18 13:01:05</time>
 </span><br>
 
 
@@ -262,6 +264,8 @@
 
         <div class="post-footer">
             
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL%E4%BA%8B%E5%8A%A1/" rel="tag">MySQL事务</a></li></ul>
+
 
             
 
