@@ -437,17 +437,8 @@ IO复用模型
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Redis 数据结构
-扁平化的特点，不存在数据库中列表查询一类的操作
-
-数据结构
-
-
-
-Value对象的通用数据结构
-
-
-1234567typedef struct redisObject &#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int refcount;   ...
+        Redis 数据结构扁平化的特点，不存在数据库中列表查询一类的操作。Redis 可以做缓存或者内存数据库
+数据结构Value对象的通用数据结构1234567typedef struct redisObject &#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int re...
     
 
         <a href="/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/" class="post-more waves-effect waves-button">

@@ -21,16 +21,16 @@
     
     
     <meta name="keywords" content="Redis,Redis数据结构">
-    <meta name="description" content="Redis 数据结构 扁平化的特点，不存在数据库中列表查询一类的操作  数据结构    Value对象的通用数据结构   1234567typedef struct redisObject &amp;#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int refcount;    vo">
+    <meta name="description" content="Redis 数据结构扁平化的特点，不存在数据库中列表查询一类的操作。Redis 可以做缓存或者内存数据库 数据结构Value对象的通用数据结构1234567typedef struct redisObject &amp;#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int refco">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据存储&#x2F;缓存&#x2F;redis数据结构整理">
 <meta property="og:url" content="https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/index.html">
 <meta property="og:site_name" content="冲鸭">
-<meta property="og:description" content="Redis 数据结构 扁平化的特点，不存在数据库中列表查询一类的操作  数据结构    Value对象的通用数据结构   1234567typedef struct redisObject &amp;#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int refcount;    vo">
+<meta property="og:description" content="Redis 数据结构扁平化的特点，不存在数据库中列表查询一类的操作。Redis 可以做缓存或者内存数据库 数据结构Value对象的通用数据结构1234567typedef struct redisObject &amp;#123;    unsigned type:4;    unsigned encoding:4;    unsigned lru:REDIS_LRU_BITS;    int refco">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBda5af15f4bd8cfc917bf6764295d3d05?method=download&shareKey=c5e74b3ff893de9a0f9e53fffce19803">
 <meta property="article:published_time" content="2019-01-01T13:18:50.746Z">
-<meta property="article:modified_time" content="2020-04-18T04:59:05.083Z">
+<meta property="article:modified_time" content="2020-04-25T12:54:31.514Z">
 <meta property="article:author" content="zcy-fover">
 <meta property="article:tag" content="Redis">
 <meta property="article:tag" content="Redis数据结构">
@@ -157,7 +157,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Redis-数据结构"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis 数据结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据结构"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">数据结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Value对象的通用数据结构"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">Value对象的通用数据结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#String"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">String</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#基本操作："><span class="post-toc-number">1.1.2.1.</span> <span class="post-toc-text">基本操作：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#List"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">List</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#基本操作：-1"><span class="post-toc-number">1.1.3.1.</span> <span class="post-toc-text">基本操作：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Map："><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">Map：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#基本操作：-2"><span class="post-toc-number">1.1.4.1.</span> <span class="post-toc-text">基本操作：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Set："><span class="post-toc-number">1.1.5.</span> <span class="post-toc-text">Set：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#基本操作：-3"><span class="post-toc-number">1.1.5.1.</span> <span class="post-toc-text">基本操作：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Sorted-Set："><span class="post-toc-number">1.1.6.</span> <span class="post-toc-text">Sorted-Set：</span></a></li></ol></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Redis-数据结构"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis 数据结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据结构"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">数据结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Value对象的通用数据结构"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">Value对象的通用数据结构</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#String"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">String</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#基本操作："><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">基本操作：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#应用场景："><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">应用场景：</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#List"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">List</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Hash："><span class="post-toc-number">1.4.</span> <span class="post-toc-text">Hash：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Set"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">Set</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Sorted-Set："><span class="post-toc-number">1.6.</span> <span class="post-toc-text">Sorted-Set：</span></a></li></ol></li></ol>
         </nav>
     </aside>
 
@@ -181,17 +181,8 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Redis-数据结构"><a href="#Redis-数据结构" class="headerlink" title="Redis 数据结构"></a>Redis 数据结构</h2><ul>
-<li><p>扁平化的特点，不存在数据库中列表查询一类的操作</p>
-</li>
-<li><h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3></li>
-</ul>
-<blockquote>
-<ul>
-<li><h4 id="Value对象的通用数据结构"><a href="#Value对象的通用数据结构" class="headerlink" title="Value对象的通用数据结构"></a>Value对象的通用数据结构</h4></li>
-</ul>
-<blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> encoding:<span class="number">4</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> lru:REDIS_LRU_BITS;</span><br><span class="line">    <span class="keyword">int</span> refcount;</span><br><span class="line">    <span class="keyword">void</span> *ptr;</span><br><span class="line">&#125;robj;</span><br></pre></td></tr></table></figure>
+            <h2 id="Redis-数据结构"><a href="#Redis-数据结构" class="headerlink" title="Redis 数据结构"></a>Redis 数据结构</h2><p>扁平化的特点，不存在数据库中列表查询一类的操作。Redis 可以做缓存或者内存数据库</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><h4 id="Value对象的通用数据结构"><a href="#Value对象的通用数据结构" class="headerlink" title="Value对象的通用数据结构"></a>Value对象的通用数据结构</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type:<span class="number">4</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> encoding:<span class="number">4</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> lru:REDIS_LRU_BITS;</span><br><span class="line">    <span class="keyword">int</span> refcount;</span><br><span class="line">    <span class="keyword">void</span> *ptr;</span><br><span class="line">&#125;robj;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><strong>type</strong>：指String、List等结构化类型</li>
@@ -200,97 +191,109 @@
 <li><strong>refcount</strong>：应用计数用于对象的垃圾回收</li>
 <li><strong>ptr</strong>：指向的是以encoding方式实现这个对象的实际承载者的地址，例如String对象对应的sds地址</li>
 </ul>
-</blockquote>
-<ul>
-<li><h4 id="String"><a href="#String" class="headerlink" title="String"></a>String</h4></li>
-</ul>
-<blockquote>
-<ul>
-<li><p>Redis中的String可以表示字符串、整数、浮点数三种类型，由Redis完成相互间的自动转型</p>
+<p>Redis 是二进制安全的存储，存储的数据编码格式有客户端自己指定，Redis 存储对应的字节。类似的还有 zookeeper、Kafka、hbase。</p>
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>Redis中的String可以表示字符串、整数、浮点数、二进制四种类型，由Redis完成相互间的自动转型</p>
+<h4 id="基本操作："><a href="#基本操作：" class="headerlink" title="基本操作："></a>基本操作：</h4><p> <img src="https://note.youdao.com/yws/api/personal/file/WEBda5af15f4bd8cfc917bf6764295d3d05?method=download&shareKey=c5e74b3ff893de9a0f9e53fffce19803" alt="Redis-String操作"></p>
+<p>存储二进制时，当偏移量超出当前字节的位数，也不会报错会继续开辟一个字节来存储</p>
+<h4 id="应用场景："><a href="#应用场景：" class="headerlink" title="应用场景："></a>应用场景：</h4><ul>
+<li><p>对于数值的自增自减可以用来做秒杀或者限流</p>
 </li>
-<li><h5 id="基本操作："><a href="#基本操作：" class="headerlink" title="基本操作："></a>基本操作：</h5></li>
+<li><p>二进制(bigmap)：可以利用二进制偏移的特性记录用户是否每天登录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SETBIT KEY1 2 1 # 第三天登录</span><br><span class="line">SETBIT KEY1 9 1 # 第十天登录</span><br><span class="line">BITCOUNT KEY1 0 -1  # 统计用户总共登录几次</span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
-<blockquote>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="https://note.youdao.com/yws/api/personal/file/WEBda5af15f4bd8cfc917bf6764295d3d05?method=download&shareKey=c5e74b3ff893de9a0f9e53fffce19803" alt="Redis-String操作" title="">
-                </div>
-                <div class="image-caption">Redis-String操作</div>
-            </figure>
-</blockquote>
-</blockquote>
-<ul>
-<li><h4 id="List"><a href="#List" class="headerlink" title="List"></a>List</h4></li>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><ul>
+<li><p>RPUSH/LPUSH：RPUSH将元素添加在列表尾，L则是将元素添加在列表头部</p>
+</li>
+<li><p>RPOP/LPOP：取出给定key的列表的尾部或头部的元素并删除元素</p>
+</li>
+<li><p>LINDEX：去除给定的key对应列表索引的某个元素</p>
+</li>
+<li><p>LRANGE：取出给定key的索引范围内的元素，例如LRANGE key1 0, 3即取出前四个元素</p>
+</li>
+<li><p>LTRIM：将给定key的列表索引范围外的元素去除</p>
+</li>
+<li><p>BLPOP/BRPOP：BRPOP key1 key2 60，60秒内，key1非空则从key1对应的列表中pop最右元素，否则从key2中pop最右元素；如果60秒内两个列表始终为空，则超时返回</p>
+</li>
+<li><p>BLPOPPUSH/BRPOPPUSH：BRPOPPUSH key1 key2 60即60秒内如果key1对应的列表非空，则把key1列表的最右元素pop，并且放到key2最后</p>
+<h3 id="Hash："><a href="#Hash：" class="headerlink" title="Hash："></a>Hash：</h3></li>
+<li><p>HGET：返回给定key， field的值</p>
+</li>
+<li><p>HSET：设置给定key，field的值</p>
+</li>
+<li><p>HMGET：返回给定key，field1、field2…的值</p>
+</li>
+<li><p>HMSET：设置给定key，多个field的值</p>
+</li>
+<li><p>HGETALL：获取给定key的所有field和value</p>
+</li>
+<li><p>HDEL：删除给定key， field元素</p>
+</li>
+<li><p>HKEYS：获取给定的key的所有field名字</p>
+</li>
+<li><p>HVALS：获取给定key的所有value</p>
+</li>
+<li><p>HLEN：获取给定的key的字段数量</p>
+</li>
+<li><p>HINCRBY：HINCRBY key field increment，给定key的field元素value自增整数</p>
+</li>
+<li><p>HINCRBYFLOAT：HINCRBYFLOAT key field increment ，给定key的field元素value自增浮点数</p>
+</li>
+<li><p>HEXISTS：检查指定key field是否存在</p>
+</li>
+<li><p>HSETNX：HSETNX key field value只有当field字段不存在时，设置该元素</p>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3></li>
+<li><p>SADD / SREM / SISMEMBER：实现向SET中增加、删除元素，以及检查元素是否存在</p>
+</li>
+<li><p>SCARD / SMEMBERS：实现统计元素个数、列出所有元素</p>
+</li>
+<li><p>SRANDMEMBER：随机获取元素的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SRANDMEMBER key1 3 #返回set集合中随机的三个元素，如果超过了set集合的大小，则全部返回</span><br><span class="line">SRANDMEMBER key1 -4 #随即返回4个元素，但是可能存在重复；如果超过了集合大小，则会返回要求的数值个数元素，存在重复</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SDIFF / SINTER：返回给定所有集合的差集/交集</p>
+</li>
+<li><p>SDIFFSTORE / SINTERSTORE destination key1 [key2]：返回所有集合的差集/交集，并且存储在 destination 中</p>
+</li>
+<li><p>SUNION：返回给定所有集合的并集</p>
+</li>
+<li><p>SUNIONSTORE  destination key1 [key2]：返回所有集合的并集，并且存储在 destination 中</p>
+</li>
+<li><p>SMOVE source destination member：将 member 元素从 source 集合移动到 destination 集合</p>
+</li>
+<li><p>SPOP：移除并返回集合中的一个随机元素</p>
+<h3 id="Sorted-Set："><a href="#Sorted-Set：" class="headerlink" title="Sorted-Set："></a>Sorted-Set：</h3></li>
+<li><p>ZADD / ZREM：添加/删除元素</p>
+</li>
+<li><p>ZRANK：确定某个KEY值在本sorted-set内按照顺序排在第几位</p>
+</li>
+<li><p>ZRANGE：例如ZRANGE key start stop，获取sorted-set中排名为start和stop间的数据</p>
+</li>
+<li><p>ZRANGESCOPE：ZRANGEBYSCOPE key min max获取sorted-set中scope介于min和max之间的数据</p>
+</li>
+<li><p>ZSCOPE：确定某个key值在本sorted-set内对应的 score</p>
+</li>
+<li><p>ZINCRBY：有序集合中对指定成员的分数加上增量 increment</p>
+</li>
+<li><p>ZCARD：获取有序集合成员数</p>
+</li>
+<li><p>ZCOUNT：获取指定 score 区间的成员数</p>
+</li>
+<li><p>ZLEXCOUNT：在有序集合中计算指定字典区间内成员数量</p>
+</li>
+<li><p>ZRANGE / ZREVRANGE：通过索引区间返回有序集合的元素 / 反转</p>
+</li>
+<li><p>ZRANGEBYLEX / ZREVRANGEBYLEX：通过字典区间返回元素 / 反转</p>
+</li>
+<li><p>ZRANGEBYSCORE / ZREVRANGEBYSCORE：通过 score 区间返回元素 / 反转</p>
+</li>
+<li><p>ZRANK / ZREVRANK：返回指定成员的索引(排名) / 反向排名</p>
+</li>
+<li><p>ZINTERSTORE：交集</p>
+</li>
+<li><p>ZUNIONSTORE：并集</p>
+</li>
 </ul>
-<blockquote>
-<ul>
-<li><h5 id="基本操作：-1"><a href="#基本操作：-1" class="headerlink" title="基本操作："></a>基本操作：</h5></li>
-</ul>
-<blockquote>
-<ul>
-<li>RPUSH/LPUSH：RPUSH将元素添加在列表尾，L则是将元素添加在列表头部</li>
-<li>RPOP/LPOP：取出给定key的列表的尾部或头部的元素并删除元素</li>
-<li>LINDEX：去除给定的key对应列表索引的某个元素</li>
-<li>LRANGE：取出给定key的索引范围内的元素，例如LRANGE key1 0, 3即取出前四个元素</li>
-<li>LTRIM：将给定key的列表索引范围的元素去除</li>
-<li>BLPOP/BRPOP：BRPOP key1 key2 60，60秒内，key1非空则从key1对应的列表中pop最右元素，否则从key2中pop最右元素；如果60秒内两个列表始终为空，则超时返回</li>
-<li>BLPOPPUSH/BRPOPPUSH：BRPOPPUSH key1 key2 60即60秒内如果key1对应的列表非空，则把key1列表的最右元素pop，并且放到key2最后</li>
-</ul>
-</blockquote>
-</blockquote>
-<ul>
-<li><h4 id="Map："><a href="#Map：" class="headerlink" title="Map："></a>Map：</h4></li>
-</ul>
-<blockquote>
-<ul>
-<li><h5 id="基本操作：-2"><a href="#基本操作：-2" class="headerlink" title="基本操作："></a>基本操作：</h5></li>
-</ul>
-<blockquote>
-<ul>
-<li>HGET：返回给定key， field的值</li>
-<li>HSET：设置给定key，field的值</li>
-<li>HMGET：返回给定key，field1、field2…的值</li>
-<li>HMSET：设置给定key，多个field的值</li>
-<li>HGETALL：获取给定key的所有field和value</li>
-<li>HDEL：删除给定key， field元素</li>
-<li>HKEYS：获取给定的key的所有field名字</li>
-<li>HVALS：获取给定key的所有value</li>
-<li>HLEN：获取给定的key的字段数量</li>
-<li>HINCRBY：HINCRBY key field increment，给定key的field元素value自增整数</li>
-<li>HINCRBYFLOAT：HINCRBYFLOAT key field increment ，给定key的field元素value自增浮点数</li>
-<li>HEXISTS：检查指定key field是否存在</li>
-<li>HSETNX：HSETNX key field value只有当field字段不存在时，设置该元素</li>
-</ul>
-</blockquote>
-</blockquote>
-<ul>
-<li><h4 id="Set："><a href="#Set：" class="headerlink" title="Set："></a>Set：</h4></li>
-</ul>
-<blockquote>
-<ul>
-<li><h5 id="基本操作：-3"><a href="#基本操作：-3" class="headerlink" title="基本操作："></a>基本操作：</h5></li>
-</ul>
-<blockquote>
-<ul>
-<li>SADD/SREM/SISMEMBER：实现向SET中增加、删除元素，以及检查元素是否存在</li>
-<li>SCAD/SMEMBERS/SRANDMEMBER：实现统计元素个数、列出所有元素、随机获取元素的操作</li>
-</ul>
-</blockquote>
-</blockquote>
-<ul>
-<li><h4 id="Sorted-Set："><a href="#Sorted-Set：" class="headerlink" title="Sorted-Set："></a>Sorted-Set：</h4></li>
-</ul>
-<blockquote>
-<ul>
-<li>ZRANK：确定某个KEY值在本sorted-set内按照顺序排在第几位</li>
-<li>ZRANGE：例如ZRANGE key start stop，获取sorted-set中排名为start和stop间的数据</li>
-<li>ZRANGESCOPE：ZRANGEBYSCOPE key min max获取sorted-set中scope介于min和max之间的数据</li>
-<li>ZSCOPE：确定某个key值在本sorted-set内对应的value</li>
-<li>ZINCRBY</li>
-</ul>
-</blockquote>
-</blockquote>
 
         </div>
 
@@ -299,7 +302,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-04-18T04:59:05.083Z" itemprop="dateUpdated">2020-04-18 12:59:05</time>
+    最后更新时间：<time datetime="2020-04-25T12:54:31.514Z" itemprop="dateUpdated">2020-04-25 20:54:31</time>
 </span><br>
 
 
