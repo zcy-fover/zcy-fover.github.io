@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zcy-fover.github.io/"/>
-  <updated>2020-04-28T15:22:23.527Z</updated>
+  <updated>2020-05-08T14:36:33.610Z</updated>
   <id>https://zcy-fover.github.io/</id>
   
   <author>
@@ -17,20 +17,19 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>java/jvm/GC策略</title>
-    <link href="https://zcy-fover.github.io/2020/04/28/java/jvm/GC%E7%AD%96%E7%95%A5/"/>
-    <id>https://zcy-fover.github.io/2020/04/28/java/jvm/GC%E7%AD%96%E7%95%A5/</id>
-    <published>2020-04-28T15:21:44.152Z</published>
-    <updated>2020-04-28T15:22:23.527Z</updated>
+    <title>java/jvm/1.JVM-内存模型</title>
+    <link href="https://zcy-fover.github.io/2020/05/08/java/jvm/1.JVM-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"/>
+    <id>https://zcy-fover.github.io/2020/05/08/java/jvm/1.JVM-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</id>
+    <published>2020-05-08T14:36:33.605Z</published>
+    <updated>2020-05-08T14:36:33.610Z</updated>
     
-    <content type="html"><![CDATA[<p>待补充。</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="JVM-内存模型"><a href="#JVM-内存模型" class="headerlink" title="JVM 内存模型"></a>JVM 内存模型</h2><p>Java 语言在虚拟机 JVM 的帮助下，不需要用户手动释放内存，减少了很多工作，也不容易出现内存泄漏和内存溢出问题。不过正是因为把内存的控制权交给了 JVM，这使得在出现问题后定位问题的难度也增加了。JVM 在运行的时候会把内存分为：</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://pic.yupoo.com/zcyfover/6de6ce6e/ed8608f8.png" alt="JVM内存模型" title="">                </div>                <div class="image-caption">JVM内存模型</div>            </figure><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://pic.yupoo.com/zcyfover/777b8b69/8b4568a8.png" alt="" title="">                </div>                <div class="image-caption"></div>            </figure><p><strong>直接内存</strong>：该部分内存不是虚拟机规范和运行时数据区的内存，但是在一些 NIO 操作中会用到。NIO 是基于 Channel 和缓冲区的 IO 方式，可以使用 native 库函数直接分配堆外内存，然后通过存储在堆内的 DirectByteBuffer 对象作为这块内存的引用来进行操作，这样避免了在 Java 堆和 native 堆复制数据，提高了性能。直接内存的分配不受 JVM 限制，但是受本机物理总内存限制，所以如果有使用到这部分内存，在分配 JVM 内存时不能全部占用物理内存。</p><h3 id="程序寄存器"><a href="#程序寄存器" class="headerlink" title="程序寄存器"></a>程序寄存器</h3><p>JVM 可以允许多个线程同时执行，每个 JVM 线程都有自己的程序寄存器，线程正在执行的当前方法不是 native 方法则程序寄存器保存 JVM 正在执行的字节码指令的地址；如果是 native 方法则程序寄存器的值是 undefined。字节码解释器工作时通过改变程序寄存器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复都需要寄存器来完成。</p><p>JVM 多线程是通过轮流切换 CPU 来获取程序执行资源，在任何时刻一个内核只会执行一个线程中的指令，程序寄存器就保证了线程重新获取 CPU 后能让程序恢复到正确的执行位置，所以各个线程之间不能互相影响，程序寄存器也是线程私有内存空间。</p><p>程序寄存器的容量至少能保存一个 <code>returnAddress</code> 类型的数据或者与一个平台相关的的本地指针的值。此内存区域是唯一一个 JVM 中没有规定任何 <code>OutOfMemoryError</code> 的区域。</p><blockquote><p><strong>returnAddress</strong>：指向某个操作码的指针，与 Java 虚拟机指令相对应。没有直接与 Java 中的数据类型相对应，程序运行期间也无法更改。</p></blockquote><h3 id="Java-虚拟机栈"><a href="#Java-虚拟机栈" class="headerlink" title="Java 虚拟机栈"></a>Java 虚拟机栈</h3><p>方法在执行的时候都会创建一个栈帧，用于储存局部变量表、操作数栈、动态链接、方法出口等信息。方法的执行过程对应了栈帧在虚拟机中出栈入栈的过程。Java虚拟机栈也是线程私有的空间。</p><h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><p>存放了编译器可知的基本数据类型(byte、short、int、long、char、float、double、boolean)、对象引用(reference 类型，对象起始地址的引用指针、代表对象的句柄或者对象的相关地址)、returnAddress类型。64 位的 long 和 double 类型会占用 2 个局部变量表空间，其他数据类型只占用一个。局部变量表空间是在编译时期完成分配，当执行方法时这部分空间是完全确定的，运行期间也不会改变。</p><h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><p>栈帧里面包含一个先进后出的操作数栈，栈帧中的操作数栈的最大深度在编译器决定。</p><p>栈帧刚创建时，操作数栈是空的， JVM 通过字节码指令从局部变量表或者对象实例字段中复制常量或者变量值到操作数栈中，从操作数栈中取走数据、操作数据、操作结果入栈等；调用方法时也可将方法参数或者方法返回结果入栈。</p><p>操作数栈的位置可以保存任意的数据类型的值，long 和 double 占用两个单位的栈深度，其他类型则占用一个单位栈深度。</p><h4 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h4><p>动态链接指向当前方法所在类型的运行时常量池的引用。</p><p>class 文件中，一个方法需要通过符号引用调用其他方法或者访问成员变量。动态链接是在运行时将部分符号引用转化为直接引用。部分符号引用在类加载阶段(解析)时就转化为直接引用这种转化成为静态链接。</p><blockquote><p><strong>符号引用</strong>：用一组符号描述所引用的目标，可以使任何形式的字面量，在转化时可以无歧义的定位到目标，符号引用和虚拟机的布局无关。</p><p><strong>直接引用</strong>：与虚拟机布局相关，已经转化为直接引用，那么引用目标也一定被加载到虚拟机内存里了。直接引用可以是：直接指向目标的指针、相对偏移量、可以间接定位到目标的句柄</p></blockquote><h4 id="方法出口"><a href="#方法出口" class="headerlink" title="方法出口"></a>方法出口</h4><h5 id="方法调用正常结束"><a href="#方法调用正常结束" class="headerlink" title="方法调用正常结束"></a>方法调用正常结束</h5><p>方法执行过程中没有抛出任何异常。方法正常完成时会返回一个字节码标识给他的调用方法，返回指令类型由返回的数据类型决定(如果方法有返回值)。</p><p>方法正常结束时，当前栈帧需要恢复调用者的状态，包括局部变量表、操作数栈并且正确递增程序计数器，以跳过刚才执行的方法调用指令。调用者将被调方法的返回值压入操作数栈后继续正常执行。</p><h5 id="方法调用异常结束"><a href="#方法调用异常结束" class="headerlink" title="方法调用异常结束"></a>方法调用异常结束</h5><p>方法执行过程中某些指令导致虚拟机抛出异常或者遇到了 <code>athrow</code> 指令，代码无法处理或者没有捕获异常导致方法结束。异常结束时不会有返回值给调用方。</p><p>Java 虚拟机栈会产生两个异常：<code>StackOverflowError</code> 当线程请求的栈深度大于虚拟机栈所允许的栈深度；<code>OutOfMemoryError</code> 虚拟机栈可以动态扩展，如果无法申请到足够的内存则会抛出异常。</p><h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>Java 虚拟机栈为执行 Java 方法(字节码) 服务，本地方法栈(C stack)是为虚拟机使用到的 native 方法服务。本地方法栈的支持也需要看具体的 Java 虚拟机，如果虚拟机不支持本地方法栈，则不需要开辟这一块儿内存；如果支持则在线程创建的时候会按照线程来分配内存，所以本地方法栈也是线程私有内存。该部分内存也存在 <code>StackOverflowError</code> 和 <code>OutOfMemoryError</code>异常。</p><h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>方法区是线程共享的内存区域，存储已经被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。方法区在虚拟机启动的时候创建。方法区是堆的逻辑组成部分，但是虚拟机的实现可以不考虑该部分内存的垃圾收集与压缩，方法区的容量可以固定也可以动态调整，这个可以由虚拟机来具体实现。方法区内存不能满足内存分配请求虚拟机会抛出 <code>OutOfMemoryError</code> 异常。</p><h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>运行时常量池都在 Java 虚拟机的方法区中分配，在加载类和接口到虚拟机后就创建对应的运行时常量池。是 class 文件中每一个类或者接口的常量池表的运行时表现形式，主要用于存放编译期生成的各种字面量或者运行期解析后才能获得的方法和字段引用。运行时常量池是方法区的一部分，所以受到方法区的内存限制。</p><p>运行时常量池比 class 文件常量池具备动态性，运行时产生的常量也可以放入到运行时常量池，例如：String.intern() 方法。</p><h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p>线程共享的内存区域，几乎所有对象实例在堆上分配内存，是虚拟机所管理的最大的一块内存空间，在虚拟机启动时创建。是垃圾收集器的主要工作区域。Java 堆可以处于物理上不连续的内存空间，逻辑上连续即可。实现时可以按照固定大小来分配空间也可以动态扩展，通过(-Xmx 和 -Xms)来控制，不需要过多空间时也可以自己收缩。如果堆中没有内存支持实例分配空间，虚拟机会抛出 <code>OutOfMemoryError</code> 异常。</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;待补充。&lt;/p&gt;
-
+        &lt;h2 id=&quot;JVM-内存模型&quot;&gt;&lt;a href=&quot;#JVM-内存模型&quot; class=&quot;headerlink&quot; title=&quot;JVM 内存模型&quot;&gt;&lt;/a&gt;JVM 内存模型&lt;/h2&gt;&lt;p&gt;Java 语言在虚拟机 JVM 的帮助下，不需要用户手动释放内存，减少了很多工作，也不容易出
       
     
     </summary>
@@ -46,11 +45,71 @@
   </entry>
   
   <entry>
-    <title>java/jvm/JVM内存模型</title>
-    <link href="https://zcy-fover.github.io/2020/04/28/java/jvm/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"/>
-    <id>https://zcy-fover.github.io/2020/04/28/java/jvm/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</id>
-    <published>2020-04-28T15:21:14.321Z</published>
-    <updated>2020-04-28T15:22:12.070Z</updated>
+    <title>java/jvm/3.JVM-类加载过程</title>
+    <link href="https://zcy-fover.github.io/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/"/>
+    <id>https://zcy-fover.github.io/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/</id>
+    <published>2020-05-04T09:41:26.048Z</published>
+    <updated>2020-05-08T14:40:51.559Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h2><p>Java 虚拟机执行某个类，首先需要把类文件加载到虚拟机内存中，这个动作是通过类加载器来完成的。class 文件被类加载器加载到虚拟机内存中到卸载出内存经过了<strong>加载-验证-准备-解析-初始化-使用-卸载</strong>七个阶段。</p><h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><p>从 JVM 角度来看有两种类加载器：<strong>启动类加载器</strong>和<strong>用户自定义类加载器</strong>。从开发人员角度来讲的话可分为四种：启动类加载器、扩展类加载器、应用程序类加载器、用户自定义类加载器。</p><h4 id="启动类加载-Bootstrap-ClassLoader"><a href="#启动类加载-Bootstrap-ClassLoader" class="headerlink" title="启动类加载(Bootstrap ClassLoader)"></a>启动类加载(Bootstrap ClassLoader)</h4><p>使用 C 语言实现，是虚拟机的一部分，主要负责将存放在 <code>${JAVA_HOME}\lib</code> 目录中的或者通过 <code>-Xbootclasspath</code> 参数指定路径中的并且可以被虚拟机识别(按照文件名识别) 的类库加载到虚拟机内存中。Java 程序不可以直接引用启动类加载器，开发者在自定义了自己的类加载器后，也要把类加载的请求委派给启动类加载器(双亲委派模型)。</p><h4 id="扩展类加载器-Extension-ClassLoader"><a href="#扩展类加载器-Extension-ClassLoader" class="headerlink" title="扩展类加载器(Extension ClassLoader)"></a>扩展类加载器(Extension ClassLoader)</h4><p>由 <code>sun.misc.Launcher.ExtClassLoader</code> 实现，主要负责加载<code>${JAVA_HOME}\lib\ext</code> 目录中或者被 <code>java.ext.dir</code> 系统变量指定路径的类库，开发人员可以直接使用扩展类加载器。</p><h4 id="应用程序类加载器-Application-ClassLoader"><a href="#应用程序类加载器-Application-ClassLoader" class="headerlink" title="应用程序类加载器(Application ClassLoader)"></a>应用程序类加载器(Application ClassLoader)</h4><p>由 <code>sun.misc.Launcher.AppClassLoader</code> 实现，负责加载用户类路径(Class Path)上指定的类库，开发者可以直接使用该加载器，一般情况下用户没有指定自己的类加载器，该加载器是程序的默认加载器。<code>java.lang.ClassLoader#getSystemClassLoader</code> 方法的返回值就是该类加载器，所以也叫做系统类加载器。</p><h4 id="用户自定义类加载器"><a href="#用户自定义类加载器" class="headerlink" title="用户自定义类加载器"></a>用户自定义类加载器</h4><p>开发人员可以通过继承 <code>ClassLoader</code> 来实现自己的加载器。</p><h3 id="类加载模型-双亲委派模型"><a href="#类加载模型-双亲委派模型" class="headerlink" title="类加载模型-双亲委派模型"></a>类加载模型-双亲委派模型</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;类加载机制&quot;&gt;&lt;a href=&quot;#类加载机制&quot; class=&quot;headerlink&quot; title=&quot;类加载机制&quot;&gt;&lt;/a&gt;类加载机制&lt;/h2&gt;&lt;p&gt;Java 虚拟机执行某个类，首先需要把类文件加载到虚拟机内存中，这个动作是通过类加载器来完成的。class 文件被类
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/categories/Java/JVM/"/>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java/jvm/2.JVM-类加载器</title>
+    <link href="https://zcy-fover.github.io/2020/05/04/java/jvm/2.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/"/>
+    <id>https://zcy-fover.github.io/2020/05/04/java/jvm/2.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/</id>
+    <published>2020-05-04T09:41:26.048Z</published>
+    <updated>2020-05-12T15:56:41.030Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>Java 虚拟机执行某个类，首先需要把类文件加载到虚拟机内存中，这个动作是通过类加载器来完成的。class 文件被类加载器加载到虚拟机内存中到卸载出内存经过了<strong>加载-验证-准备-解析-初始化-使用-卸载</strong>七个阶段。</p><p>从 JVM 角度来看有两种类加载器：<strong>启动类加载器</strong>和<strong>用户自定义类加载器</strong>。从开发人员角度来讲的话可分为四种：启动类加载器、扩展类加载器、应用程序类加载器、用户自定义类加载器。</p><h4 id="启动类加载-Bootstrap-ClassLoader"><a href="#启动类加载-Bootstrap-ClassLoader" class="headerlink" title="启动类加载(Bootstrap ClassLoader)"></a>启动类加载(Bootstrap ClassLoader)</h4><p>使用 C 语言实现，是虚拟机的一部分，主要负责将存放在 <code>${JAVA_HOME}\lib</code> 目录中的或者通过 <code>-Xbootclasspath</code> 参数指定路径中的并且可以被虚拟机识别(按照文件名识别) 的类库加载到虚拟机内存中。Java 程序不可以直接引用启动类加载器，开发者在自定义了自己的类加载器后，也要把类加载的请求委派给启动类加载器(双亲委派模型)。</p><h4 id="扩展类加载器-Extension-ClassLoader"><a href="#扩展类加载器-Extension-ClassLoader" class="headerlink" title="扩展类加载器(Extension ClassLoader)"></a>扩展类加载器(Extension ClassLoader)</h4><p>由 <code>sun.misc.Launcher.ExtClassLoader</code> 实现，主要负责加载<code>${JAVA_HOME}\lib\ext</code> 目录中或者被 <code>java.ext.dir</code> 系统变量指定路径的类库，开发人员可以直接使用扩展类加载器。</p><h4 id="应用程序类加载器-Application-ClassLoader"><a href="#应用程序类加载器-Application-ClassLoader" class="headerlink" title="应用程序类加载器(Application ClassLoader)"></a>应用程序类加载器(Application ClassLoader)</h4><p>由 <code>sun.misc.Launcher.AppClassLoader</code> 实现，负责加载用户类路径(Class Path)上指定的类库，开发者可以直接使用该加载器，一般情况下用户没有指定自己的类加载器，该加载器是程序的默认加载器。<code>java.lang.ClassLoader#getSystemClassLoader</code> 方法的返回值就是该类加载器，所以也叫做系统类加载器。</p><h4 id="用户自定义类加载器"><a href="#用户自定义类加载器" class="headerlink" title="用户自定义类加载器"></a>用户自定义类加载器</h4><p>开发人员可以通过继承 <code>ClassLoader</code> 来实现自己的加载器。</p><h3 id="类加载模型-双亲委派模型"><a href="#类加载模型-双亲委派模型" class="headerlink" title="类加载模型-双亲委派模型"></a>类加载模型-双亲委派模型</h3><p>双亲委派模型是类加载器之间的一种层次关系，双亲委派模型要求除了启动类加载器外，其他的类加载器都需要有自己的父类加载器。这种父子关系不是通过继承来实现，而是通过组合模式来复用父类加载器的代码。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://pic.yupoo.com/zcyfover/a9248491/20778457.png" alt="类加载器模型" title="">                </div>                <div class="image-caption">类加载器模型</div>            </figure><p>当前类加载器收到了加载类的请求，先判断是否有父类加载器可以加载这个类，将加载请求委派给父类加载器（直到启动类加载），当父类无法加载时，子类加载器再尝试自己去加载，子类加载器无法加载时则抛出<code>ClassNotFoundException</code> 异常。双亲委派模型的优点：</p><ul><li>防止一个类被重复加载（同一个 class 文件被不同的类加载器加载后是不同的类）</li><li>保护 Java 的核心类库，避免用户自定义类似于<code>java.lang.Object</code>、<code>java.lang.Integer</code>类，对应用程序有一定安全保证</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @param  name 类全路径名：例如：java.lang.Integer</span></span><br><span class="line"><span class="comment"> * @param  resolve </span></span><br><span class="line"><span class="comment"> * @return  The resulting Class object</span></span><br><span class="line"><span class="comment"> * @throws  ClassNotFoundException If the class could not be found</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; loadClass(String name, <span class="keyword">boolean</span> resolve) <span class="keyword">throws</span> ClassNotFoundException</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//返回一个对象用于加锁，从线程安全上保证一个类被一个加载器加载</span></span><br><span class="line">    <span class="keyword">synchronized</span> (getClassLoadingLock(name)) &#123;</span><br><span class="line">        <span class="comment">// 检查这个类是否已经被加载过了</span></span><br><span class="line">        Class&lt;?&gt; c = findLoadedClass(name);</span><br><span class="line">        <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">long</span> t0 = System.nanoTime();</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//判断该类加载是否存在父类加载器，如果存在则使用父类加载器</span></span><br><span class="line">                <span class="keyword">if</span> (parent != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    c = parent.loadClass(name, <span class="keyword">false</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//没有父类加载器，则直接尝试使用启动类加载器加载（也是为了保证核心类库的安全）</span></span><br><span class="line">                    c = findBootstrapClassOrNull(name);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">                <span class="comment">// ClassNotFoundException thrown if class not found</span></span><br><span class="line">                <span class="comment">// from the non-null parent class loader</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">// If still not found, then invoke findClass in order</span></span><br><span class="line">                <span class="comment">// to find the class.</span></span><br><span class="line">                <span class="keyword">long</span> t1 = System.nanoTime();</span><br><span class="line">                <span class="comment">//调用当前类加载器自己的加载方法</span></span><br><span class="line">                c = findClass(name);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// this is the defining class loader; record the stats</span></span><br><span class="line">                sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0);</span><br><span class="line">                sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1);</span><br><span class="line">                sun.misc.PerfCounter.getFindClasses().increment();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (resolve) &#123;</span><br><span class="line">            <span class="comment">//使用该方法链接类 c，装入引用类（超类、接口、字段、方法中使用的本地变量等）。</span></span><br><span class="line">            resolveClass(c);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">getClassLoadingLock</span><span class="params">(String className)</span> </span>&#123;</span><br><span class="line">    Object lock = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">//用 ConcurrentHashMap 实现，当前类加载器是否注册实现了 ParallelLoaders 并行加载能力</span></span><br><span class="line">    <span class="keyword">if</span> (parallelLockMap != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//parallerLockMap 由内部类 ParallelLoaders 来初始化</span></span><br><span class="line">        <span class="comment">//实现了并行加载，则把当前需要加载的类全名做key，new一个对象做value放入parallelLockMap，表示这个类在被加载</span></span><br><span class="line">        Object newLock = <span class="keyword">new</span> Object();</span><br><span class="line">        lock = parallelLockMap.putIfAbsent(className, newLock);</span><br><span class="line">        <span class="keyword">if</span> (lock == <span class="keyword">null</span>) &#123;</span><br><span class="line">            lock = newLock;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//直接讲当前类加载器对象返回，表示当前类加载器正在加载 className 这个类</span></span><br><span class="line">    <span class="keyword">return</span> lock;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="破坏双亲委派模型"><a href="#破坏双亲委派模型" class="headerlink" title="破坏双亲委派模型"></a>破坏双亲委派模型</h4><p>双亲委派模型是一种推荐的类加载器实现方式，从上面的代码中可以看到，自定义类加载器的实现的加载方法主要是在 <code>findClass()</code> 方法中实现的，在 <code>loadClass</code> 方法中如果父类加载器加载失败，就可以调用 <code>findClass()</code> 来加载，这样就可以保证实现双亲委派模型。</p><p>双亲委派模型是为了解决各个类加载器对于核心类统一加载的问题，如果基础类库中部分类需要调用用户代码，则双亲模型就要被破坏了，例如JNDI、JDBC、JCE、JAXB、JBI等。利用线程上下文类加载器（Thead Context ClassLoader）实现。</p><p>代码热替换、模块热部署等技术。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;类加载器&quot;&gt;&lt;a href=&quot;#类加载器&quot; class=&quot;headerlink&quot; title=&quot;类加载器&quot;&gt;&lt;/a&gt;类加载器&lt;/h2&gt;&lt;p&gt;Java 虚拟机执行某个类，首先需要把类文件加载到虚拟机内存中，这个动作是通过类加载器来完成的。class 文件被类加载器加
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/categories/Java/JVM/"/>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java/jvm/JVM-GC策略</title>
+    <link href="https://zcy-fover.github.io/2020/04/28/java/jvm/JVM-GC%E7%AD%96%E7%95%A5/"/>
+    <id>https://zcy-fover.github.io/2020/04/28/java/jvm/JVM-GC%E7%AD%96%E7%95%A5/</id>
+    <published>2020-04-28T15:21:44.152Z</published>
+    <updated>2020-04-28T15:22:23.527Z</updated>
     
     <content type="html"><![CDATA[<p>待补充。</p>]]></content>
     
@@ -1208,34 +1267,6 @@
   </entry>
   
   <entry>
-    <title>java/jvm/Java的引用与回收</title>
-    <link href="https://zcy-fover.github.io/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/"/>
-    <id>https://zcy-fover.github.io/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/</id>
-    <published>2019-01-20T06:38:22.701Z</published>
-    <updated>2020-04-26T14:16:34.700Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Java-的引用与回收"><a href="#Java-的引用与回收" class="headerlink" title="Java 的引用与回收"></a>Java 的引用与回收</h2><p>Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本篇不涉及）。</p><p>强引用：通过 <code>new</code> 创建的引用，被强引用指向的对象，<strong>不会被 gc 回收</strong>。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object ref = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure><p>软引用：通过 <code>SoftReference</code> 包裹的引用，<strong>内存不足</strong>时，如果没有强引用指向它则被 gc 回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SoftReference weakRef = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Object);</span><br></pre></td></tr></table></figure><p>弱引用：通过 <code>WeakReference</code> 包裹的引用，<strong>下一次 gc</strong> 时，如果没有强引用指向它则被 gc 回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WeakReference weakRef = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object);</span><br></pre></td></tr></table></figure><h2 id="软引用-amp-弱引用的使用"><a href="#软引用-amp-弱引用的使用" class="headerlink" title="软引用 &amp; 弱引用的使用"></a>软引用 &amp; 弱引用的使用</h2><p>软引用一般用于<strong>可伸缩式缓存</strong>，即缓存本身的大小不固定，可随着存储空间的增加而增加。因为软引用只有在<strong>内存不足时，才会被 gc 回收</strong>。</p><p>基于弱引用的回收特性，最常见的一种用法是 <code>WeakHashMap</code>。弱引用还可以解决 <a href="https://en.wikipedia.org/wiki/Lapsed_listener_problem" target="_blank" rel="noopener">Lapsed listener problem</a>。</p><p>当出现“内存坏账”的时候，它可以解决“坏账”对象的回收问题。例如，使用 <code>ThreadLocal</code> 容器时，可以将 <code>WeakReference</code> 作为元素，这样可以不用考虑被引用对象的回收问题。</p><h3 id="何时被回收"><a href="#何时被回收" class="headerlink" title="何时被回收"></a>何时被回收</h3><p>当使用软引用或弱引用的时候，要明白创建了 2 个对象：<strong>引用对象（Reference）</strong>和<strong>被引用对象（Referent）</strong>。被引用对象根据约定会被 gc 回收。但是由于引用对象是强引用，不会被 gc 自动回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ref1 and object A</span></span><br><span class="line">Reference ref1 = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object());</span><br><span class="line"><span class="comment">// ref2 and object B</span></span><br><span class="line">Reference ref2 = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line"><span class="comment">// release refs by handle</span></span><br><span class="line"><span class="keyword">if</span> (ref1.get() == <span class="keyword">null</span>) ref1 = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (ref2.get() == <span class="keyword">null</span>) ref2 = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure><p>其中，gc 会在约定下回收 <code>A</code>、<code>B</code> 两个对象，<code>ref1</code> 和 <code>ref2</code> 不会被 gc 回收。</p><p>如果不希望被引用对象 <code>A</code> 被 gc 回收，需要使用强引用 <code>N</code> 重新指向对象，让对象 <code>A</code> 处于<strong>可达</strong>状态。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ref1 and object A</span></span><br><span class="line">Reference ref1 = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object());</span><br><span class="line">Object N = ref1.get();</span><br></pre></td></tr></table></figure><blockquote><p> <strong>可达性</strong>是 JVM 在内存回收时，判断对象是否可以被回收的标准，更多关于内存回收的内容在 <a href="./JVM内存回收.md">JVM 内存回收</a></p></blockquote><h3 id="ReferenceQueue"><a href="#ReferenceQueue" class="headerlink" title="ReferenceQueue"></a>ReferenceQueue</h3><p><strong>引用队列（ReferenceQueue）</strong> 可以和 Reference 配合使用。当 gc 会收了 Referent 后，会将 Reference 放入队列中，以此通知用户 Referent 已经被回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ReferenceQueue&lt;Object&gt; refQueue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line">WeakReference&lt;Object&gt; ref = <span class="keyword">new</span> WeakReference&lt;&gt;(<span class="keyword">new</span> Object(), refQueue);</span><br><span class="line">System.out.println(ref + <span class="string">" - "</span> + ref.get());  <span class="comment">// java.lang.ref.WeakReference@198e2867 - java.lang.Object@12f40c25</span></span><br><span class="line">System.gc();</span><br><span class="line">System.out.println(refQueue.remove()); <span class="comment">// java.lang.ref.WeakReference@198e2867</span></span><br></pre></td></tr></table></figure><h2 id="Tick-Tick"><a href="#Tick-Tick" class="headerlink" title="Tick, Tick"></a>Tick, Tick</h2><p>本篇重点讲解引用的回收：gc 回收的是 Referent，而不是 Reference。用于提醒读者，在后续的开发中，不要因使用了 Reference 却没有手动的清理 Reference 对象而出现内存泄漏。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;Java-的引用与回收&quot;&gt;&lt;a href=&quot;#Java-的引用与回收&quot; class=&quot;headerlink&quot; title=&quot;Java 的引用与回收&quot;&gt;&lt;/a&gt;Java 的引用与回收&lt;/h2&gt;&lt;p&gt;Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本
-      
-    
-    </summary>
-    
-    
-      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
-    
-      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
-    
-  </entry>
-  
-  <entry>
     <title>java/Thread/线程的一生</title>
     <link href="https://zcy-fover.github.io/2019/01/20/java/Thread/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E7%94%9F/"/>
     <id>https://zcy-fover.github.io/2019/01/20/java/Thread/%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%80%E7%94%9F/</id>
@@ -1251,6 +1282,34 @@
         &lt;h2 id=&quot;线程的一生&quot;&gt;&lt;a href=&quot;#线程的一生&quot; class=&quot;headerlink&quot; title=&quot;线程的一生&quot;&gt;&lt;/a&gt;线程的一生&lt;/h2&gt;&lt;p&gt;线程是 CPU 调度的基本单位。Java 中线程状态分为 6 种：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;New：创建状态&lt;/l
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java/jvm/Java的引用与回收</title>
+    <link href="https://zcy-fover.github.io/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/"/>
+    <id>https://zcy-fover.github.io/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/</id>
+    <published>2019-01-20T06:38:22.701Z</published>
+    <updated>2020-04-26T14:16:34.700Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Java-的引用与回收"><a href="#Java-的引用与回收" class="headerlink" title="Java 的引用与回收"></a>Java 的引用与回收</h2><p>Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本篇不涉及）。</p><p>强引用：通过 <code>new</code> 创建的引用，被强引用指向的对象，<strong>不会被 gc 回收</strong>。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object ref = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure><p>软引用：通过 <code>SoftReference</code> 包裹的引用，<strong>内存不足</strong>时，如果没有强引用指向它则被 gc 回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SoftReference weakRef = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Object);</span><br></pre></td></tr></table></figure><p>弱引用：通过 <code>WeakReference</code> 包裹的引用，<strong>下一次 gc</strong> 时，如果没有强引用指向它则被 gc 回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WeakReference weakRef = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object);</span><br></pre></td></tr></table></figure><h2 id="软引用-amp-弱引用的使用"><a href="#软引用-amp-弱引用的使用" class="headerlink" title="软引用 &amp; 弱引用的使用"></a>软引用 &amp; 弱引用的使用</h2><p>软引用一般用于<strong>可伸缩式缓存</strong>，即缓存本身的大小不固定，可随着存储空间的增加而增加。因为软引用只有在<strong>内存不足时，才会被 gc 回收</strong>。</p><p>基于弱引用的回收特性，最常见的一种用法是 <code>WeakHashMap</code>。弱引用还可以解决 <a href="https://en.wikipedia.org/wiki/Lapsed_listener_problem" target="_blank" rel="noopener">Lapsed listener problem</a>。</p><p>当出现“内存坏账”的时候，它可以解决“坏账”对象的回收问题。例如，使用 <code>ThreadLocal</code> 容器时，可以将 <code>WeakReference</code> 作为元素，这样可以不用考虑被引用对象的回收问题。</p><h3 id="何时被回收"><a href="#何时被回收" class="headerlink" title="何时被回收"></a>何时被回收</h3><p>当使用软引用或弱引用的时候，要明白创建了 2 个对象：<strong>引用对象（Reference）</strong>和<strong>被引用对象（Referent）</strong>。被引用对象根据约定会被 gc 回收。但是由于引用对象是强引用，不会被 gc 自动回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ref1 and object A</span></span><br><span class="line">Reference ref1 = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object());</span><br><span class="line"><span class="comment">// ref2 and object B</span></span><br><span class="line">Reference ref2 = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line"><span class="comment">// release refs by handle</span></span><br><span class="line"><span class="keyword">if</span> (ref1.get() == <span class="keyword">null</span>) ref1 = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (ref2.get() == <span class="keyword">null</span>) ref2 = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure><p>其中，gc 会在约定下回收 <code>A</code>、<code>B</code> 两个对象，<code>ref1</code> 和 <code>ref2</code> 不会被 gc 回收。</p><p>如果不希望被引用对象 <code>A</code> 被 gc 回收，需要使用强引用 <code>N</code> 重新指向对象，让对象 <code>A</code> 处于<strong>可达</strong>状态。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ref1 and object A</span></span><br><span class="line">Reference ref1 = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object());</span><br><span class="line">Object N = ref1.get();</span><br></pre></td></tr></table></figure><blockquote><p> <strong>可达性</strong>是 JVM 在内存回收时，判断对象是否可以被回收的标准，更多关于内存回收的内容在 <a href="./JVM内存回收.md">JVM 内存回收</a></p></blockquote><h3 id="ReferenceQueue"><a href="#ReferenceQueue" class="headerlink" title="ReferenceQueue"></a>ReferenceQueue</h3><p><strong>引用队列（ReferenceQueue）</strong> 可以和 Reference 配合使用。当 gc 会收了 Referent 后，会将 Reference 放入队列中，以此通知用户 Referent 已经被回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ReferenceQueue&lt;Object&gt; refQueue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line">WeakReference&lt;Object&gt; ref = <span class="keyword">new</span> WeakReference&lt;&gt;(<span class="keyword">new</span> Object(), refQueue);</span><br><span class="line">System.out.println(ref + <span class="string">" - "</span> + ref.get());  <span class="comment">// java.lang.ref.WeakReference@198e2867 - java.lang.Object@12f40c25</span></span><br><span class="line">System.gc();</span><br><span class="line">System.out.println(refQueue.remove()); <span class="comment">// java.lang.ref.WeakReference@198e2867</span></span><br></pre></td></tr></table></figure><h2 id="Tick-Tick"><a href="#Tick-Tick" class="headerlink" title="Tick, Tick"></a>Tick, Tick</h2><p>本篇重点讲解引用的回收：gc 回收的是 Referent，而不是 Reference。用于提醒读者，在后续的开发中，不要因使用了 Reference 却没有手动的清理 Reference 对象而出现内存泄漏。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Java-的引用与回收&quot;&gt;&lt;a href=&quot;#Java-的引用与回收&quot; class=&quot;headerlink&quot; title=&quot;Java 的引用与回收&quot;&gt;&lt;/a&gt;Java 的引用与回收&lt;/h2&gt;&lt;p&gt;Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本
       
     
     </summary>

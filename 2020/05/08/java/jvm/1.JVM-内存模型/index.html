@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>java/jvm/1.JVM-内存模型 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,JVM">
+    <meta name="description" content="JVM 内存模型Java 语言在虚拟机 JVM 的帮助下，不需要用户手动释放内存，减少了很多工作，也不容易出现内存泄漏和内存溢出问题。不过正是因为把内存的控制权交给了 JVM，这使得在出现问题后定位问题的难度也增加了。JVM 在运行的时候会把内存分为：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java&#x2F;jvm&#x2F;1.JVM-内存模型">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/05/08/java/jvm/1.JVM-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="JVM 内存模型Java 语言在虚拟机 JVM 的帮助下，不需要用户手动释放内存，减少了很多工作，也不容易出现内存泄漏和内存溢出问题。不过正是因为把内存的控制权交给了 JVM，这使得在出现问题后定位问题的难度也增加了。JVM 在运行的时候会把内存分为：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://pic.yupoo.com/zcyfover/6de6ce6e/ed8608f8.png">
+<meta property="og:image" content="http://pic.yupoo.com/zcyfover/777b8b69/8b4568a8.png">
+<meta property="article:published_time" content="2020-05-08T14:36:33.605Z">
+<meta property="article:modified_time" content="2020-05-08T14:36:33.610Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://pic.yupoo.com/zcyfover/6de6ce6e/ed8608f8.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/%E7%A7%91%E6%8A%80.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/resume"  >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">java/jvm/1.JVM-内存模型</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">java/jvm/1.JVM-内存模型</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-05-08T14:36:33.605Z" itemprop="datePublished" class="page-time">
+  2020-05-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#JVM-内存模型"><span class="post-toc-number">1.</span> <span class="post-toc-text">JVM 内存模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#程序寄存器"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">程序寄存器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Java-虚拟机栈"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Java 虚拟机栈</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#局部变量表"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">局部变量表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#操作数栈"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">操作数栈</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#动态链接"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">动态链接</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#方法出口"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">方法出口</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#方法调用正常结束"><span class="post-toc-number">1.2.4.1.</span> <span class="post-toc-text">方法调用正常结束</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#方法调用异常结束"><span class="post-toc-number">1.2.4.2.</span> <span class="post-toc-text">方法调用异常结束</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#本地方法栈"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">本地方法栈</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#方法区"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">方法区</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#运行时常量池"><span class="post-toc-number">1.4.1.</span> <span class="post-toc-text">运行时常量池</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#堆"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">堆</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-java/jvm/1.JVM-内存模型"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">java/jvm/1.JVM-内存模型</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-05-08 22:36:33" datetime="2020-05-08T14:36:33.605Z"  itemprop="datePublished">2020-05-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="JVM-内存模型"><a href="#JVM-内存模型" class="headerlink" title="JVM 内存模型"></a>JVM 内存模型</h2><p>Java 语言在虚拟机 JVM 的帮助下，不需要用户手动释放内存，减少了很多工作，也不容易出现内存泄漏和内存溢出问题。不过正是因为把内存的控制权交给了 JVM，这使得在出现问题后定位问题的难度也增加了。JVM 在运行的时候会把内存分为：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://pic.yupoo.com/zcyfover/6de6ce6e/ed8608f8.png" alt="JVM内存模型" title="">
+                </div>
+                <div class="image-caption">JVM内存模型</div>
+            </figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://pic.yupoo.com/zcyfover/777b8b69/8b4568a8.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+<p><strong>直接内存</strong>：该部分内存不是虚拟机规范和运行时数据区的内存，但是在一些 NIO 操作中会用到。NIO 是基于 Channel 和缓冲区的 IO 方式，可以使用 native 库函数直接分配堆外内存，然后通过存储在堆内的 DirectByteBuffer 对象作为这块内存的引用来进行操作，这样避免了在 Java 堆和 native 堆复制数据，提高了性能。直接内存的分配不受 JVM 限制，但是受本机物理总内存限制，所以如果有使用到这部分内存，在分配 JVM 内存时不能全部占用物理内存。</p>
+<h3 id="程序寄存器"><a href="#程序寄存器" class="headerlink" title="程序寄存器"></a>程序寄存器</h3><p>JVM 可以允许多个线程同时执行，每个 JVM 线程都有自己的程序寄存器，线程正在执行的当前方法不是 native 方法则程序寄存器保存 JVM 正在执行的字节码指令的地址；如果是 native 方法则程序寄存器的值是 undefined。字节码解释器工作时通过改变程序寄存器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复都需要寄存器来完成。</p>
+<p>JVM 多线程是通过轮流切换 CPU 来获取程序执行资源，在任何时刻一个内核只会执行一个线程中的指令，程序寄存器就保证了线程重新获取 CPU 后能让程序恢复到正确的执行位置，所以各个线程之间不能互相影响，程序寄存器也是线程私有内存空间。</p>
+<p>程序寄存器的容量至少能保存一个 <code>returnAddress</code> 类型的数据或者与一个平台相关的的本地指针的值。此内存区域是唯一一个 JVM 中没有规定任何 <code>OutOfMemoryError</code> 的区域。</p>
+<blockquote>
+<p><strong>returnAddress</strong>：指向某个操作码的指针，与 Java 虚拟机指令相对应。没有直接与 Java 中的数据类型相对应，程序运行期间也无法更改。</p>
+</blockquote>
+<h3 id="Java-虚拟机栈"><a href="#Java-虚拟机栈" class="headerlink" title="Java 虚拟机栈"></a>Java 虚拟机栈</h3><p>方法在执行的时候都会创建一个栈帧，用于储存局部变量表、操作数栈、动态链接、方法出口等信息。方法的执行过程对应了栈帧在虚拟机中出栈入栈的过程。Java虚拟机栈也是线程私有的空间。</p>
+<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><p>存放了编译器可知的基本数据类型(byte、short、int、long、char、float、double、boolean)、对象引用(reference 类型，对象起始地址的引用指针、代表对象的句柄或者对象的相关地址)、returnAddress类型。64 位的 long 和 double 类型会占用 2 个局部变量表空间，其他数据类型只占用一个。局部变量表空间是在编译时期完成分配，当执行方法时这部分空间是完全确定的，运行期间也不会改变。</p>
+<h4 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h4><p>栈帧里面包含一个先进后出的操作数栈，栈帧中的操作数栈的最大深度在编译器决定。</p>
+<p>栈帧刚创建时，操作数栈是空的， JVM 通过字节码指令从局部变量表或者对象实例字段中复制常量或者变量值到操作数栈中，从操作数栈中取走数据、操作数据、操作结果入栈等；调用方法时也可将方法参数或者方法返回结果入栈。</p>
+<p>操作数栈的位置可以保存任意的数据类型的值，long 和 double 占用两个单位的栈深度，其他类型则占用一个单位栈深度。</p>
+<h4 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h4><p>动态链接指向当前方法所在类型的运行时常量池的引用。</p>
+<p>class 文件中，一个方法需要通过符号引用调用其他方法或者访问成员变量。动态链接是在运行时将部分符号引用转化为直接引用。部分符号引用在类加载阶段(解析)时就转化为直接引用这种转化成为静态链接。</p>
+<blockquote>
+<p><strong>符号引用</strong>：用一组符号描述所引用的目标，可以使任何形式的字面量，在转化时可以无歧义的定位到目标，符号引用和虚拟机的布局无关。</p>
+<p><strong>直接引用</strong>：与虚拟机布局相关，已经转化为直接引用，那么引用目标也一定被加载到虚拟机内存里了。直接引用可以是：直接指向目标的指针、相对偏移量、可以间接定位到目标的句柄</p>
+</blockquote>
+<h4 id="方法出口"><a href="#方法出口" class="headerlink" title="方法出口"></a>方法出口</h4><h5 id="方法调用正常结束"><a href="#方法调用正常结束" class="headerlink" title="方法调用正常结束"></a>方法调用正常结束</h5><p>方法执行过程中没有抛出任何异常。方法正常完成时会返回一个字节码标识给他的调用方法，返回指令类型由返回的数据类型决定(如果方法有返回值)。</p>
+<p>方法正常结束时，当前栈帧需要恢复调用者的状态，包括局部变量表、操作数栈并且正确递增程序计数器，以跳过刚才执行的方法调用指令。调用者将被调方法的返回值压入操作数栈后继续正常执行。</p>
+<h5 id="方法调用异常结束"><a href="#方法调用异常结束" class="headerlink" title="方法调用异常结束"></a>方法调用异常结束</h5><p>方法执行过程中某些指令导致虚拟机抛出异常或者遇到了 <code>athrow</code> 指令，代码无法处理或者没有捕获异常导致方法结束。异常结束时不会有返回值给调用方。</p>
+<p>Java 虚拟机栈会产生两个异常：<code>StackOverflowError</code> 当线程请求的栈深度大于虚拟机栈所允许的栈深度；<code>OutOfMemoryError</code> 虚拟机栈可以动态扩展，如果无法申请到足够的内存则会抛出异常。</p>
+<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>Java 虚拟机栈为执行 Java 方法(字节码) 服务，本地方法栈(C stack)是为虚拟机使用到的 native 方法服务。本地方法栈的支持也需要看具体的 Java 虚拟机，如果虚拟机不支持本地方法栈，则不需要开辟这一块儿内存；如果支持则在线程创建的时候会按照线程来分配内存，所以本地方法栈也是线程私有内存。该部分内存也存在 <code>StackOverflowError</code> 和 <code>OutOfMemoryError</code>异常。</p>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>方法区是线程共享的内存区域，存储已经被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。方法区在虚拟机启动的时候创建。方法区是堆的逻辑组成部分，但是虚拟机的实现可以不考虑该部分内存的垃圾收集与压缩，方法区的容量可以固定也可以动态调整，这个可以由虚拟机来具体实现。方法区内存不能满足内存分配请求虚拟机会抛出 <code>OutOfMemoryError</code> 异常。</p>
+<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>运行时常量池都在 Java 虚拟机的方法区中分配，在加载类和接口到虚拟机后就创建对应的运行时常量池。是 class 文件中每一个类或者接口的常量池表的运行时表现形式，主要用于存放编译期生成的各种字面量或者运行期解析后才能获得的方法和字段引用。运行时常量池是方法区的一部分，所以受到方法区的内存限制。</p>
+<p>运行时常量池比 class 文件常量池具备动态性，运行时产生的常量也可以放入到运行时常量池，例如：String.intern() 方法。</p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p>线程共享的内存区域，几乎所有对象实例在堆上分配内存，是虚拟机所管理的最大的一块内存空间，在虚拟机启动时创建。是垃圾收集器的主要工作区域。Java 堆可以处于物理上不连续的内存空间，逻辑上连续即可。实现时可以按照固定大小来分配空间也可以动态扩展，通过(-Xmx 和 -Xms)来控制，不需要过多空间时也可以自己收缩。如果堆中没有内存支持实例分配空间，虚拟机会抛出 <code>OutOfMemoryError</code> 异常。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-05-08T14:36:33.610Z" itemprop="dateUpdated">2020-05-08 22:36:33</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">java/jvm/3.JVM-类加载过程</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
