@@ -21,15 +21,13 @@
     
     
     <meta name="keywords" content="Java,JVM">
-    <meta name="description" content="类加载机制Java 虚拟机执行某个类，首先需要把类文件加载到虚拟机内存中，这个动作是通过类加载器来完成的。class 文件被类加载器加载到虚拟机内存中到卸载出内存经过了加载-验证-准备-解析-初始化-使用-卸载七个阶段。 类加载器从 JVM 角度来看有两种类加载器：启动类加载器和用户自定义类加载器。从开发人员角度来讲的话可分为四种：启动类加载器、扩展类加载器、应用程序类加载器、用户自定义类加载器。">
-<meta property="og:type" content="article">
+    <meta property="og:type" content="article">
 <meta property="og:title" content="java&#x2F;jvm&#x2F;3.JVM-类加载过程">
 <meta property="og:url" content="https://zcy-fover.github.io/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/index.html">
 <meta property="og:site_name" content="冲鸭">
-<meta property="og:description" content="类加载机制Java 虚拟机执行某个类，首先需要把类文件加载到虚拟机内存中，这个动作是通过类加载器来完成的。class 文件被类加载器加载到虚拟机内存中到卸载出内存经过了加载-验证-准备-解析-初始化-使用-卸载七个阶段。 类加载器从 JVM 角度来看有两种类加载器：启动类加载器和用户自定义类加载器。从开发人员角度来讲的话可分为四种：启动类加载器、扩展类加载器、应用程序类加载器、用户自定义类加载器。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-04T09:41:26.048Z">
-<meta property="article:modified_time" content="2020-05-08T14:40:51.559Z">
+<meta property="article:modified_time" content="2020-05-12T16:01:20.410Z">
 <meta property="article:author" content="zcy-fover">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="JVM">
@@ -157,7 +155,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#类加载机制"><span class="post-toc-number">1.</span> <span class="post-toc-text">类加载机制</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#类加载器"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">类加载器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#启动类加载-Bootstrap-ClassLoader"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">启动类加载(Bootstrap ClassLoader)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#扩展类加载器-Extension-ClassLoader"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">扩展类加载器(Extension ClassLoader)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#应用程序类加载器-Application-ClassLoader"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">应用程序类加载器(Application ClassLoader)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#用户自定义类加载器"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">用户自定义类加载器</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#类加载模型-双亲委派模型"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">类加载模型-双亲委派模型</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#"><span class="post-toc-number">1.</span> <span class="post-toc-text"></span></a></li></ol>
         </nav>
     </aside>
 
@@ -183,13 +181,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h2><p>Java 虚拟机执行某个类，首先需要把类文件加载到虚拟机内存中，这个动作是通过类加载器来完成的。class 文件被类加载器加载到虚拟机内存中到卸载出内存经过了<strong>加载-验证-准备-解析-初始化-使用-卸载</strong>七个阶段。</p>
-<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><p>从 JVM 角度来看有两种类加载器：<strong>启动类加载器</strong>和<strong>用户自定义类加载器</strong>。从开发人员角度来讲的话可分为四种：启动类加载器、扩展类加载器、应用程序类加载器、用户自定义类加载器。</p>
-<h4 id="启动类加载-Bootstrap-ClassLoader"><a href="#启动类加载-Bootstrap-ClassLoader" class="headerlink" title="启动类加载(Bootstrap ClassLoader)"></a>启动类加载(Bootstrap ClassLoader)</h4><p>使用 C 语言实现，是虚拟机的一部分，主要负责将存放在 <code>${JAVA_HOME}\lib</code> 目录中的或者通过 <code>-Xbootclasspath</code> 参数指定路径中的并且可以被虚拟机识别(按照文件名识别) 的类库加载到虚拟机内存中。Java 程序不可以直接引用启动类加载器，开发者在自定义了自己的类加载器后，也要把类加载的请求委派给启动类加载器(双亲委派模型)。</p>
-<h4 id="扩展类加载器-Extension-ClassLoader"><a href="#扩展类加载器-Extension-ClassLoader" class="headerlink" title="扩展类加载器(Extension ClassLoader)"></a>扩展类加载器(Extension ClassLoader)</h4><p>由 <code>sun.misc.Launcher.ExtClassLoader</code> 实现，主要负责加载<code>${JAVA_HOME}\lib\ext</code> 目录中或者被 <code>java.ext.dir</code> 系统变量指定路径的类库，开发人员可以直接使用扩展类加载器。</p>
-<h4 id="应用程序类加载器-Application-ClassLoader"><a href="#应用程序类加载器-Application-ClassLoader" class="headerlink" title="应用程序类加载器(Application ClassLoader)"></a>应用程序类加载器(Application ClassLoader)</h4><p>由 <code>sun.misc.Launcher.AppClassLoader</code> 实现，负责加载用户类路径(Class Path)上指定的类库，开发者可以直接使用该加载器，一般情况下用户没有指定自己的类加载器，该加载器是程序的默认加载器。<code>java.lang.ClassLoader#getSystemClassLoader</code> 方法的返回值就是该类加载器，所以也叫做系统类加载器。</p>
-<h4 id="用户自定义类加载器"><a href="#用户自定义类加载器" class="headerlink" title="用户自定义类加载器"></a>用户自定义类加载器</h4><p>开发人员可以通过继承 <code>ClassLoader</code> 来实现自己的加载器。</p>
-<h3 id="类加载模型-双亲委派模型"><a href="#类加载模型-双亲委派模型" class="headerlink" title="类加载模型-双亲委派模型"></a>类加载模型-双亲委派模型</h3>
+            <h3 id=""><a href="#" class="headerlink" title=""></a></h3>
         </div>
 
         <blockquote class="post-copyright">
@@ -197,7 +189,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-05-08T14:40:51.559Z" itemprop="dateUpdated">2020-05-08 22:40:51</time>
+    最后更新时间：<time datetime="2020-05-12T16:01:20.410Z" itemprop="dateUpdated">2020-05-13 00:01:20</time>
 </span><br>
 
 
