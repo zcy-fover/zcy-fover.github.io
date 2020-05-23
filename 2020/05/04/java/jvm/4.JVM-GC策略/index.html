@@ -14,20 +14,22 @@
     
     
     
-    <title>java/jvm/3.JVM-类加载过程 | 冲鸭</title>
+    <title>java/jvm/4.JVM-GC策略 | 冲鸭</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Java,JVM">
-    <meta property="og:type" content="article">
-<meta property="og:title" content="java&#x2F;jvm&#x2F;3.JVM-类加载过程">
-<meta property="og:url" content="https://zcy-fover.github.io/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/index.html">
+    <meta name="description" content="内存分配与GC策略在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java&#x2F;jvm&#x2F;4.JVM-GC策略">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/05/04/java/jvm/4.JVM-GC%E7%AD%96%E7%95%A5/index.html">
 <meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="内存分配与GC策略在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-04T09:41:26.048Z">
-<meta property="article:modified_time" content="2020-05-12T16:01:20.410Z">
+<meta property="article:modified_time" content="2020-05-23T01:52:52.890Z">
 <meta property="article:author" content="zcy-fover">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="JVM">
@@ -112,7 +114,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">java/jvm/3.JVM-类加载过程</div>
+        <div class="flex-col header-title ellipsis">java/jvm/4.JVM-GC策略</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -130,7 +132,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">java/jvm/3.JVM-类加载过程</h1>
+        <h1 class="title">java/jvm/4.JVM-GC策略</h1>
         <h5 class="subtitle">
             
                 <time datetime="2020-05-04T09:41:26.048Z" itemprop="datePublished" class="page-time">
@@ -155,16 +157,16 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#"><span class="post-toc-number">1.</span> <span class="post-toc-text"></span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存分配与GC策略"><span class="post-toc-number">1.</span> <span class="post-toc-text">内存分配与GC策略</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#那些对象需要被回收"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">那些对象需要被回收</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#对象引用"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">对象引用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#引用计数法"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">引用计数法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#可达性分析算法"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">可达性分析算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#第一次标记"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">第一次标记</span></a></li></ol></li></ol></li></ol>
         </nav>
     </aside>
 
 
-<article id="post-java/jvm/3.JVM-类加载过程"
+<article id="post-java/jvm/4.JVM-GC策略"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">java/jvm/3.JVM-类加载过程</h1>
+        <h1 class="post-card-title">java/jvm/4.JVM-GC策略</h1>
         <div class="post-meta">
             <time class="post-time" title="2020-05-04 17:41:26" datetime="2020-05-04T09:41:26.048Z"  itemprop="datePublished">2020-05-04</time>
 
@@ -181,7 +183,26 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+            <h2 id="内存分配与GC策略"><a href="#内存分配与GC策略" class="headerlink" title="内存分配与GC策略"></a>内存分配与GC策略</h2><p>在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动态的，这也是垃圾收集(GC)器工作的主要对象。</p>
+<h3 id="那些对象需要被回收"><a href="#那些对象需要被回收" class="headerlink" title="那些对象需要被回收"></a>那些对象需要被回收</h3><p>Java 中的对象都是在堆上分配内存空间的，然后通过引用指向对象地址。是否被引用是判断对象是否还存活的重要根据。</p>
+<h4 id="对象引用"><a href="#对象引用" class="headerlink" title="对象引用"></a>对象引用</h4><p>JDK 1.2之前，reference 数据类型存储的数值代表一个内存地址表示着一个引用。随着硬件的发展内存空间虽然很珍贵但是还可满足，所以在内存空间充足的情况下，有些对象则尽可能的保留在内存中当内存不足时再回收。如何区分这些对象呢，就是通过引用的强弱关系来区分，主要有四种：</p>
+<ul>
+<li><strong>强引用（Strong Reference）：</strong>这是在代码中普遍存在的一种引用，类似：<code>Object obj = new Object()</code>，如果强引用还存在则一定不会被回收。</li>
+<li><strong>软引用（Soft Reference）：</strong>通过 <code>SoftReference</code> 类来实现，表示有用但是非必需的对象。系统发生内存溢出之前（已经 GC 一次）会把软引用关联的对象列进回收范围进行第二次回收，如果回收后还是内存不足则会抛出内存溢出异常。</li>
+<li><strong>弱引用（Weak Reference）：</strong>有用非必需对象，通过 <code>WeakReference</code> 类来实现，弱引用对象只能生存到下一次垃圾收集之前，当垃圾收集器工作时都会回收掉弱引用关联的对象。</li>
+<li><strong>虚引用（Phantom Reference）：</strong>最弱的引用关系，虚引用不会对对象的存活造成影响，无法通过虚引用在获取一个对象实例。为一个对象设置虚引用是在对象被垃圾回收时可以收到一个系统的通知。可以通过 <code>PhantomReference</code> 类来实现。</li>
+</ul>
+<p>对象是否还被引用，主要通过下面两种算法来判断：</p>
+<h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>给对象添加一个引用计数器，当对象被引用的时候计数器就增加 1，引用失效时计数器减 1，任何时刻计数器为 0 的对象就是不再被使用的。但是当对象存在循环引用时，其实环上的对象都已经不在被使用，但是计数器不为 0，这样会造成对象无法被回收。</p>
+<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>通过 <code>GC Roots</code> 的对象作为起点，对引用到的对象构造一条引用链，当某个对象没有到达 <code>GC Roots</code> 的路径，称为不可达。这部分对象被判定为可回收的。Java 虚拟机中可以作为 <code>GC Roots</code> 对象的有：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
+<li>方法区中类静态属性引用的属性</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中 JNI（Native 方法）引用的对象</li>
+</ul>
+<p>对象的真正死亡也要经过两个标记过程：</p>
+<h4 id="第一次标记"><a href="#第一次标记" class="headerlink" title="第一次标记"></a>第一次标记</h4>
         </div>
 
         <blockquote class="post-copyright">
@@ -189,7 +210,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-05-12T16:01:20.410Z" itemprop="dateUpdated">2020-05-13 00:01:20</time>
+    最后更新时间：<time datetime="2020-05-23T01:52:52.890Z" itemprop="dateUpdated">2020-05-23 09:52:52</time>
 </span><br>
 
 
@@ -222,18 +243,18 @@
 <nav class="post-nav flex-row flex-justify-between">
   
     <div class="waves-block waves-effect prev">
-      <a href="/2020/05/04/java/jvm/4.JVM-GC%E7%AD%96%E7%95%A5/" id="post-prev" class="post-nav-link">
+      <a href="/2020/05/08/java/jvm/1.JVM-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" id="post-prev" class="post-nav-link">
         <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">java/jvm/4.JVM-GC策略</h4>
+        <h4 class="title">java/jvm/1.JVM-内存模型</h4>
       </a>
     </div>
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2020/05/04/java/jvm/2.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" id="post-next" class="post-nav-link">
+      <a href="/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">java/jvm/2.JVM-类加载器</h4>
+        <h4 class="title">java/jvm/3.JVM-类加载过程</h4>
       </a>
     </div>
   
