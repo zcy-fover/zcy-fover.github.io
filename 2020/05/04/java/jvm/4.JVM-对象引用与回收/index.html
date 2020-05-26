@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>java/jvm/4.JVM-对象引用与回收 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,JVM">
+    <meta name="description" content="对象引用与回收在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动态的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java&#x2F;jvm&#x2F;4.JVM-对象引用与回收">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/05/04/java/jvm/4.JVM-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="对象引用与回收在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动态的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-04T09:41:26.048Z">
+<meta property="article:modified_time" content="2020-05-25T14:47:00.959Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/%E7%A7%91%E6%8A%80.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/resume"  >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">java/jvm/4.JVM-对象引用与回收</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">java/jvm/4.JVM-对象引用与回收</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-05-04T09:41:26.048Z" itemprop="datePublished" class="page-time">
+  2020-05-04
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/JVM/">JVM</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对象引用与回收"><span class="post-toc-number">1.</span> <span class="post-toc-text">对象引用与回收</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#那些对象需要被回收"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">那些对象需要被回收</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#对象引用"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">对象引用</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#引用计数法"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">引用计数法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#可达性分析算法"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">可达性分析算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#第一次标记"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">第一次标记</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#第二次标记"><span class="post-toc-number">1.1.5.</span> <span class="post-toc-text">第二次标记</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#常量、类回收"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">常量、类回收</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#废弃常量"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">废弃常量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#无用的类"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">无用的类</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-java/jvm/4.JVM-对象引用与回收"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">java/jvm/4.JVM-对象引用与回收</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-05-04 17:41:26" datetime="2020-05-04T09:41:26.048Z"  itemprop="datePublished">2020-05-04</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/JVM/">JVM</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="对象引用与回收"><a href="#对象引用与回收" class="headerlink" title="对象引用与回收"></a>对象引用与回收</h2><p>在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动态的，这也是垃圾收集(GC)器工作的主要对象。</p>
+<h3 id="那些对象需要被回收"><a href="#那些对象需要被回收" class="headerlink" title="那些对象需要被回收"></a>那些对象需要被回收</h3><p>Java 中的对象都是在堆上分配内存空间的，然后通过引用指向对象地址。是否被引用是判断对象是否还存活的重要根据。</p>
+<h4 id="对象引用"><a href="#对象引用" class="headerlink" title="对象引用"></a>对象引用</h4><p>JDK 1.2之前，reference 数据类型存储的数值代表一个内存地址表示着一个引用。随着硬件的发展内存空间虽然很珍贵但是还可满足，所以在内存空间充足的情况下，有些对象则尽可能的保留在内存中当内存不足时再回收。如何区分这些对象呢，就是通过引用的强弱关系来区分，主要有四种：</p>
+<ul>
+<li><strong>强引用（Strong Reference）：</strong>这是在代码中普遍存在的一种引用，类似：<code>Object obj = new Object()</code>，如果强引用还存在则一定不会被回收。</li>
+<li><strong>软引用（Soft Reference）：</strong>通过 <code>SoftReference</code> 类来实现，表示有用但是非必需的对象。系统发生内存溢出之前（已经 GC 一次）会把软引用关联的对象列进回收范围进行第二次回收，如果回收后还是内存不足则会抛出内存溢出异常。</li>
+<li><strong>弱引用（Weak Reference）：</strong>有用非必需对象，通过 <code>WeakReference</code> 类来实现，弱引用对象只能生存到下一次垃圾收集之前，当垃圾收集器工作时都会回收掉弱引用关联的对象。</li>
+<li><strong>虚引用（Phantom Reference）：</strong>最弱的引用关系，虚引用不会对对象的存活造成影响，无法通过虚引用在获取一个对象实例。为一个对象设置虚引用是在对象被垃圾回收时可以收到一个系统的通知。可以通过 <code>PhantomReference</code> 类来实现。</li>
+</ul>
+<p>对象是否还被引用，主要通过下面两种算法来判断：</p>
+<h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>给对象添加一个引用计数器，当对象被引用的时候计数器就增加 1，引用失效时计数器减 1，任何时刻计数器为 0 的对象就是不再被使用的。但是当对象存在循环引用时，其实环上的对象都已经不在被使用，但是计数器不为 0，这样会造成对象无法被回收。</p>
+<h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>通过 <code>GC Roots</code> 的对象作为起点，对引用到的对象构造一条引用链，当某个对象没有到达 <code>GC Roots</code> 的路径，称为不可达。这部分对象被判定为可回收的。Java 虚拟机中可以作为 <code>GC Roots</code> 对象的有：</p>
+<ul>
+<li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li>
+<li>方法区中类静态属性引用的属性</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈中 JNI（Native 方法）引用的对象</li>
+</ul>
+<p>对象的真正死亡也至少要经过两个标记过程：</p>
+<h4 id="第一次标记"><a href="#第一次标记" class="headerlink" title="第一次标记"></a>第一次标记</h4><p>可达性分析后对象没有与 <code>GC Roots</code> 相连的引用链，此时进行第一次标记并且进行一次筛选。筛选条件是次对象是否需要执行 <code>finalize()</code> 方法。如果对象没有覆盖 <code>finalize</code> 方法、或者<code>finalize</code> 方法已经被虚拟机调用过，这两种情况视为不需要执行。</p>
+<p>如果对象需要执行 <code>finalize</code> 方法，对象会被放在 <code>F-Queue</code> 队列中，稍后由虚拟机自动建立的、低优先级的 <code>Finalizer</code> 线程去执行。这个执行仅是触发，不会等到方法执行完，避免出现 <code>finalize</code> 方法执行慢、死循环等情况使 <code>F-Queue</code> 对垒处于等待最终导致回收系统奔溃。第一次标记后的 <code>finalize</code> 方法是对象逃脱死亡的最后机会。</p>
+<h4 id="第二次标记"><a href="#第二次标记" class="headerlink" title="第二次标记"></a>第二次标记</h4><p>第二次标记是针对在 <code>F-Queue</code> 队列中的对象，此时如果对象确实没有引用了就会被回收。所以在第一次的标记后的 <code>finalize</code> 方法执行时讲对象重新与引用链上对象建立引用关系即可被移出即将回收的集合。这种自救的方法只有一次，因为对象的 <code>finalize</code> 方法只会被虚拟机执行一次。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalizeEscapeGc</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> FinalizeEscapeGc SAVE_HOOK = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">isAlive</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"对象还存活"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"finalize 方法开始执行"</span>);</span><br><span class="line">        <span class="keyword">super</span>.finalize();</span><br><span class="line">        FinalizeEscapeGc.SAVE_HOOK = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        SAVE_HOOK = <span class="keyword">new</span> FinalizeEscapeGc();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第一次的回收时，通过指向this，拯救自己</span></span><br><span class="line">        SAVE_HOOK = <span class="keyword">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        <span class="comment">//finalize 方法的优先级较低，线程停500ms等待</span></span><br><span class="line">        Thread.sleep(<span class="number">500</span>);</span><br><span class="line">        <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) &#123;</span><br><span class="line">            SAVE_HOOK.isAlive();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"对象已死"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第二次的回收时，回收成功；因为finalize方法只能被虚拟机执行一次，所以这次会被回收掉</span></span><br><span class="line">        SAVE_HOOK = <span class="keyword">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        <span class="comment">//finalize 方法的优先级较低，线程停500ms等待</span></span><br><span class="line">        Thread.sleep(<span class="number">500</span>);</span><br><span class="line">        <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) &#123;</span><br><span class="line">            SAVE_HOOK.isAlive();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"对象已死"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//finalize 方法开始执行</span></span><br><span class="line"><span class="comment">//对象还存活</span></span><br><span class="line"><span class="comment">//对象已死</span></span><br><span class="line"><span class="comment">//输出结果可看到，finalize只被执行了一次，对象第一次还存活第二次被回收了。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常量、类回收"><a href="#常量、类回收" class="headerlink" title="常量、类回收"></a>常量、类回收</h3><p>上面主要说的是堆上对象的回收，对于方法区或者永久代虽然回收的效率比较低但是也存在垃圾回收。永久代主要回收两部分：废弃的常量和无用的类。</p>
+<h4 id="废弃常量"><a href="#废弃常量" class="headerlink" title="废弃常量"></a>废弃常量</h4><p>如果常量池中的常量没有其他对象引用了。如果此时发生内存回收并且内存可能已经不足这个常量就会被清除。常量池中的其他类（接口）、方法、字段等符号引用也类似。</p>
+<h4 id="无用的类"><a href="#无用的类" class="headerlink" title="无用的类"></a>无用的类</h4><p>一个类是否无用的判断则比较苛刻：</p>
+<ul>
+<li>该类的所有实例都被回收，即堆上不存在该类的实例</li>
+<li>加载该类的 ClassLoader 已经被回收</li>
+<li>该类对象的 <code>java.lang.Class</code> 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li>
+</ul>
+<p>满足这些条件时才有可能被回收，是否回收虚拟机提供了 <code>-Xnoclassgc</code> 参数来控制。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-05-25T14:47:00.959Z" itemprop="dateUpdated">2020-05-25 22:47:00</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/05/08/java/jvm/1.JVM-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">java/jvm/1.JVM-内存模型</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/05/04/java/jvm/2.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">java/jvm/2.JVM-类加载器</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://zcy-fover.github.io/"/>
-  <updated>2020-05-08T14:36:33.610Z</updated>
+  <updated>2020-05-26T14:49:51.389Z</updated>
   <id>https://zcy-fover.github.io/</id>
   
   <author>
@@ -15,6 +15,66 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>java/jvm/3.JVM-类加载过程</title>
+    <link href="https://zcy-fover.github.io/2020/05/26/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/"/>
+    <id>https://zcy-fover.github.io/2020/05/26/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/</id>
+    <published>2020-05-26T14:45:37.622Z</published>
+    <updated>2020-05-26T14:49:51.389Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h2><p>java 文件经过编译后生成了 class 文件，类加载器的工作对象就是 class 文件，将 class 文件从其他位置加载到 JVM 内存中。类从加载到虚拟机到卸载出内存整个生命周期包括：加载、验证、准备、解析、初始化、使用、卸载七个过程。其中验证、准备、解析三个步骤统称为链接。</p><figure class="image-bubble">                <div class="img-lightbox">                    <div class="overlay"></div>                    <img src="http://pic.yupoo.com/zcyfover/eeff256d/dd0991d9.png" alt="类加载过程" title="">                </div>                <div class="image-caption">类加载过程</div>            </figure><p>加载、验证、准备、初始化、卸载这 5 个过程是按顺序开始即可(不一定等上一步骤结束)。解析阶段有可能在初始化之后，这是为了支持 Java 语言的运行时绑定特性。</p><h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p>加载时虚拟机的工作：</p><ul><li>通过一个类的全限定名来获取定义此类的二进制字节流</li><li>将字节流所代表的静态存储结构转化为方法区的运行时数据结构</li><li>在内存中生成一个代表这个类的 <code>java.lang.Class</code> 对象，作为方法区这个类的各种数据的访问入口</li></ul><p>虚拟机获取字节流的方式：</p><ul><li>本地磁盘中的 class 文件中获取</li><li>从 ZIP 包中获取，例如JAR、WAR、EAR等</li><li>从网络中读取</li><li>运行时计算生成，例如动态代理技术，利用 <code>sun.misc.ProxyGenerator#generateProxyClass</code> 为特定接口生成代理类的二进制字节流</li><li>由其他文件生成，例如 JSP 应用</li><li>从数据库中读取</li></ul><p>对于数组类的加载，由虚拟机直接创建，但是数组的元素类型最终还是靠类加载器来加载。数组创建遵循的原则：</p><ul><li>如果数组的组件类型（去掉一个维度的类型）是引用类型，则递归加载过程来创建，数组也在加载该组件类型的类加载器的类名称空间上被标识。</li><li>数组的组件类型不是引用类型（基本数据类型，例如 int[]），虚拟机会将数组标记为与引导类加载关联。</li><li>数组类的可见性与引用类型的可见性一致，如果组件类型不是引用类型，那数组类的可见性将默认为 public。</li></ul><h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>class 文件可以有多种生成方式，生成的文件是否完全符合 class 文件规范。验证是为了尽量保证虚拟机的安全，避免错误的字节流导致虚拟机奔溃。如果验证到字节流不符合规范虚拟机会抛出 <code>java.lang.VerifyError</code> 异常。验证大致会完成四个阶段的校验：</p><h4 id="文件格式校验"><a href="#文件格式校验" class="headerlink" title="文件格式校验"></a>文件格式校验</h4><p>验证字节流是否符合 class 文件规范，保证输入的字节流能正确解析并且存储在方法区。</p><h4 id="元数据验证"><a href="#元数据验证" class="headerlink" title="元数据验证"></a>元数据验证</h4><p>对字节码描述的信息进行语义分析，保证描述信息符合 Java 语言规范。包括：该类是否有父类、父类是否继承了被 final 修饰的类、该类不是抽象类是否实现了其父类或者接口中的所有方法、类中的方法和字段是否与父类冲突等。</p><h4 id="字节码验证"><a href="#字节码验证" class="headerlink" title="字节码验证"></a>字节码验证</h4><p>通过数据流和控制流分析确保程序语义合法、符合逻辑。保证被校验类的方法在运行时不会做出危害虚拟机安全的事件，例如：</p><ul><li>保证任意时刻操作数栈数据类型与指令序列能够匹配工作，避免出现操作数栈的 int 数据类型被按照 long 类型指令加载入本地变量表</li><li>保证跳转指令不会跳转到方法体以外的字节码指令上</li><li>保证方法体中的类型转换是有效的</li></ul><h4 id="符号引用验证"><a href="#符号引用验证" class="headerlink" title="符号引用验证"></a>符号引用验证</h4><p>这个验证是在加载过程的解析阶段将符号引用转化为直接引用时发生。符号引用校验是对类自身外（常量池的符号引用）的信息进行匹配性校验：</p><ul><li>符号引用通过字符串描述的全限定名是否可以找到对应的类</li><li>指定类中是否存在符合方法的字段描述符和简单名称所描述的方法、字段</li><li>符号引用中的类、字段、方法的访问性是否可以被当前类访问</li></ul><p>符号引用验证确保解析动作能正常执行，如果符号引用验证失败将会抛出 <code>java.lang.IncompatibleClassChangeError</code> 异常的子类，如：<code>java.lang.IllegalAccessError</code>、<code>java.lang.NoSuchFieldError</code>、<code>java.langNoSuchMethodError</code>等。</p><p>验证对于虚拟机是重要但是不必要的阶段，如果对于运行的 class 文件都反复使用和验证过，可以使用 <code>-Xverify:none</code> 来关闭验证。</p><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>在方法区中为类变量分配内存并且设置初始值，仅类变量不包括实例变量，实例变量随着对象实例化时一起在堆中分配内存。这里的初始值是数据类型的零值。例如：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> value = <span class="number">2</span>;</span><br></pre></td></tr></table></figure><p>在准备阶段只会把 <code>value</code> 置为 0，赋值是在编译阶段会把 <code>putstatic</code> 指令放到类构造器的 <code>clinit()</code> 方法中，在初始化阶段在执行赋值。数据零值：</p><table><thead><tr><th>数据类型</th><th>零值</th><th>数据类型</th><th>零值</th></tr></thead><tbody><tr><td>int</td><td>0</td><td>boolean</td><td>false</td></tr><tr><td>short</td><td>(short) 0</td><td>float</td><td>0.0f</td></tr><tr><td>long</td><td>0L</td><td>double</td><td>0.0d</td></tr><tr><td>char</td><td>‘\u0000’</td><td>reference</td><td>null</td></tr><tr><td>byte</td><td>(byte) 0</td><td></td><td></td></tr></tbody></table><p>但是如果字段属性存在 ConstantValue 属性，则编译器会给 value 生成 ConstantValue 属性，然后在准备阶段就会置为指定值，例如：</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> value = <span class="number">2</span>;</span><br></pre></td></tr></table></figure><h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析是虚拟机将常量池内的符号引用转化为直接引用的过程。解析动作主要针对 7 类符号引用：</p><table><thead><tr><th>类型</th><th>名称</th></tr></thead><tbody><tr><td>CONSTANT_Class_info</td><td>类或接口</td></tr><tr><td>CONSTANT_Fieldref_info</td><td>字段</td></tr><tr><td>CONSTANT_Methodref_info</td><td>类方法</td></tr><tr><td>CONSTANT_InterfaceMethodref_info</td><td>接口方法</td></tr><tr><td>CONSTANT_MethodType_info</td><td>方法类型</td></tr><tr><td>CONSTANT_MethodHandle_info</td><td>方法句柄</td></tr><tr><td>CONSTANT_InvokeDynamic_info</td><td>调用点限定符</td></tr></tbody></table><h4 id="符号引用"><a href="#符号引用" class="headerlink" title="符号引用"></a>符号引用</h4><p>以一组符号来描述引用的目标，符号可以是任何形式的字面量，只要使用时能无歧义的定位到目标即可。符号引用的字面量形式定义在 Java 虚拟机规范 Class 文件中，与虚拟机的内存布局无关。</p><h4 id="直接引用"><a href="#直接引用" class="headerlink" title="直接引用"></a>直接引用</h4><p>指向目标的指针、相对偏移量或者一个能间接定位到目标的句柄。与虚拟机实现的内存布局相关，同一个符号引用在不同的虚拟机上翻译出来的直接引用一般不相同，如果有了直接引用那目标一定被加载到了内存中。</p><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>初始化阶段虚拟机开始执行前期编译好的字节码，初始化类变量和其他资源，就是执行类构造器 <code>&lt;clinit&gt;()</code> 方法。</p><ul><li><code>&lt;clinit&gt;()</code> 方法是由编译器自动收集所有类变量赋值语句和静态语句块组合，顺序是由源文件中出现的顺序决定。静态语句块只能访问到定义在静态语句块之前的变量，之后的变量在前面的静态语句块可以赋值，但是不能访问。</li></ul><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        i = <span class="number">0</span>;</span><br><span class="line">        System.out.println(i);   <span class="comment">// 编译器会提示：Illegal forward reference；无效的向前引用</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li><p><code>&lt;clinit&gt;()</code> 方法与类的构造函数（实例构造器<init>()方法）不同，不需要显示调用父类的<code>&lt;clinit&gt;()</code> 方法，虚拟机会保证在执行子类的<code>&lt;clinit&gt;()</code> 之前执行完父类的<code>&lt;clinit&gt;()</code> 方法。即 <code>java.lang.Object</code> 的<code>&lt;clinit&gt;()</code> 方法是第一个被执行的。</p></li><li><p>由于父类的 <code>&lt;clinit&gt;()</code> 先执行，则父类的静态语句块先于子类的变量赋值操作。</p></li><li><p><code>&lt;clinit&gt;()</code> 不是必须的，如果类或者接口没有静态语句块或者变量赋值操作，编译器也可以不生成该方法。</p></li><li><p>接口中不能使用静态语句块，但可以有变量赋值操作，都会生成 <code>&lt;clinit&gt;()</code> 方法。不同点是，执行接口的 <code>&lt;clinit&gt;()</code> 方法不需要先执行父类的，只有使用到父类接口中定义的变量时在初始化。同样接口的实现类在初始化时也不会执行接口的 <code>&lt;clinit&gt;()</code> 方法。</p></li><li><p>虚拟机保证一个类 <code>&lt;clinit&gt;()</code> 方法的执行是线程安全的。其他线程会被阻塞，等当前初始化线程执行完后其他线程也不会再进入 <code>&lt;clinit&gt;()</code> 方法，同一个类加载器一个类只会被初始化一次。</p></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;类加载过程&quot;&gt;&lt;a href=&quot;#类加载过程&quot; class=&quot;headerlink&quot; title=&quot;类加载过程&quot;&gt;&lt;/a&gt;类加载过程&lt;/h2&gt;&lt;p&gt;java 文件经过编译后生成了 class 文件，类加载器的工作对象就是 class 文件，将 class 文件从其
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/categories/Java/JVM/"/>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java/jvm/5.JVM-GC算法</title>
+    <link href="https://zcy-fover.github.io/2020/05/25/java/jvm/5.JVM-GC%E7%AE%97%E6%B3%95/"/>
+    <id>https://zcy-fover.github.io/2020/05/25/java/jvm/5.JVM-GC%E7%AE%97%E6%B3%95/</id>
+    <published>2020-05-25T14:49:40.046Z</published>
+    <updated>2020-05-26T14:49:53.658Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h2>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;GC算法&quot;&gt;&lt;a href=&quot;#GC算法&quot; class=&quot;headerlink&quot; title=&quot;GC算法&quot;&gt;&lt;/a&gt;GC算法&lt;/h2&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/categories/Java/JVM/"/>
+    
+    
+      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
+    
+      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
+    
+  </entry>
   
   <entry>
     <title>java/jvm/1.JVM-内存模型</title>
@@ -45,49 +105,19 @@
   </entry>
   
   <entry>
-    <title>java/jvm/4.JVM-GC策略</title>
-    <link href="https://zcy-fover.github.io/2020/05/04/java/jvm/4.JVM-GC%E7%AD%96%E7%95%A5/"/>
-    <id>https://zcy-fover.github.io/2020/05/04/java/jvm/4.JVM-GC%E7%AD%96%E7%95%A5/</id>
+    <title>java/jvm/4.JVM-对象引用与回收</title>
+    <link href="https://zcy-fover.github.io/2020/05/04/java/jvm/4.JVM-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/"/>
+    <id>https://zcy-fover.github.io/2020/05/04/java/jvm/4.JVM-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/</id>
     <published>2020-05-04T09:41:26.048Z</published>
-    <updated>2020-05-23T01:52:52.890Z</updated>
+    <updated>2020-05-25T14:47:00.959Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="内存分配与GC策略"><a href="#内存分配与GC策略" class="headerlink" title="内存分配与GC策略"></a>内存分配与GC策略</h2><p>在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动态的，这也是垃圾收集(GC)器工作的主要对象。</p><h3 id="那些对象需要被回收"><a href="#那些对象需要被回收" class="headerlink" title="那些对象需要被回收"></a>那些对象需要被回收</h3><p>Java 中的对象都是在堆上分配内存空间的，然后通过引用指向对象地址。是否被引用是判断对象是否还存活的重要根据。</p><h4 id="对象引用"><a href="#对象引用" class="headerlink" title="对象引用"></a>对象引用</h4><p>JDK 1.2之前，reference 数据类型存储的数值代表一个内存地址表示着一个引用。随着硬件的发展内存空间虽然很珍贵但是还可满足，所以在内存空间充足的情况下，有些对象则尽可能的保留在内存中当内存不足时再回收。如何区分这些对象呢，就是通过引用的强弱关系来区分，主要有四种：</p><ul><li><strong>强引用（Strong Reference）：</strong>这是在代码中普遍存在的一种引用，类似：<code>Object obj = new Object()</code>，如果强引用还存在则一定不会被回收。</li><li><strong>软引用（Soft Reference）：</strong>通过 <code>SoftReference</code> 类来实现，表示有用但是非必需的对象。系统发生内存溢出之前（已经 GC 一次）会把软引用关联的对象列进回收范围进行第二次回收，如果回收后还是内存不足则会抛出内存溢出异常。</li><li><strong>弱引用（Weak Reference）：</strong>有用非必需对象，通过 <code>WeakReference</code> 类来实现，弱引用对象只能生存到下一次垃圾收集之前，当垃圾收集器工作时都会回收掉弱引用关联的对象。</li><li><strong>虚引用（Phantom Reference）：</strong>最弱的引用关系，虚引用不会对对象的存活造成影响，无法通过虚引用在获取一个对象实例。为一个对象设置虚引用是在对象被垃圾回收时可以收到一个系统的通知。可以通过 <code>PhantomReference</code> 类来实现。</li></ul><p>对象是否还被引用，主要通过下面两种算法来判断：</p><h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>给对象添加一个引用计数器，当对象被引用的时候计数器就增加 1，引用失效时计数器减 1，任何时刻计数器为 0 的对象就是不再被使用的。但是当对象存在循环引用时，其实环上的对象都已经不在被使用，但是计数器不为 0，这样会造成对象无法被回收。</p><h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>通过 <code>GC Roots</code> 的对象作为起点，对引用到的对象构造一条引用链，当某个对象没有到达 <code>GC Roots</code> 的路径，称为不可达。这部分对象被判定为可回收的。Java 虚拟机中可以作为 <code>GC Roots</code> 对象的有：</p><ul><li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li><li>方法区中类静态属性引用的属性</li><li>方法区中常量引用的对象</li><li>本地方法栈中 JNI（Native 方法）引用的对象</li></ul><p>对象的真正死亡也要经过两个标记过程：</p><h4 id="第一次标记"><a href="#第一次标记" class="headerlink" title="第一次标记"></a>第一次标记</h4>]]></content>
+    <content type="html"><![CDATA[<h2 id="对象引用与回收"><a href="#对象引用与回收" class="headerlink" title="对象引用与回收"></a>对象引用与回收</h2><p>在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是动态的，这也是垃圾收集(GC)器工作的主要对象。</p><h3 id="那些对象需要被回收"><a href="#那些对象需要被回收" class="headerlink" title="那些对象需要被回收"></a>那些对象需要被回收</h3><p>Java 中的对象都是在堆上分配内存空间的，然后通过引用指向对象地址。是否被引用是判断对象是否还存活的重要根据。</p><h4 id="对象引用"><a href="#对象引用" class="headerlink" title="对象引用"></a>对象引用</h4><p>JDK 1.2之前，reference 数据类型存储的数值代表一个内存地址表示着一个引用。随着硬件的发展内存空间虽然很珍贵但是还可满足，所以在内存空间充足的情况下，有些对象则尽可能的保留在内存中当内存不足时再回收。如何区分这些对象呢，就是通过引用的强弱关系来区分，主要有四种：</p><ul><li><strong>强引用（Strong Reference）：</strong>这是在代码中普遍存在的一种引用，类似：<code>Object obj = new Object()</code>，如果强引用还存在则一定不会被回收。</li><li><strong>软引用（Soft Reference）：</strong>通过 <code>SoftReference</code> 类来实现，表示有用但是非必需的对象。系统发生内存溢出之前（已经 GC 一次）会把软引用关联的对象列进回收范围进行第二次回收，如果回收后还是内存不足则会抛出内存溢出异常。</li><li><strong>弱引用（Weak Reference）：</strong>有用非必需对象，通过 <code>WeakReference</code> 类来实现，弱引用对象只能生存到下一次垃圾收集之前，当垃圾收集器工作时都会回收掉弱引用关联的对象。</li><li><strong>虚引用（Phantom Reference）：</strong>最弱的引用关系，虚引用不会对对象的存活造成影响，无法通过虚引用在获取一个对象实例。为一个对象设置虚引用是在对象被垃圾回收时可以收到一个系统的通知。可以通过 <code>PhantomReference</code> 类来实现。</li></ul><p>对象是否还被引用，主要通过下面两种算法来判断：</p><h4 id="引用计数法"><a href="#引用计数法" class="headerlink" title="引用计数法"></a>引用计数法</h4><p>给对象添加一个引用计数器，当对象被引用的时候计数器就增加 1，引用失效时计数器减 1，任何时刻计数器为 0 的对象就是不再被使用的。但是当对象存在循环引用时，其实环上的对象都已经不在被使用，但是计数器不为 0，这样会造成对象无法被回收。</p><h4 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h4><p>通过 <code>GC Roots</code> 的对象作为起点，对引用到的对象构造一条引用链，当某个对象没有到达 <code>GC Roots</code> 的路径，称为不可达。这部分对象被判定为可回收的。Java 虚拟机中可以作为 <code>GC Roots</code> 对象的有：</p><ul><li>虚拟机栈（栈帧中的本地变量表）中引用的对象</li><li>方法区中类静态属性引用的属性</li><li>方法区中常量引用的对象</li><li>本地方法栈中 JNI（Native 方法）引用的对象</li></ul><p>对象的真正死亡也至少要经过两个标记过程：</p><h4 id="第一次标记"><a href="#第一次标记" class="headerlink" title="第一次标记"></a>第一次标记</h4><p>可达性分析后对象没有与 <code>GC Roots</code> 相连的引用链，此时进行第一次标记并且进行一次筛选。筛选条件是次对象是否需要执行 <code>finalize()</code> 方法。如果对象没有覆盖 <code>finalize</code> 方法、或者<code>finalize</code> 方法已经被虚拟机调用过，这两种情况视为不需要执行。</p><p>如果对象需要执行 <code>finalize</code> 方法，对象会被放在 <code>F-Queue</code> 队列中，稍后由虚拟机自动建立的、低优先级的 <code>Finalizer</code> 线程去执行。这个执行仅是触发，不会等到方法执行完，避免出现 <code>finalize</code> 方法执行慢、死循环等情况使 <code>F-Queue</code> 对垒处于等待最终导致回收系统奔溃。第一次标记后的 <code>finalize</code> 方法是对象逃脱死亡的最后机会。</p><h4 id="第二次标记"><a href="#第二次标记" class="headerlink" title="第二次标记"></a>第二次标记</h4><p>第二次标记是针对在 <code>F-Queue</code> 队列中的对象，此时如果对象确实没有引用了就会被回收。所以在第一次的标记后的 <code>finalize</code> 方法执行时讲对象重新与引用链上对象建立引用关系即可被移出即将回收的集合。这种自救的方法只有一次，因为对象的 <code>finalize</code> 方法只会被虚拟机执行一次。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalizeEscapeGc</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> FinalizeEscapeGc SAVE_HOOK = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">isAlive</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"对象还存活"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"finalize 方法开始执行"</span>);</span><br><span class="line">        <span class="keyword">super</span>.finalize();</span><br><span class="line">        FinalizeEscapeGc.SAVE_HOOK = <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        SAVE_HOOK = <span class="keyword">new</span> FinalizeEscapeGc();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第一次的回收时，通过指向this，拯救自己</span></span><br><span class="line">        SAVE_HOOK = <span class="keyword">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        <span class="comment">//finalize 方法的优先级较低，线程停500ms等待</span></span><br><span class="line">        Thread.sleep(<span class="number">500</span>);</span><br><span class="line">        <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) &#123;</span><br><span class="line">            SAVE_HOOK.isAlive();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"对象已死"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//第二次的回收时，回收成功；因为finalize方法只能被虚拟机执行一次，所以这次会被回收掉</span></span><br><span class="line">        SAVE_HOOK = <span class="keyword">null</span>;</span><br><span class="line">        System.gc();</span><br><span class="line">        <span class="comment">//finalize 方法的优先级较低，线程停500ms等待</span></span><br><span class="line">        Thread.sleep(<span class="number">500</span>);</span><br><span class="line">        <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) &#123;</span><br><span class="line">            SAVE_HOOK.isAlive();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"对象已死"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//finalize 方法开始执行</span></span><br><span class="line"><span class="comment">//对象还存活</span></span><br><span class="line"><span class="comment">//对象已死</span></span><br><span class="line"><span class="comment">//输出结果可看到，finalize只被执行了一次，对象第一次还存活第二次被回收了。</span></span><br></pre></td></tr></table></figure><h3 id="常量、类回收"><a href="#常量、类回收" class="headerlink" title="常量、类回收"></a>常量、类回收</h3><p>上面主要说的是堆上对象的回收，对于方法区或者永久代虽然回收的效率比较低但是也存在垃圾回收。永久代主要回收两部分：废弃的常量和无用的类。</p><h4 id="废弃常量"><a href="#废弃常量" class="headerlink" title="废弃常量"></a>废弃常量</h4><p>如果常量池中的常量没有其他对象引用了。如果此时发生内存回收并且内存可能已经不足这个常量就会被清除。常量池中的其他类（接口）、方法、字段等符号引用也类似。</p><h4 id="无用的类"><a href="#无用的类" class="headerlink" title="无用的类"></a>无用的类</h4><p>一个类是否无用的判断则比较苛刻：</p><ul><li>该类的所有实例都被回收，即堆上不存在该类的实例</li><li>加载该类的 ClassLoader 已经被回收</li><li>该类对象的 <code>java.lang.Class</code> 对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法。</li></ul><p>满足这些条件时才有可能被回收，是否回收虚拟机提供了 <code>-Xnoclassgc</code> 参数来控制。</p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;内存分配与GC策略&quot;&gt;&lt;a href=&quot;#内存分配与GC策略&quot; class=&quot;headerlink&quot; title=&quot;内存分配与GC策略&quot;&gt;&lt;/a&gt;内存分配与GC策略&lt;/h2&gt;&lt;p&gt;在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有
-      
-    
-    </summary>
-    
-    
-      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
-    
-      <category term="JVM" scheme="https://zcy-fover.github.io/categories/Java/JVM/"/>
-    
-    
-      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
-    
-      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>java/jvm/3.JVM-类加载过程</title>
-    <link href="https://zcy-fover.github.io/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/"/>
-    <id>https://zcy-fover.github.io/2020/05/04/java/jvm/3.JVM-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/</id>
-    <published>2020-05-04T09:41:26.048Z</published>
-    <updated>2020-05-12T16:01:20.410Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id=""><a href="#" class="headerlink" title=""></a></h3>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title=&quot;&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+        &lt;h2 id=&quot;对象引用与回收&quot;&gt;&lt;a href=&quot;#对象引用与回收&quot; class=&quot;headerlink&quot; title=&quot;对象引用与回收&quot;&gt;&lt;/a&gt;对象引用与回收&lt;/h2&gt;&lt;p&gt;在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上
       
     
     </summary>
@@ -1283,34 +1313,6 @@
         &lt;h2 id=&quot;线程的一生&quot;&gt;&lt;a href=&quot;#线程的一生&quot; class=&quot;headerlink&quot; title=&quot;线程的一生&quot;&gt;&lt;/a&gt;线程的一生&lt;/h2&gt;&lt;p&gt;线程是 CPU 调度的基本单位。Java 中线程状态分为 6 种：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;New：创建状态&lt;/l
-      
-    
-    </summary>
-    
-    
-      <category term="Java" scheme="https://zcy-fover.github.io/categories/Java/"/>
-    
-    
-      <category term="Java" scheme="https://zcy-fover.github.io/tags/Java/"/>
-    
-      <category term="JVM" scheme="https://zcy-fover.github.io/tags/JVM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>java/jvm/Java的引用与回收</title>
-    <link href="https://zcy-fover.github.io/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/"/>
-    <id>https://zcy-fover.github.io/2019/01/20/java/jvm/Java%E7%9A%84%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/</id>
-    <published>2019-01-20T06:38:22.701Z</published>
-    <updated>2020-04-26T14:16:34.700Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Java-的引用与回收"><a href="#Java-的引用与回收" class="headerlink" title="Java 的引用与回收"></a>Java 的引用与回收</h2><p>Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本篇不涉及）。</p><p>强引用：通过 <code>new</code> 创建的引用，被强引用指向的对象，<strong>不会被 gc 回收</strong>。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object ref = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure><p>软引用：通过 <code>SoftReference</code> 包裹的引用，<strong>内存不足</strong>时，如果没有强引用指向它则被 gc 回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SoftReference weakRef = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Object);</span><br></pre></td></tr></table></figure><p>弱引用：通过 <code>WeakReference</code> 包裹的引用，<strong>下一次 gc</strong> 时，如果没有强引用指向它则被 gc 回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WeakReference weakRef = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object);</span><br></pre></td></tr></table></figure><h2 id="软引用-amp-弱引用的使用"><a href="#软引用-amp-弱引用的使用" class="headerlink" title="软引用 &amp; 弱引用的使用"></a>软引用 &amp; 弱引用的使用</h2><p>软引用一般用于<strong>可伸缩式缓存</strong>，即缓存本身的大小不固定，可随着存储空间的增加而增加。因为软引用只有在<strong>内存不足时，才会被 gc 回收</strong>。</p><p>基于弱引用的回收特性，最常见的一种用法是 <code>WeakHashMap</code>。弱引用还可以解决 <a href="https://en.wikipedia.org/wiki/Lapsed_listener_problem" target="_blank" rel="noopener">Lapsed listener problem</a>。</p><p>当出现“内存坏账”的时候，它可以解决“坏账”对象的回收问题。例如，使用 <code>ThreadLocal</code> 容器时，可以将 <code>WeakReference</code> 作为元素，这样可以不用考虑被引用对象的回收问题。</p><h3 id="何时被回收"><a href="#何时被回收" class="headerlink" title="何时被回收"></a>何时被回收</h3><p>当使用软引用或弱引用的时候，要明白创建了 2 个对象：<strong>引用对象（Reference）</strong>和<strong>被引用对象（Referent）</strong>。被引用对象根据约定会被 gc 回收。但是由于引用对象是强引用，不会被 gc 自动回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ref1 and object A</span></span><br><span class="line">Reference ref1 = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object());</span><br><span class="line"><span class="comment">// ref2 and object B</span></span><br><span class="line">Reference ref2 = <span class="keyword">new</span> SoftReference(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line"><span class="comment">// release refs by handle</span></span><br><span class="line"><span class="keyword">if</span> (ref1.get() == <span class="keyword">null</span>) ref1 = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">if</span> (ref2.get() == <span class="keyword">null</span>) ref2 = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure><p>其中，gc 会在约定下回收 <code>A</code>、<code>B</code> 两个对象，<code>ref1</code> 和 <code>ref2</code> 不会被 gc 回收。</p><p>如果不希望被引用对象 <code>A</code> 被 gc 回收，需要使用强引用 <code>N</code> 重新指向对象，让对象 <code>A</code> 处于<strong>可达</strong>状态。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ref1 and object A</span></span><br><span class="line">Reference ref1 = <span class="keyword">new</span> WeakReference(<span class="keyword">new</span> Object());</span><br><span class="line">Object N = ref1.get();</span><br></pre></td></tr></table></figure><blockquote><p> <strong>可达性</strong>是 JVM 在内存回收时，判断对象是否可以被回收的标准，更多关于内存回收的内容在 <a href="./JVM内存回收.md">JVM 内存回收</a></p></blockquote><h3 id="ReferenceQueue"><a href="#ReferenceQueue" class="headerlink" title="ReferenceQueue"></a>ReferenceQueue</h3><p><strong>引用队列（ReferenceQueue）</strong> 可以和 Reference 配合使用。当 gc 会收了 Referent 后，会将 Reference 放入队列中，以此通知用户 Referent 已经被回收。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ReferenceQueue&lt;Object&gt; refQueue = <span class="keyword">new</span> ReferenceQueue&lt;&gt;();</span><br><span class="line">WeakReference&lt;Object&gt; ref = <span class="keyword">new</span> WeakReference&lt;&gt;(<span class="keyword">new</span> Object(), refQueue);</span><br><span class="line">System.out.println(ref + <span class="string">" - "</span> + ref.get());  <span class="comment">// java.lang.ref.WeakReference@198e2867 - java.lang.Object@12f40c25</span></span><br><span class="line">System.gc();</span><br><span class="line">System.out.println(refQueue.remove()); <span class="comment">// java.lang.ref.WeakReference@198e2867</span></span><br></pre></td></tr></table></figure><h2 id="Tick-Tick"><a href="#Tick-Tick" class="headerlink" title="Tick, Tick"></a>Tick, Tick</h2><p>本篇重点讲解引用的回收：gc 回收的是 Referent，而不是 Reference。用于提醒读者，在后续的开发中，不要因使用了 Reference 却没有手动的清理 Reference 对象而出现内存泄漏。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;Java-的引用与回收&quot;&gt;&lt;a href=&quot;#Java-的引用与回收&quot; class=&quot;headerlink&quot; title=&quot;Java 的引用与回收&quot;&gt;&lt;/a&gt;Java 的引用与回收&lt;/h2&gt;&lt;p&gt;Java 中引用类型中主要包含了：强引用、软引用、弱引用、虚引用（本
       
     
     </summary>
