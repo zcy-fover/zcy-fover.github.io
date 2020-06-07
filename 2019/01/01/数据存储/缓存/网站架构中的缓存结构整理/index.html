@@ -21,17 +21,17 @@
     
     
     <meta name="keywords" content="缓存">
-    <meta name="description" content="网站架构中的缓存                                                                                              image               网站架构缓存如图可分为： 客户端缓存  页面缓存 将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。   浏览">
+    <meta name="description" content="网站架构中的缓存                                                                                             image               网站架构缓存如图可分为： 客户端缓存页面缓存将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。 浏览器缓存HTT">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据存储&#x2F;缓存&#x2F;网站架构中的缓存结构整理">
 <meta property="og:url" content="https://zcy-fover.github.io/2019/01/01/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E7%BC%93%E5%AD%98%E7%BB%93%E6%9E%84%E6%95%B4%E7%90%86/index.html">
 <meta property="og:site_name" content="冲鸭">
-<meta property="og:description" content="网站架构中的缓存                                                                                              image               网站架构缓存如图可分为： 客户端缓存  页面缓存 将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。   浏览">
+<meta property="og:description" content="网站架构中的缓存                                                                                             image               网站架构缓存如图可分为： 客户端缓存页面缓存将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。 浏览器缓存HTT">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/F0430B67472F4B11B8577A56CC026CA4?method=download&shareKey=8d33adf1c1a85fbb1ed7c5d80c67f852">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBb567791a999bb7f27b16a79d0c258432?method=download&shareKey=d9fe97b682b4e9bcef1909cd8093a87f">
 <meta property="article:published_time" content="2019-01-01T13:16:21.593Z">
-<meta property="article:modified_time" content="2020-04-26T14:06:45.724Z">
+<meta property="article:modified_time" content="2020-06-07T03:10:39.813Z">
 <meta property="article:author" content="zcy-fover">
 <meta property="article:tag" content="缓存">
 <meta name="twitter:card" content="summary">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#网站架构中的缓存"><span class="post-toc-number">1.</span> <span class="post-toc-text">网站架构中的缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网站架构缓存如图可分为："><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">网站架构缓存如图可分为：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端缓存"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">客户端缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#网络中缓存"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">网络中缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务端缓存"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">服务端缓存</span></a></li></ol></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#网站架构中的缓存"><span class="post-toc-number">1.</span> <span class="post-toc-text">网站架构中的缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#客户端缓存"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">客户端缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#页面缓存"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">页面缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#浏览器缓存"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">浏览器缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#APP上缓存"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">APP上缓存</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网络中缓存"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">网络中缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#WEB代理缓存"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">WEB代理缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#边缘缓存"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">边缘缓存</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#服务端缓存"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">服务端缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#数据库缓存"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">数据库缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#平台级缓存"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">平台级缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#EhCache："><span class="post-toc-number">1.3.2.1.</span> <span class="post-toc-text">EhCache：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#应用级缓存"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">应用级缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Redis："><span class="post-toc-number">1.3.3.1.</span> <span class="post-toc-text">Redis：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#应用缓存技术："><span class="post-toc-number">1.3.3.2.</span> <span class="post-toc-text">应用缓存技术：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#替代策略："><span class="post-toc-number">1.3.3.3.</span> <span class="post-toc-text">替代策略：</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#云缓存服务"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">云缓存服务</span></a></li></ol></li></ol></li></ol>
         </nav>
     </aside>
 
@@ -185,8 +185,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="网站架构中的缓存"><a href="#网站架构中的缓存" class="headerlink" title="网站架构中的缓存"></a>网站架构中的缓存</h2><blockquote>
-<figure class="image-bubble">
+            <h2 id="网站架构中的缓存"><a href="#网站架构中的缓存" class="headerlink" title="网站架构中的缓存"></a>网站架构中的缓存</h2><figure class="image-bubble">
                 <div class="img-lightbox">
                     <div class="overlay"></div>
                     <img src="https://note.youdao.com/yws/api/personal/file/F0430B67472F4B11B8577A56CC026CA4?method=download&shareKey=8d33adf1c1a85fbb1ed7c5d80c67f852" alt="image" title="">
@@ -194,17 +193,9 @@
                 <div class="image-caption">image</div>
             </figure>
 
-<h4 id="网站架构缓存如图可分为："><a href="#网站架构缓存如图可分为：" class="headerlink" title="网站架构缓存如图可分为："></a>网站架构缓存如图可分为：</h4><blockquote>
-<h4 id="客户端缓存"><a href="#客户端缓存" class="headerlink" title="客户端缓存"></a>客户端缓存</h4><blockquote>
-<ul>
-<li>页面缓存<blockquote>
-<p>将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。</p>
-</blockquote>
-</li>
-<li>浏览器缓存</li>
-</ul>
-<blockquote>
-<p>HTTP1.0：与服务器约定规则进行，在服务器侧设置Expires的HTTP头来告诉客户端在重新请求文件之前多久是安全的，可以使用if-midified-since的条件请求来清空缓存，比较文件最初的下载时间和最后的更新时间，如果文件没有改变可以用304-Not Modified应答客户端</p>
+<p>网站架构缓存如图可分为：</p>
+<h3 id="客户端缓存"><a href="#客户端缓存" class="headerlink" title="客户端缓存"></a>客户端缓存</h3><h4 id="页面缓存"><a href="#页面缓存" class="headerlink" title="页面缓存"></a>页面缓存</h4><p>将之前渲染的页面保存为文件，当用户再次访问时可以避开网络连接，从而减少负载，提升性能和用户体验。</p>
+<h4 id="浏览器缓存"><a href="#浏览器缓存" class="headerlink" title="浏览器缓存"></a>浏览器缓存</h4><p>HTTP1.0：与服务器约定规则进行，在服务器侧设置Expires的HTTP头来告诉客户端在重新请求文件之前多久是安全的，可以使用if-midified-since的条件请求来清空缓存，比较文件最初的下载时间和最后的更新时间，如果文件没有改变可以用304-Not Modified应答客户端</p>
 <p>HTTP1.1：缓存系统被形式化引入了e-Tag标签，e-Tag标签是文件或者对象的唯一标识，当询问服务器某一个资源的e-Tag标签是否有效，有效会生成304-Not Modified；否则返回200提供正确的文件</p>
 <figure class="image-bubble">
                 <div class="img-lightbox">
@@ -216,54 +207,22 @@
 
 <p>Cache-Control/Expires和Last-Modified/ETag一期使用时，Cache-Control/Expires的优先级要高于后者。即当本地缓存根据Cache-Control/Expires判断还在有效期内时，就不会在去服务器询问修改时间和实体标识了。</p>
 <p>在html页面可以添加（并不是所有浏览器都支持）</p>
-<pre><code class="html"><span class="tag">&lt;<span class="name">META</span> <span class="attr">HTTP-EQUIV</span>=<span class="string">"Pragma"</span> <span class="attr">CONTENT</span>=<span class="string">"no-cache"</span>&gt;</span></code></pre>
-</blockquote>
-<ul>
-<li>APP上缓存</li>
-</ul>
-<blockquote>
-<p>数据库缓存：把文件的相关信息（URL、路径、下载时间、过期时间）等放到数据库中，下次查询先从数据库中查询做对比</p>
-<p>文件缓存：使用文件操作的API获取文件的最后修改时间。图片和其他配置类文件的缓存时间不一样。图片的缓存时间可能可以持续到下次清空缓存，但是配置文件可能会被更新；在不同网络环境下缓存的更新时间也可以不一样</p>
-</blockquote>
-</blockquote>
-<h4 id="网络中缓存"><a href="#网络中缓存" class="headerlink" title="网络中缓存"></a>网络中缓存</h4><blockquote>
-<ul>
-<li>WEB代理缓存</li>
-</ul>
-<blockquote>
-<p>正向代理</p>
-<p>反向代理：客户端向代理服务发送请求，反向代理自己判断向何处发送请求，然后将从源服务获取到的内容返回给客户端</p>
-<p>透明代理：客户端根本不需要知道有代理服务器的存在，又代理服务器改变客户端的请求报文，并传送真实的IP地址</p>
-<p>匿名代理：加密的透明代理</p>
-</blockquote>
-<ul>
-<li>边缘缓存</li>
-</ul>
-<blockquote>
-<p>反向代理服务和用户来源于同一个网络，用户访问反向代理服务就会得到较高质量的响应，这种反向代理缓存叫做边缘缓存</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">META</span> <span class="attr">HTTP-EQUIV</span>=<span class="string">"Pragma"</span> <span class="attr">CONTENT</span>=<span class="string">"no-cache"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="APP上缓存"><a href="#APP上缓存" class="headerlink" title="APP上缓存"></a>APP上缓存</h4><p><strong>数据库缓存</strong>：把文件的相关信息（URL、路径、下载时间、过期时间）等放到数据库中，下次查询先从数据库中查询做对比</p>
+<p><strong>文件缓存</strong>：使用文件操作的API获取文件的最后修改时间。图片和其他配置类文件的缓存时间不一样。图片的缓存时间可能可以持续到下次清空缓存，但是配置文件可能会被更新；在不同网络环境下缓存的更新时间也可以不一样</p>
+<h3 id="网络中缓存"><a href="#网络中缓存" class="headerlink" title="网络中缓存"></a>网络中缓存</h3><h4 id="WEB代理缓存"><a href="#WEB代理缓存" class="headerlink" title="WEB代理缓存"></a>WEB代理缓存</h4><p><strong>正向代理</strong></p>
+<p><strong>反向代理</strong>：客户端向代理服务发送请求，反向代理自己判断向何处发送请求，然后将从源服务获取到的内容返回给客户端</p>
+<p><strong>透明代理</strong>：客户端根本不需要知道有代理服务器的存在，又代理服务器改变客户端的请求报文，并传送真实的IP地址</p>
+<p><strong>匿名代理</strong>：加密的透明代理</p>
+<h4 id="边缘缓存"><a href="#边缘缓存" class="headerlink" title="边缘缓存"></a>边缘缓存</h4><p>反向代理服务和用户来源于同一个网络，用户访问反向代理服务就会得到较高质量的响应，这种反向代理缓存叫做边缘缓存</p>
 <p>边缘缓存的商业化服务-CDN</p>
 <p>CDN缓存也是通过HTTP响应头的Cache-Control:max-age字段来设置CDN边缘节点的数据缓存时间，当客户端向CDN节点请求数据时，CDN回先判断缓存时间是否过期，没有过期则将缓存返回给客户端，过期则像服务器请求数据并更新本地缓存。</p>
-</blockquote>
-</blockquote>
-<h4 id="服务端缓存"><a href="#服务端缓存" class="headerlink" title="服务端缓存"></a>服务端缓存</h4><blockquote>
-<ul>
-<li>数据库缓存</li>
-</ul>
-<blockquote>
-<p>query cache：作用于MySQL实例，主要针对于select语句，MySQL将接收到的select语句以字符串进行hash，然后在query cache中进行查找，如果有就返回query cache的内容。</p>
+<h3 id="服务端缓存"><a href="#服务端缓存" class="headerlink" title="服务端缓存"></a>服务端缓存</h3><h4 id="数据库缓存"><a href="#数据库缓存" class="headerlink" title="数据库缓存"></a>数据库缓存</h4><p>query cache：作用于MySQL实例，主要针对于select语句，MySQL将接收到的select语句以字符串进行hash，然后在query cache中进行查找，如果有就返回query cache的内容。</p>
 <p>query cache：需要query_cache_size和query_cache_type；前者设置缓存大小，后者表示在那种场景下使用（0-OFF，1-ON，2-DEMAND）</p>
 <p>Qcache inserts表示多少次未命中然后插入；Qcache lowmem prunes值大则说明缓存不够；Qcache hits值非常大，则说明使用缓存较频繁；Qcache free blocks表明缓存区的碎片，如果较多需要清理.    </p>
-</blockquote>
-<blockquote>
 <p>InnoDB缓存：innodb_buffer_pool_size设置缓存InnoDB索引及数据块的内存区域大小；table_cache设置高速缓存的数量。</p>
-</blockquote>
-<ul>
-<li>平台级缓存</li>
-</ul>
-<blockquote>
-<p>EhCache：</p>
-<blockquote>
-<ul>
+<h4 id="平台级缓存"><a href="#平台级缓存" class="headerlink" title="平台级缓存"></a>平台级缓存</h4><h5 id="EhCache："><a href="#EhCache：" class="headerlink" title="EhCache："></a>EhCache：</h5><ul>
 <li>轻量快速：线程机制为大型高并发系统设计</li>
 <li>良性伸缩：数据可以伸缩到数G字节，节点可以到数百个</li>
 <li>简洁灵活：运行时缓存设置，存活时间、空闲时间、内存和缓存存放的最大数目可以在运行时修改</li>
@@ -273,51 +232,51 @@
 <li>缓存监听：提供对缓存事件之后的处理机制</li>
 <li>分布式缓存：支持高性能的分布式缓存，兼具灵活性和扩展性</li>
 </ul>
-</blockquote>
-</blockquote>
-<ul>
-<li>应用级缓存</li>
+<h4 id="应用级缓存"><a href="#应用级缓存" class="headerlink" title="应用级缓存"></a>应用级缓存</h4><h5 id="Redis："><a href="#Redis：" class="headerlink" title="Redis："></a>Redis：</h5><h5 id="应用缓存技术："><a href="#应用缓存技术：" class="headerlink" title="应用缓存技术："></a>应用缓存技术：</h5><ul>
+<li><p>缓存命中：缓存中有这一对象，则使用缓存的数据</p>
+</li>
+<li><p>没有命中：cache miss ，缓存中还有空间的时候，没有命中的对象就会被放入缓存中</p>
+</li>
+<li><p>存储成本：没有命中缓存，需要从数据库中取出数据放入缓存，这个过程消耗的时间和空间叫做存储成本</p>
+</li>
+<li><p>缓存失效：存储在缓存中的数据要被更新时，则原数据就失效了</p>
+</li>
+<li><p>替代策略：当缓存已经满了，有新的数据来，需要从缓存中去除一条旧的数据放入新的数据，如何去除如何插入新的需要有替代策略</p>
+<h5 id="替代策略："><a href="#替代策略：" class="headerlink" title="替代策略："></a>替代策略：</h5></li>
+<li><p>Least-Recently-Used（LRU）：替换掉最近最少请求的对象</p>
+</li>
+<li><p>Least-Frequently-Used（LFU）：替换掉访问次数最少的对象</p>
+</li>
+<li><p>Least-Recently-Used 2（LRU2）：把最近访问两次的对象放入缓存，会把最近两次使用最少的缓存对象去除，需要跟踪对象两次，访问负载会增加</p>
+</li>
+<li><p>Two  Queues（2Q）：把被访问的数据放到KRU的缓存中，如果这个对象在被访问一次，就把这个对象放到第二个、更大的LRU缓存中，使用多级缓存</p>
+</li>
+<li><p>SIZE：替换占用空间最大的对象，这样会导致某些小对象可能一直存在与缓存中</p>
+</li>
+<li><p>LRU-Threshold：不缓存超过某一大小的对象，其他与LRU相同</p>
+</li>
+<li><p>Log(size)+LRU：替换最大的对象，size相同时按照LRU处理</p>
+</li>
+<li><p>Hyper-G：LFU的改进，同时考虑上一次访问时间和大小</p>
+</li>
+<li><p>Pitkow/Recker：替换最近最少使用的对象，除非所有对象都是今天使用的；如果都是今天则替换掉最大的对象</p>
+</li>
+<li><p>Lowest-Latency-First：替换下载时间最少的文件</p>
+</li>
+<li><p>Hybrid Hybrid：减少平均延迟，对缓存中的每个文档计算一个保留效用，保留效用最小的对象会被替换掉</p>
+</li>
+<li><p>Lowest Relative Value（LRV）：计算保留效用，替换保留效用最低的对象</p>
+</li>
+<li><p>Adaptive Replacement Cache（APC）：介于LRU和LFU中间，由两个LRU组成，第一个LRU包含最近只被使用过一次的，第二个包含最近被使用过两次的，以此得到新的和常用的对象；APC可以自我调节，访问负载较小</p>
+</li>
+<li><p>Most Recently Used（MRU）：MRU与LRU是相对的，移除最近被最多使用的对象；（减少因为计算寻找最少最近的耗时）</p>
+</li>
+<li><p>First in First out（FIFO）：通过队列跟踪缓存对象，最先进入的对象最先被踢走</p>
+</li>
+<li><p>Random Cache：随意替换，效果比FIFO好，有些情况比LRU好</p>
+</li>
 </ul>
-<blockquote>
-<p>Redis：</p>
-</blockquote>
-<blockquote>
-<p>应用缓存技术：</p>
-<ul>
-<li>缓存命中：缓存中有这一对象，则使用缓存的数据</li>
-<li>没有命中：cache miss ，缓存中还有空间的时候，没有命中的对象就会被放入缓存中</li>
-<li>存储成本：没有命中缓存，需要从数据库中取出数据放入缓存，这个过程消耗的时间和空间叫做存储成本</li>
-<li>缓存失效：存储在缓存中的数据要被更新时，则原数据就失效了</li>
-<li>替代策略：当缓存已经满了，有新的数据来，需要从缓存中去除一条旧的数据放入新的数据，如何去除如何插入新的需要有替代策略</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>替代策略：</p>
-<ul>
-<li>Least-Recently-Used（LRU）：替换掉最近最少请求的对象</li>
-<li>Least-Frequently-Used（LFU）：替换掉访问次数最少的对象</li>
-<li>Least-Recently-Used 2（LRU2）：把最近访问两次的对象放入缓存，会把最近两次使用最少的缓存对象去除，需要跟踪对象两次，访问负载会增加</li>
-<li>Two  Queues（2Q）：把被访问的数据放到KRU的缓存中，如果这个对象在被访问一次，就把这个对象放到第二个、更大的LRU缓存中，使用多级缓存</li>
-<li>SIZE：替换占用空间最大的对象，这样会导致某些小对象可能一直存在与缓存中</li>
-<li>LRU-Threshold：不缓存超过某一大小的对象，其他与LRU相同</li>
-<li>Log(size)+LRU：替换最大的对象，size相同时按照LRU处理</li>
-<li>Hyper-G：LFU的改进，同时考虑上一次访问时间和大小</li>
-<li>Pitkow/Recker：替换最近最少使用的对象，除非所有对象都是今天使用的；如果都是今天则替换掉最大的对象</li>
-<li>Lowest-Latency-First：替换下载时间最少的文件</li>
-<li>Hybrid Hybrid：减少平均延迟，对缓存中的每个文档计算一个保留效用，保留效用最小的对象会被替换掉</li>
-<li>Lowest Relative Value（LRV）：计算保留效用，替换保留效用最低的对象</li>
-<li>Adaptive Replacement Cache（APC）：介于LRU和LFU中间，由两个LRU组成，第一个LRU包含最近只被使用过一次的，第二个包含最近被使用过两次的，以此得到新的和常用的对象；APC可以自我调节，访问负载较小</li>
-<li>Most Recently Used（MRU）：MRU与LRU是相对的，移除最近被最多使用的对象；（减少因为计算寻找最少最近的耗时）</li>
-<li>First in First out（FIFO）：通过队列跟踪缓存对象，最先进入的对象最先被踢走</li>
-<li>Random Cache：随意替换，效果比FIFO好，有些情况比LRU好</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>云缓存服务：动态扩容、数据多备、自动容灾、成本较低</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
+<h4 id="云缓存服务"><a href="#云缓存服务" class="headerlink" title="云缓存服务"></a>云缓存服务</h4><p>动态扩容、数据多备、自动容灾、成本较低</p>
 
         </div>
 
@@ -326,7 +285,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-04-26T14:06:45.724Z" itemprop="dateUpdated">2020-04-26 22:06:45</time>
+    最后更新时间：<time datetime="2020-06-07T03:10:39.813Z" itemprop="dateUpdated">2020-06-07 11:10:39</time>
 </span><br>
 
 

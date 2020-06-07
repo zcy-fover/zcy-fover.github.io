@@ -21,16 +21,16 @@
     
     
     <meta name="keywords" content="算法与数据结构">
-    <meta name="description" content="队列什么是队列 先进先出，也是一种操作受限的线性表数据结构。用数组实现的队列叫做顺序队列，用链表实现的队列叫做链式队列 队列支持队头入队，队尾出队 队列需要有两个指针 head 指向头指针，tail 指向队尾指针队列实现顺序队列顺序队列当入队、出队时 head 指针和 tail都向后移。顺序队列当 tail 指针到达数组尾部，数组 索引 [0 - head] 之间的空间就会浪费掉，可以利用数据迁移">
+    <meta name="description" content="队列什么是队列 先进先出，也是一种操作受限的线性表数据结构。用数组实现的队列叫做顺序队列，用链表实现的队列叫做链式队列 队列支持队头入队，队尾出队 队列需要有两个指针 head 指向头指针，tail 指向队尾指针  队列实现顺序队列顺序队列当入队、出队时 head 指针和 tail都向后移。顺序队列当 tail 指针到达数组尾部，数组 索引 [0 - head] 之间的空间就会浪费掉，可以利用数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构和算法&#x2F;数据结构与算法之美&#x2F;5.队列">
 <meta property="og:url" content="https://zcy-fover.github.io/2020/02/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E/5.%E9%98%9F%E5%88%97/index.html">
 <meta property="og:site_name" content="冲鸭">
-<meta property="og:description" content="队列什么是队列 先进先出，也是一种操作受限的线性表数据结构。用数组实现的队列叫做顺序队列，用链表实现的队列叫做链式队列 队列支持队头入队，队尾出队 队列需要有两个指针 head 指向头指针，tail 指向队尾指针队列实现顺序队列顺序队列当入队、出队时 head 指针和 tail都向后移。顺序队列当 tail 指针到达数组尾部，数组 索引 [0 - head] 之间的空间就会浪费掉，可以利用数据迁移">
+<meta property="og:description" content="队列什么是队列 先进先出，也是一种操作受限的线性表数据结构。用数组实现的队列叫做顺序队列，用链表实现的队列叫做链式队列 队列支持队头入队，队尾出队 队列需要有两个指针 head 指向头指针，tail 指向队尾指针  队列实现顺序队列顺序队列当入队、出队时 head 指针和 tail都向后移。顺序队列当 tail 指针到达数组尾部，数组 索引 [0 - head] 之间的空间就会浪费掉，可以利用数据">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBd76a8be0ce852584fe5a019711d19c4c?method=download&shareKey=380fa5043148fbbde2945c10905a9f42">
 <meta property="article:published_time" content="2020-02-22T07:46:43.368Z">
-<meta property="article:modified_time" content="2020-04-26T14:13:18.315Z">
+<meta property="article:modified_time" content="2020-06-07T03:28:44.835Z">
 <meta property="article:author" content="zcy-fover">
 <meta property="article:tag" content="算法与数据结构">
 <meta name="twitter:card" content="summary">
@@ -187,15 +187,20 @@
             <h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h2><h3 id="什么是队列"><a href="#什么是队列" class="headerlink" title="什么是队列"></a>什么是队列</h3><ul>
 <li>先进先出，也是一种操作受限的线性表数据结构。用数组实现的队列叫做顺序队列，用链表实现的队列叫做链式队列</li>
 <li>队列支持队头入队，队尾出队</li>
-<li>队列需要有两个指针 head 指向头指针，tail 指向队尾指针<h3 id="队列实现"><a href="#队列实现" class="headerlink" title="队列实现"></a>队列实现</h3><h4 id="顺序队列"><a href="#顺序队列" class="headerlink" title="顺序队列"></a>顺序队列</h4>顺序队列当入队、出队时 head 指针和 tail都向后移。顺序队列当 tail 指针到达数组尾部，数组 索引 [0 - head] 之间的空间就会浪费掉，可以利用数据迁移的想法将在入队时将数据整体往前迁移。这样出队时间复杂度是 ${O(1)}$ ，入队时需要数据搬移，最好的情况就是 head 指针在数组索引 0 的位置，不需要迁移，否则假如队列有 n 个元素，则需要迁移 n 次。则平均时间复杂度$(1+2+3+…+n) / n = O(n)$。<h4 id="链式队列"><a href="#链式队列" class="headerlink" title="链式队列"></a>链式队列</h4>链式队列也需要两个指针，head 指针和 tail 指针。链式队列的出队、入队时间复杂度都是${O(1)}$。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 入队操作</span></span><br><span class="line">tail.next = newNode;</span><br><span class="line">tail = tail.next;</span><br><span class="line"><span class="comment">// 出队操作</span></span><br><span class="line">head = head.next;</span><br></pre></td></tr></table></figure>
-<h4 id="循环队列"><a href="#循环队列" class="headerlink" title="循环队列"></a>循环队列</h4>用数组实现的队列当出队时会造成空间浪费，所以需要数据搬移，利用循环队列来解决这个问题。<div>
+<li>队列需要有两个指针 head 指向头指针，tail 指向队尾指针</li>
+</ul>
+<h3 id="队列实现"><a href="#队列实现" class="headerlink" title="队列实现"></a>队列实现</h3><h4 id="顺序队列"><a href="#顺序队列" class="headerlink" title="顺序队列"></a>顺序队列</h4><p>顺序队列当入队、出队时 head 指针和 tail都向后移。顺序队列当 tail 指针到达数组尾部，数组 索引 [0 - head] 之间的空间就会浪费掉，可以利用数据迁移的想法将在入队时将数据整体往前迁移。这样出队时间复杂度是 ${O(1)}$ ，入队时需要数据搬移，最好的情况就是 head 指针在数组索引 0 的位置，不需要迁移，否则假如队列有 n 个元素，则需要迁移 n 次。则平均时间复杂度$(1+2+3+…+n) / n = O(n)$。</p>
+<h4 id="链式队列"><a href="#链式队列" class="headerlink" title="链式队列"></a>链式队列</h4><p>链式队列也需要两个指针，head 指针和 tail 指针。链式队列的出队、入队时间复杂度都是${O(1)}$。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 入队操作</span></span><br><span class="line">tail.next = newNode;</span><br><span class="line">tail = tail.next;</span><br><span class="line"><span class="comment">// 出队操作</span></span><br><span class="line">head = head.next;</span><br></pre></td></tr></table></figure>
+
+<h4 id="循环队列"><a href="#循环队列" class="headerlink" title="循环队列"></a>循环队列</h4><p>用数组实现的队列当出队时会造成空间浪费，所以需要数据搬移，利用循环队列来解决这个问题。</p>
+<div>
 <img src="https://note.youdao.com/yws/api/personal/file/WEBd76a8be0ce852584fe5a019711d19c4c?method=download&shareKey=380fa5043148fbbde2945c10905a9f42" style="with: 300px; height: 300px">
 </div>
 
-</li>
-</ul>
 <p>关键的地方是如何判断堆满和队空的条件：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">head = (head + <span class="number">1</span>) % n;</span><br><span class="line">tail = (tail + <span class="number">1</span>) % n;</span><br></pre></td></tr></table></figure>
+
 <h4 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h4><p>队列为空时出队操作会被阻塞，此时还无数据可取；队列满时入队被阻塞直到队列中有空闲位置。类似于 生产者-消费者 模型。当多个线程同时操作队列时就会出现线程安全问题。</p>
 <h4 id="并发队列"><a href="#并发队列" class="headerlink" title="并发队列"></a>并发队列</h4><p>线程安全的队列叫做并发队列，需要在出队、入队操作上加锁。基于数组的循环队列利用 CAS 原子操作可以实现高效的并发队列。</p>
 
@@ -206,7 +211,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-04-26T14:13:18.315Z" itemprop="dateUpdated">2020-04-26 22:13:18</time>
+    最后更新时间：<time datetime="2020-06-07T03:28:44.835Z" itemprop="dateUpdated">2020-06-07 11:28:44</time>
 </span><br>
 
 

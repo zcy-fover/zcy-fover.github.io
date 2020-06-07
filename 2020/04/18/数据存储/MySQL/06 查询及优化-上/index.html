@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://note.youdao.com/yws/api/personal/file/WEBecd6654d5d2586335eaa84d07396b27f?method=download&shareKey=8e62b5af757ec7ab3585e206b25a01c4">
 <meta property="article:published_time" content="2020-04-18T03:29:37.484Z">
-<meta property="article:modified_time" content="2020-04-26T14:09:49.729Z">
+<meta property="article:modified_time" content="2020-06-07T03:15:09.364Z">
 <meta property="article:author" content="zcy-fover">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="索引">
@@ -317,6 +317,7 @@
                 </div>
                 <div class="image-caption">MySQL查询执行过程</div>
             </figure>
+
 <h4 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h4><p>半双工通信协议。在同一时刻客户端和服务器只能有一方发送消息。这种通信简单快速，但是同一时刻只能是发送消息或者等待响应。双方传递数据包消息时服务器会通过 <code>max_allowed_packet</code> 控制客户端发送数据包的大小，如果查询太大服务器会拒绝或者抛出错误。但是如果服务器响应给客户端的数据如果太大，会分开为几个数据包发送，但是客户端不能拒收，如果太大导致客户端奔溃，此时客户端应该考虑加上 limit 限制。</p>
 <h5 id="查询状态"><a href="#查询状态" class="headerlink" title="查询状态"></a>查询状态</h5><p>整个连接，或者一个查询线程在某一个时刻都有一个状态，表示 MySQL 当前正在做什么。可以使用 <code>SHOW FULL PROCESSLIST</code> 查看。</p>
 <ul>
@@ -352,7 +353,14 @@
 <li>子查询优化，避免多个查询对数据进行多次访问</li>
 <li>提前终止查询，例如使用了 limit，或者遇到不满足的条件立即终止</li>
 <li>等值传播</li>
-<li>列表 IN() 的比较，对 IN 列表中的数据先进行排序，然后二分查找来确定列表中的值是否满足条件<h5 id="数据和索引的统计信息"><a href="#数据和索引的统计信息" class="headerlink" title="数据和索引的统计信息"></a>数据和索引的统计信息</h5>统计信息由存储引擎实现，不同的存储引擎存储不同的统计信息<h5 id="执行关联查询"><a href="#执行关联查询" class="headerlink" title="执行关联查询"></a>执行关联查询</h5>MySQL 对任何关联查询都执行循环嵌套关联操作，先在一个表中循环取出单条数据，然后嵌套循环下一个表中寻找匹配的数据，直到找到所有匹配的行，然后根据匹配的所有行返回所需要的列。如果最后一个关联表无法找到更多的数据，则会返回上一层关联表继续寻找是否有匹配的记录，以此迭代执行。<h5 id="执行计划"><a href="#执行计划" class="headerlink" title="执行计划"></a>执行计划</h5>MySQL 会生成一颗查询的指令树，然后通过存储引擎执行这颗指令树然后返回查询结果<h5 id="关联查询优化器"><a href="#关联查询优化器" class="headerlink" title="关联查询优化器"></a>关联查询优化器</h5>优化多表关联查询的顺序，优化器通过评估不同顺序时的成本选择最优的顺序来执行。<h5 id="排序优化"><a href="#排序优化" class="headerlink" title="排序优化"></a>排序优化</h5>当不能使用索引进行排序时，MySQL 需要利用内存或者磁盘进行排序，这个过程叫做文件排序。如果排序的数据量小于“排序缓冲区”直接利用内存进行快速排序，如果超过了排序缓冲区，则将将数据分块，每个数据块独立使用快速排序，然后将排序结果放在磁盘上最后将结果合并。</li>
+<li>列表 IN() 的比较，对 IN 列表中的数据先进行排序，然后二分查找来确定列表中的值是否满足条件</li>
+</ul>
+<h5 id="数据和索引的统计信息"><a href="#数据和索引的统计信息" class="headerlink" title="数据和索引的统计信息"></a>数据和索引的统计信息</h5><p>统计信息由存储引擎实现，不同的存储引擎存储不同的统计信息</p>
+<h5 id="执行关联查询"><a href="#执行关联查询" class="headerlink" title="执行关联查询"></a>执行关联查询</h5><p>MySQL 对任何关联查询都执行循环嵌套关联操作，先在一个表中循环取出单条数据，然后嵌套循环下一个表中寻找匹配的数据，直到找到所有匹配的行，然后根据匹配的所有行返回所需要的列。如果最后一个关联表无法找到更多的数据，则会返回上一层关联表继续寻找是否有匹配的记录，以此迭代执行。</p>
+<h5 id="执行计划"><a href="#执行计划" class="headerlink" title="执行计划"></a>执行计划</h5><p>MySQL 会生成一颗查询的指令树，然后通过存储引擎执行这颗指令树然后返回查询结果</p>
+<h5 id="关联查询优化器"><a href="#关联查询优化器" class="headerlink" title="关联查询优化器"></a>关联查询优化器</h5><p>优化多表关联查询的顺序，优化器通过评估不同顺序时的成本选择最优的顺序来执行。</p>
+<h5 id="排序优化"><a href="#排序优化" class="headerlink" title="排序优化"></a>排序优化</h5><p>当不能使用索引进行排序时，MySQL 需要利用内存或者磁盘进行排序，这个过程叫做文件排序。如果排序的数据量小于“排序缓冲区”直接利用内存进行快速排序，如果超过了排序缓冲区，则将将数据分块，每个数据块独立使用快速排序，然后将排序结果放在磁盘上最后将结果合并。</p>
+<ul>
 <li><strong>两次传输排序(就版本使用)</strong>：读取行指针和需要排序的字段，进行排序然后读取对应的行数据。<strong>优点</strong>是排序缓冲区存储的数据较少，可以容纳更多的行进行排序；<strong>缺点</strong>要两次数据传输，第一次是读取行指针和排序字段，第二次是根据排序结果读取行数据，而且第二次排序后读取数据时不再是数据存储的顺序，产生大量的随机 I/O，导致数据传输的成本变高。</li>
 <li><strong>单次传输数据</strong>：先查询读取所有需要的列，然后进行排序，最后返回结果。这样做的优缺点就和上面相反。<strong>优点</strong>减少数据读取次数，对于 I/O 密集的应用可以提高效率；<strong>缺点</strong>行数据返回很多排序无关字段占用空间，如果数据量过大可能导致需要分块排序。</li>
 </ul>
@@ -379,7 +387,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-04-26T14:09:49.729Z" itemprop="dateUpdated">2020-04-26 22:09:49</time>
+    最后更新时间：<time datetime="2020-06-07T03:15:09.364Z" itemprop="dateUpdated">2020-06-07 11:15:09</time>
 </span><br>
 
 

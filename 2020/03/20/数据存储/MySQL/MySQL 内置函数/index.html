@@ -21,15 +21,15 @@
     
     
     <meta name="keywords" content="MySQL,MySQL内置函数">
-    <meta name="description" content="TIPS ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录； 示例：  1INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLICATE">
+    <meta name="description" content="TIPSON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录； 示例：  1INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLICATE">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据存储&#x2F;MySQL&#x2F;MySQL 内置函数">
 <meta property="og:url" content="https://zcy-fover.github.io/2020/03/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/MySQL%20%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="冲鸭">
-<meta property="og:description" content="TIPS ON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录； 示例：  1INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLICATE">
+<meta property="og:description" content="TIPSON DUPLICATE KEY UPDATE使用：作用：向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录； 示例：  1INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLICATE">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-20T09:27:08.000Z">
-<meta property="article:modified_time" content="2020-04-26T14:10:05.914Z">
+<meta property="article:modified_time" content="2020-06-07T03:20:25.832Z">
 <meta property="article:author" content="zcy-fover">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="MySQL内置函数">
@@ -157,7 +157,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TIPS"><span class="post-toc-number">1.</span> <span class="post-toc-text">TIPS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ON-DUPLICATE-KEY-UPDATE使用："><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">ON DUPLICATE KEY UPDATE使用：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#MySQL字符串函数："><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">MySQL字符串函数：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ASCII-str-："><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">ASCII(str)：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ORD-str-："><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">ORD(str)：</span></a></li></ol></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TIPS"><span class="post-toc-number">1.</span> <span class="post-toc-text">TIPS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ON-DUPLICATE-KEY-UPDATE使用："><span class="post-toc-number">1.1.</span> <span class="post-toc-text">ON DUPLICATE KEY UPDATE使用：</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MySQL字符串函数："><span class="post-toc-number">1.2.</span> <span class="post-toc-text">MySQL字符串函数：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ASCII-str-："><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">ASCII(str)：</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#ORD-str-："><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">ORD(str)：</span></a></li></ol></li></ol></li></ol>
         </nav>
     </aside>
 
@@ -183,35 +183,17 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h3 id="TIPS"><a href="#TIPS" class="headerlink" title="TIPS"></a>TIPS</h3><blockquote>
-<h5 id="ON-DUPLICATE-KEY-UPDATE使用："><a href="#ON-DUPLICATE-KEY-UPDATE使用：" class="headerlink" title="ON DUPLICATE KEY UPDATE使用："></a>ON DUPLICATE KEY UPDATE使用：</h5><p><strong>作用：</strong>向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录；</p>
+            <h3 id="TIPS"><a href="#TIPS" class="headerlink" title="TIPS"></a>TIPS</h3><h4 id="ON-DUPLICATE-KEY-UPDATE使用："><a href="#ON-DUPLICATE-KEY-UPDATE使用：" class="headerlink" title="ON DUPLICATE KEY UPDATE使用："></a>ON DUPLICATE KEY UPDATE使用：</h4><p><strong>作用：</strong>向数据库以相同unique或者primary key插入一条记录，若已经存在该key则更新这条记录，否则则新增一条记录；</p>
 <p><strong>示例：</strong></p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLICATE KEY UPDATE id &#x3D; &#39;111&#39;</span><br></pre></td></tr></table></figure>
-</blockquote>
-</blockquote>
-<blockquote>
-<h5 id="MySQL字符串函数："><a href="#MySQL字符串函数：" class="headerlink" title="MySQL字符串函数："></a>MySQL字符串函数：</h5><ul>
-<li><h5 id="ASCII-str-："><a href="#ASCII-str-：" class="headerlink" title="ASCII(str)："></a>ASCII(str)：</h5></li>
-</ul>
-<blockquote>
-<p><strong>作用：</strong>返回第一个字符串的ASCII码值；如果字符串为空则返回0；</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO TABLE_NAME(&#39;id&#39;, &#39;column2&#39;) VALUES(&#39;&#39;, &#39;&#39;) ON DUPLICATE KEY UPDATE id &#x3D; &#39;111&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="MySQL字符串函数："><a href="#MySQL字符串函数：" class="headerlink" title="MySQL字符串函数："></a>MySQL字符串函数：</h4><h5 id="ASCII-str-："><a href="#ASCII-str-：" class="headerlink" title="ASCII(str)："></a>ASCII(str)：</h5><p><strong>作用：</strong>返回第一个字符串的ASCII码值；如果字符串为空则返回0；</p>
 <p><strong>示例：</strong></p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT ASCII(&#39;2&#39;)</span><br></pre></td></tr></table></figure>
-</blockquote>
-</blockquote>
-<ul>
-<li><h5 id="ORD-str-："><a href="#ORD-str-：" class="headerlink" title="ORD(str)："></a>ORD(str)：</h5></li>
-</ul>
-<blockquote>
-<p><strong>作用：</strong>如果字符串str句首是单字节返回与ASCII()函数返回的相同值。如果是一个多字节字符,以格式返回((first byte ASCII code)<em>256+(second byte ASCII code))[</em>256+third byte ASCII code…]  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT ASCII(&#39;2&#39;)</span><br><span class="line">&#96;&#96;</span><br></pre></td></tr></table></figure>
+
+<h5 id="ORD-str-："><a href="#ORD-str-：" class="headerlink" title="ORD(str)："></a>ORD(str)：</h5><p><strong>作用：</strong>如果字符串str句首是单字节返回与ASCII()函数返回的相同值。如果是一个多字节字符,以格式返回((first byte ASCII code)<em>256+(second byte ASCII code))[</em>256+third byte ASCII code…]  </p>
 <p><strong>示例：</strong></p>
-<blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT ORD(&#39;2&#39;)</span><br></pre></td></tr></table></figure>
-</blockquote>
-</blockquote>
-</blockquote>
 
         </div>
 
@@ -220,7 +202,7 @@
     <div class="content">
         
 <span class="post-time">
-    最后更新时间：<time datetime="2020-04-26T14:10:05.914Z" itemprop="dateUpdated">2020-04-26 22:10:05</time>
+    最后更新时间：<time datetime="2020-06-07T03:20:25.832Z" itemprop="dateUpdated">2020-06-07 11:20:25</time>
 </span><br>
 
 
