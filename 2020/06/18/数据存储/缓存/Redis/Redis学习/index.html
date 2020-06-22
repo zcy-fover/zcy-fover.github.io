@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>数据存储/缓存/Redis/Redis学习 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Redis">
+    <meta name="description" content="RedisRedis 之持久化持久化的意义在于缓存中的数据对于业务是否必要，如果数据损失是否可以通过其他数据存储方式恢复。如果需要通过 Redis 自己来恢复，这就是 Redis 持久化的意义。持久化的两种方式：快照和日志。 快照（RDB）将缓存数据序列化成二进制放到磁盘中，开机时或者恢复时从磁盘中读取二进制数据反序列化即可。利用快照数据恢复时间快，但是快照的生成间隔较大时，可能丢失很多数据。 日">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据存储&#x2F;缓存&#x2F;Redis&#x2F;Redis学习">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/06/18/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/Redis/Redis%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="RedisRedis 之持久化持久化的意义在于缓存中的数据对于业务是否必要，如果数据损失是否可以通过其他数据存储方式恢复。如果需要通过 Redis 自己来恢复，这就是 Redis 持久化的意义。持久化的两种方式：快照和日志。 快照（RDB）将缓存数据序列化成二进制放到磁盘中，开机时或者恢复时从磁盘中读取二进制数据反序列化即可。利用快照数据恢复时间快，但是快照的生成间隔较大时，可能丢失很多数据。 日">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-18T13:01:38.790Z">
+<meta property="article:modified_time" content="2020-06-20T15:39:11.575Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/%E7%A7%91%E6%8A%80.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/resume"  >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">数据存储/缓存/Redis/Redis学习</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">数据存储/缓存/Redis/Redis学习</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-06-18T13:01:38.790Z" itemprop="datePublished" class="page-time">
+  2020-06-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Redis"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Redis-之持久化"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Redis 之持久化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#快照（RDB）"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">快照（RDB）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#日志（AOF）"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">日志（AOF）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">使用</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Redis-的可用性"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Redis 的可用性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#单点故障"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">单点故障</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#强一致性"><span class="post-toc-number">1.2.1.1.</span> <span class="post-toc-text">强一致性</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#弱一致性"><span class="post-toc-number">1.2.1.2.</span> <span class="post-toc-text">弱一致性</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#压力、扩展性"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">压力、扩展性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分片"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">分片</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#客户端实现"><span class="post-toc-number">1.2.3.1.</span> <span class="post-toc-text">客户端实现</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#代理"><span class="post-toc-number">1.2.3.2.</span> <span class="post-toc-text">代理</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#一致性哈希"><span class="post-toc-number">1.2.3.3.</span> <span class="post-toc-text">一致性哈希</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Redis-锁"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Redis 锁</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-数据存储/缓存/Redis/Redis学习"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">数据存储/缓存/Redis/Redis学习</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-06-18 21:01:38" datetime="2020-06-18T13:01:38.790Z"  itemprop="datePublished">2020-06-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h3 id="Redis-之持久化"><a href="#Redis-之持久化" class="headerlink" title="Redis 之持久化"></a>Redis 之持久化</h3><p>持久化的意义在于缓存中的数据对于业务是否必要，如果数据损失是否可以通过其他数据存储方式恢复。如果需要通过 Redis 自己来恢复，这就是 Redis 持久化的意义。持久化的两种方式：<strong>快照</strong>和<strong>日志</strong>。</p>
+<h4 id="快照（RDB）"><a href="#快照（RDB）" class="headerlink" title="快照（RDB）"></a>快照（RDB）</h4><p>将缓存数据序列化成二进制放到磁盘中，开机时或者恢复时从磁盘中读取二进制数据反序列化即可。利用快照数据恢复时间快，但是快照的生成间隔较大时，可能丢失很多数据。</p>
+<h4 id="日志（AOF）"><a href="#日志（AOF）" class="headerlink" title="日志（AOF）"></a>日志（AOF）</h4><p>将 Redis 操作指令追加到日志文件中，数据恢复时要重新执行命令，恢复时间长。日志的级别：</p>
+<p><strong>每操作</strong>：没操作一次 Redis，就将操作日志刷新到日志文件中，这样做就可以报最高程度的保证操作日志的完整性，最多是写当前日志时故障，最多丢失一条操作日志。</p>
+<p><strong>每秒钟</strong>：将操作日志先写到系统缓冲池中，每秒钟在写到磁盘上。这种情况下最多损失一秒内一个缓冲池的日志数据。（当缓冲池满了之后系统也会自己写到磁盘上）。默认级别。</p>
+<p><strong>缓冲池大小</strong>：当日志缓冲池满了之后操作系统将数据写到磁盘中，这种情况下也是最多损失一个缓冲池大小数据，但是由于少了每秒钟限制，将损失扩大了。</p>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>早期 Redis 版本中，默认使用 RDB 做持久化，可以自己开启 AOF，但是开启 AOF 后，RDB 就失效了。优化后将两种方式混合使用，在 AOF 文件当中包含历史的 RDB，然后从当前时间再开始追加日志。这样在恢复时就是 RDB 加少量操作日志，可以快速恢复又最大保证了数据的完整性。这些配置可以在 Redis 启动的配置文件中开启。还可以在客户端使用 <code>BGREWRITEAOF</code> 指令重写日志文件，将日志文件压缩，消除重复的无用指令只保留最后的有效指令，例如：对同一个 key 的重复写或者读操作，只保留最后一条日志即可。如果使用了混合方式，使用该指令时就会在日志文件中生成快照，记录当前缓存的二进制数据。</p>
+<h3 id="Redis-的可用性"><a href="#Redis-的可用性" class="headerlink" title="Redis 的可用性"></a>Redis 的可用性</h3><h4 id="单点故障"><a href="#单点故障" class="headerlink" title="单点故障"></a>单点故障</h4><p>如果是单机器，机器故障后业务就要瘫痪，利用主从或者主备模式来解决。主从复制两种模式比较：</p>
+<h5 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h5><p>主机接收到指令后先执行操作然后通知从机执行，从机执行成功后会送主机，主机通知客户端成功。这种情况下如果主从之间的通信错误导致执行失败。对于客户端导致服务不可用，这种情况下主机是可用的只是从机的同步出现错误。这种强一致性会破坏可用性。</p>
+<h5 id="弱一致性"><a href="#弱一致性" class="headerlink" title="弱一致性"></a>弱一致性</h5><p>主机操作指令成功后返回给客户端同时异步通知从机。这种情况下就有可能会导致从机指令丢失，丢失数据。Redis 的主从复制默认运行在这种模式下。</p>
+<h4 id="压力、扩展性"><a href="#压力、扩展性" class="headerlink" title="压力、扩展性"></a>压力、扩展性</h4><p>单实例机器无法达到业务性能需求，需要扩展，利用分片集群模式来扩展服务能力。进行业务拆分，利用 AKF 划分原则，通过主备保证数据恢复，将数据按照业务分开降低数据在机器上的耦合（业务上对于热点数据和冷数据的处理和性能要求可能也是不同的），同类数据分片存储提高热点数据访问对于服务器的性能要求。</p>
+<h4 id="分片"><a href="#分片" class="headerlink" title="分片"></a>分片</h4><p>一般情况下为了避免这两种情况，首先会搭建一个 Redis 的分片集群，然后集群中的 Redis 实例以主从形式搭建。如果是分片集群，客户端在命令发送时就需要有一个算法来讲不同的命令分配到不同的分片上。分片算法的三种实现：</p>
+<h5 id="客户端实现"><a href="#客户端实现" class="headerlink" title="客户端实现"></a>客户端实现</h5><p>客户端维护分片集群的实例，通过自定义算法（取模等）将指令分配到不同的分片上。这种方式耦合度太高，如果集群分片增加，算法也需要修改。</p>
+<h5 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h5><p>客户端链接代理，将数据发送到代理，代理将数据发送到分片集群，分配算法由代理层实现，实现了解藕。但是分片集群更新时，代理层还是需要优化。</p>
+<h5 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a>一致性哈希</h5><p>抽象出一个 m 区间的哈希环，然后利用已有的机器节点将这个环分割，机器负载落在某个分割环的一个区间，不再是直接对应到机器上。这样当某个机器故障后，只需要将这一部分数据迁移到他的临近机器上，不需要全部数据迁移。参考文章：<a href="https://www.jianshu.com/p/735a3d4789fc" target="_blank" rel="noopener">一致性哈希</a></p>
+<h3 id="Redis-锁"><a href="#Redis-锁" class="headerlink" title="Redis 锁"></a>Redis 锁</h3>
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-06-20T15:39:11.575Z" itemprop="dateUpdated">2020-06-20 23:39:11</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/" rel="tag">Redis</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/06/22/%E8%AE%BE%E8%AE%A1/%E5%88%86%E5%B8%83%E5%BC%8F/01.%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E6%A6%82%E5%BF%B5/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">设计/分布式/01.分布式系统-概念</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/06/15/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/08.MySQL%E9%AB%98%E5%8F%AF%E7%94%A8-%E5%A4%8D%E5%88%B6/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">数据存储/MySQL/08.MySQL高可用-复制</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

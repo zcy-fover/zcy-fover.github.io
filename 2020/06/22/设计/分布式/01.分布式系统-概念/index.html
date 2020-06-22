@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>设计/分布式/01.分布式系统-概念 | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="分布式">
+    <meta name="description" content="分布式分布式应用到很多领域中，例如存储、缓存、文件系统、锁、事务、调度任务、调度计算、中间件消息、数据采集等等。本篇主要学习分布式的概念和理论基础。 术语概念进程与线程进程是系统进行资源分配和调度的一个独立单位，是具有一定独立功能的程序关于某个数据集上的一次运行活动； 线程是进程的一个实体，能独立运行的基本单位，是 CPU 调度和分配的基本单位，线程基本拥有很少系统资源（程序计数器、寄存器和栈），">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计&#x2F;分布式&#x2F;01.分布式系统-概念">
+<meta property="og:url" content="https://zcy-fover.github.io/2020/06/22/%E8%AE%BE%E8%AE%A1/%E5%88%86%E5%B8%83%E5%BC%8F/01.%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F-%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="分布式分布式应用到很多领域中，例如存储、缓存、文件系统、锁、事务、调度任务、调度计算、中间件消息、数据采集等等。本篇主要学习分布式的概念和理论基础。 术语概念进程与线程进程是系统进行资源分配和调度的一个独立单位，是具有一定独立功能的程序关于某个数据集上的一次运行活动； 线程是进程的一个实体，能独立运行的基本单位，是 CPU 调度和分配的基本单位，线程基本拥有很少系统资源（程序计数器、寄存器和栈），">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-22T13:56:09.341Z">
+<meta property="article:modified_time" content="2020-06-22T13:56:09.344Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/%E7%A7%91%E6%8A%80.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/resume"  >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">设计/分布式/01.分布式系统-概念</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">设计/分布式/01.分布式系统-概念</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-06-22T13:56:09.341Z" itemprop="datePublished" class="page-time">
+  2020-06-22
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分布式"><span class="post-toc-number">1.</span> <span class="post-toc-text">分布式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#术语概念"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">术语概念</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#进程与线程"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">进程与线程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#并行和并发"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">并行和并发</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#锁"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#集群"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">集群</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#无状态"><span class="post-toc-number">1.1.5.</span> <span class="post-toc-text">无状态</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#系统重发与幂等性"><span class="post-toc-number">1.1.6.</span> <span class="post-toc-text">系统重发与幂等性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#硬件异常"><span class="post-toc-number">1.1.7.</span> <span class="post-toc-text">硬件异常</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分布式理论"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">分布式理论</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CAP-理论"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">CAP 理论</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#CA-without-P"><span class="post-toc-number">1.2.1.1.</span> <span class="post-toc-text">CA without P</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#CP-without-A"><span class="post-toc-number">1.2.1.2.</span> <span class="post-toc-text">CP without A</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#AP-without-C"><span class="post-toc-number">1.2.1.3.</span> <span class="post-toc-text">AP without C</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Paxos-协议"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">Paxos 协议</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-PC-协议"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">2 PC 协议</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#投票阶段"><span class="post-toc-number">1.2.3.1.</span> <span class="post-toc-text">投票阶段</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#提交阶段"><span class="post-toc-number">1.2.3.2.</span> <span class="post-toc-text">提交阶段</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#缺点"><span class="post-toc-number">1.2.3.3.</span> <span class="post-toc-text">缺点</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-PC-协议"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">3 PC 协议</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Raft-算法"><span class="post-toc-number">1.2.5.</span> <span class="post-toc-text">Raft 算法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Lease-机制"><span class="post-toc-number">1.2.6.</span> <span class="post-toc-text">Lease 机制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#脑裂问题"><span class="post-toc-number">1.2.7.</span> <span class="post-toc-text">脑裂问题</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Quorum-NWR"><span class="post-toc-number">1.2.8.</span> <span class="post-toc-text">Quorum NWR</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MVCC"><span class="post-toc-number">1.2.9.</span> <span class="post-toc-text">MVCC</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Gossip"><span class="post-toc-number">1.2.10.</span> <span class="post-toc-text">Gossip</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#状态的传播"><span class="post-toc-number">1.2.10.1.</span> <span class="post-toc-text">状态的传播</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#状态一致性"><span class="post-toc-number">1.2.10.2.</span> <span class="post-toc-text">状态一致性</span></a></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-设计/分布式/01.分布式系统-概念"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">设计/分布式/01.分布式系统-概念</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-06-22 21:56:09" datetime="2020-06-22T13:56:09.341Z"  itemprop="datePublished">2020-06-22</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="分布式"><a href="#分布式" class="headerlink" title="分布式"></a>分布式</h2><p>分布式应用到很多领域中，例如存储、缓存、文件系统、锁、事务、调度任务、调度计算、中间件消息、数据采集等等。本篇主要学习分布式的概念和理论基础。</p>
+<h3 id="术语概念"><a href="#术语概念" class="headerlink" title="术语概念"></a>术语概念</h3><h4 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h4><p>进程是系统进行资源分配和调度的一个独立单位，是具有一定独立功能的程序关于某个数据集上的一次运行活动；</p>
+<p>线程是进程的一个实体，能独立运行的基本单位，是 CPU 调度和分配的基本单位，线程基本拥有很少系统资源（程序计数器、寄存器和栈），可以与其他线程共享进程所拥有的资源。</p>
+<h4 id="并行和并发"><a href="#并行和并发" class="headerlink" title="并行和并发"></a>并行和并发</h4><p>系统拥有多 CPU，当一个 CPU 执行一个线程时，另一个 CPU 可以执行另一个线程，两个线程可以同时执行互不影响，叫做并行。</p>
+<p>运行时间或者系统资源有限，CPU 将其划分为若干个时间段去执行，当一个线程正在执行时，其他线程处于挂起状态，当再次获取资源时继续执行，这种方式称为并发。</p>
+<h4 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h4><p>保护临界区的一种机制，再多线程场景中应用比较广泛。减少或者规避锁争用的集中策略：分拆锁、分离锁、避免共享变量缓存、使用并发容器（Amino）、使用 Immutable 数据和 ThreadLocal 中的数据。如果一个锁守护多个相互独立的状态量，通过分拆锁是每一个锁守护不同的状态量，改进可伸缩性降低每个锁被访问的频率。分拆锁对于中等竞争强度的锁能够有效的将其转换为非竞争锁，提高性能和扩展性。分拆锁被扩展为若干加锁快的集合归属于相互独立的对象，这种叫做分离锁。JDK 8 中的 ConcurrentHashMap 的实现就是使用多个锁的数组，每个锁守护自己的一部分数据，将原锁的请求分摊，以支持更好的并发性。</p>
+<h4 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h4><p>一组相互独立、通过高速网络互连的计算机，构成一个组以单一系统的模式加以管理。集群对外的表现应当和独立的服务器相同。集群的搭建也是为了提供系统的可用性和扩展性。根据担任的角色不同，集群有几种类型：</p>
+<ul>
+<li>节点：系统中按照协议完成工作的一个逻辑实体，可以是执行某些工作的进程或者机器</li>
+<li>网络：系统的数据传输通道，用来彼此通信，通信具有方向性</li>
+<li>存储：系统中持久化数据的数据库或者文件存储服务器</li>
+</ul>
+<p>搭建集群涉及到的技术：</p>
+<ul>
+<li>网络层，网络互联结构、通信协议和信号技术</li>
+<li>节点机及操作系统层高性能客户机、分层或基于微内核的操作系统</li>
+<li>集群系统管理层：资源管理、资源调度、负载均衡、并行 IPO、安全等</li>
+<li>应用层：并行程序开发环境、串行应用、并行应用等</li>
+</ul>
+<h4 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h4><p>服务无状态，不保存存储状态，可以随意重启和替代便于做扩展。</p>
+<h4 id="系统重发与幂等性"><a href="#系统重发与幂等性" class="headerlink" title="系统重发与幂等性"></a>系统重发与幂等性</h4><p>在做微服务设计或者 httpClient 的设计中，当一次请求出现网络或者其他失败时，有时会涉及自动重发（重试）机制。由于第一次的请求服务提供者没有明确返回业务成功与否的结果，所以当调用者有重试机制的时候，服务方应该支持幂等性设计。客户端配置重试机制时也应当充分了解服务提供者是否支持幂等性。</p>
+<h4 id="硬件异常"><a href="#硬件异常" class="headerlink" title="硬件异常"></a>硬件异常</h4><p><strong>服务器宕机</strong>：服务器停电、内存异常错误等，宕机时不能提供服务的节点称为不可用，服务器宕机时将丢失内部信息，所以要考虑存储系统的持久化，以便系统重启时恢复数据。</p>
+<p><strong>网络异常</strong>：消息丢失、网络数据包错误等</p>
+<p><strong>磁盘故障</strong>：区分为软件故障和硬件故障。硬件故障例如：主板 IDE 接口松动、硬件设备不兼容、电源不稳；坏道、分区表损坏病毒等。</p>
+<p><strong>机房级异常</strong>：当一个机房整体断点，此时对于业务可能就是毁灭性的。需要做到同城或者异地机房的灾备。</p>
+<h3 id="分布式理论"><a href="#分布式理论" class="headerlink" title="分布式理论"></a>分布式理论</h3><p>CAP 理论提出了一致性、可用性、分区容错性的取舍问题；Paxos、Raft、2PC、3PC 给出了一致性的解决方案；Lease 主要针对网络拥堵或者瞬断情况给出双主的解决方案；Quorum NWR 和 MVCC 主要解决分布式存储领域的一致性问题；Gossip 是一种去中心化、容错而又最终一致性的算法。</p>
+<h4 id="CAP-理论"><a href="#CAP-理论" class="headerlink" title="CAP 理论"></a>CAP 理论</h4><p><strong>一致性（C）</strong>：在分布式系统中的所有数据备份，在同一时刻是否有同样的值，所有数据节点都是同一份最新的数据副本。一致性被称为原子对象，任何读写都应该看起来是原子操作或串行，后面的读一定能读到前面写的内容，所有的读写请求看起来像全局有序。</p>
+<p><strong>可用性（A）</strong>：在集群中一部分节点故障后，集群整体是否还能响应客户端的读写请求，对数据更新具备高可用性。对任何非失败的节点都应该在有限的时间内给出请求的响应，请求可终止性。</p>
+<p><strong>分区容忍性（P）</strong>：分区相当于对于通信时限的要求，在一定时间内系统不能达到数据一致性，就意味着发生了分区，此时需要在 C 和 A 之间做出选择。允许节点之间丢失任意多的消息，当发生网络分区时有可能完全丢失消息。</p>
+<h5 id="CA-without-P"><a href="#CA-without-P" class="headerlink" title="CA without P"></a>CA without P</h5><p>如果不允许 P 的情况出现，则 C 和 A 是可以保证的，但是分区情况的出现是不可控的，始终会存在。分布式系统强调的是分区出现后各子系统依然可以保持 CA。关系数据库、LDAP就是放弃了分区容忍性</p>
+<h5 id="CP-without-A"><a href="#CP-without-A" class="headerlink" title="CP without A"></a>CP without A</h5><p>不要求可用性，各个节点之间强一致，但是分区可能导致节点之间的同步时间无限延长，如此来保证 CP，传统的数据库分布式事务、分布式锁属于这种情况。</p>
+<h5 id="AP-without-C"><a href="#AP-without-C" class="headerlink" title="AP without C"></a>AP without C</h5><p>分区发生时保证高可用就需要放弃一致性，分区发生时，一些节点可能失去联系，为了高可用每个节点使用本地数据提供服务这样可能导致全局的数据不一致。或者某些节点的数据延迟或者损失，造成对外服务的数据不一致。有些微服务的注册中心就采用这种方式实现。</p>
+<h4 id="Paxos-协议"><a href="#Paxos-协议" class="headerlink" title="Paxos 协议"></a>Paxos 协议</h4><p>基于消息传递一致性算法，主要解决分布式系统中在多个节点之间就某个值（提案）达成一致（决议）的通信协议。能够处理在少数节点离线的情况下剩余的多数节点仍然能够达成一致。对于协议的学习可以参考：<a href="https://zhuanlan.zhihu.com/p/31780743" target="_blank" rel="noopener">Paxos 算法详解</a> 或者《从Paxos到zookeeper分布式一致性原理与实践》- 倪超 一书。</p>
+<h4 id="2-PC-协议"><a href="#2-PC-协议" class="headerlink" title="2 PC 协议"></a>2 PC 协议</h4><p>2 阶段提交协议， 是一种原子提交协议。有第三者协调器来处理分布式原子服务参与者是提交或者回滚事务的分布式算法。该协议的两个阶段：提交请求阶段（投票阶段）和提交阶段。</p>
+<h5 id="投票阶段"><a href="#投票阶段" class="headerlink" title="投票阶段"></a>投票阶段</h5><p>确定各个参与者对于各自事务处理是否准备就绪，参与者发送 YES 表示可以提交，NO 表示失败。如果所有参与者都返回 YES，则进入提交阶段；如果有参与者发送 No，则协调器通知所有参与者事务中断。</p>
+<h5 id="提交阶段"><a href="#提交阶段" class="headerlink" title="提交阶段"></a>提交阶段</h5><p>如果参与者都表示 YES 已经准备可以提交事务，此时协调者给所有参与者发送提交事务的消息，参与者接收提交事务后并发送反馈信息（ACK）；如果有参与者事务提交失败或者超时，则协调者通知所有参与者回滚，参与者完整回滚并发送确认消息（ACK）。</p>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><ul>
+<li>同步阻塞性协议，所有参与者（节点）事务阻塞，当参与者占有共有资源时，其他事务也将处于阻塞</li>
+<li>由于协调者的重要性，当协调者故障时会导致参与者的事务处于悬挂状态</li>
+</ul>
+<h4 id="3-PC-协议"><a href="#3-PC-协议" class="headerlink" title="3 PC 协议"></a>3 PC 协议</h4><p>由于 2 PC 协议中，当协调者故障后整个分布式事务可能就会瘫痪阻塞掉，所以在 3 PC 协议中增加了一个预提交的过程。</p>
+<p>第一阶段，协调器询问确认参与者是否都可以提交事务，全部 YES 之后进入到预提交阶段；如果有 NO 则事务中断，协调者向参与者发消息事务中断</p>
+<p>第二阶段，协调者向参与者发送预提交请求，各个参与者执行预提交请求并返回 ACK 响应，都成功后进入第三阶段；如果有参与者发送了 NO 或者超时，协调者向所有参与者发送 abort 中断请求，参与者执行事务中断</p>
+<p>第三阶段，参与者在预提交全部 YES 之后，协调者通知参与者真正提交事务，参与者提交成功之后想协调者发送 ACK 响应；如果协调者没有收到参与者发送的 ACK 消息或者超时，则协调者发送 abort 请求中断事务；</p>
+<p>如果协调者故障导致参与者等待超时或者网络原因部分参与者没有收到 doCommit 请求，由于之前已经全部执行过 preCommit 所以参与者会倾向于自己提交事务，但这也有可能造成数据不一致。</p>
+<p>3 PC 协议在协调者和参与者都增加了超时机制，不会让事务一直处于阻塞状态，解决了单点故障导致的阻塞问题，但是也有可能造成数据不一致。</p>
+<h4 id="Raft-算法"><a href="#Raft-算法" class="headerlink" title="Raft 算法"></a>Raft 算法</h4><p>Raft 和 Paxos 算法都是一致性算法，在实现上稍微不同，Raft 分解为几个关键模块：领导人选举、日志复制、安全性。在 Raft 算法中任何一个服务器可以扮演三种角色之一：</p>
+<ul>
+<li>领导者（Leader）：处理所有客户端交互、日志复制等动作，一般只有一个领导者</li>
+<li>选民（Follower）：负责响应来自 Leader 或者 Candidate 的数据，被动参与选举的投票</li>
+<li>候选人（Candidate）：Leader 的候选者，选举成功后成为 Leader</li>
+</ul>
+<p>选举过程：</p>
+<ul>
+<li>任何一个服务器都可以成为候选者，向其他服务器发出要求选取自己的请求，其他服务器都同意回复 OK，则该服务器成为 Leader；成为 Leader 后可以做日志复制等操作，并在每一段时间内向所有 Follower 发送 Hearbeat 保持所有节点的状态，Follower 收到 Hearbeat 后重设自己的 Timeout 时间</li>
+<li>如果有一个选民 Follower 宕机或者失联，则只要超过半数选民同意回复 OK 即可</li>
+<li>如果 Leader 故障，其他选民正常进行选举；如果故障 Leader 恢复，由于选举是有届数记录，旧的 Leader 自动降级为 Follower</li>
+<li>假如出现一种竞争状态，总共四个服务器，有两个 Follower 同时发出选举请求，各获得两票支持（分别有一台回复 OK和自己的一票），要超过半数才能成为 Leader，此时共有两个 Candidate 和两个 Follower，两类节点的倒计时器还在运行，达到 Timeout 的节点重新发起选举</li>
+</ul>
+<p>参考：<a href="https://www.jianshu.com/p/8e4bbe7e276c" target="_blank" rel="noopener">Raft 算法</a></p>
+<h4 id="Lease-机制"><a href="#Lease-机制" class="headerlink" title="Lease 机制"></a>Lease 机制</h4><p>维护分布式系统的数据一致性，由授权者授予分布式环境一段时间内数据一致性的承诺。颁发者发出 Lease 后，不管是否被接收，只要Lease不过期，颁发者都会按照协议遵守承诺，在过期时间内不修改数据。Lease 的持有者只能在有效期内使用，一旦 Lease 过期持有者需要放弃执行重新申请 Lease。主要解决缓存和服务器之间的数据一致性问题。</p>
+<ul>
+<li>已经过期的 Lease 导致读不到的问题，节点数据已经过期，但是服务器还未发布新的 Lease，此时读不到数据影响业务；解决方案：此时有服务器直接返回数据，下次再读时可能已经发布 Lease</li>
+<li>服务器通过其他方式修改了数据要发布新的 Lease，但是各节点的 Lease 还没有到过期时间；解决方法：服务器主动通知所有节点放弃当前 Lease，接收新的 Lease</li>
+<li>如果一次更新操作的数据对象分布在不同的节点上，对于数据 A，只要对应的节点 Lease 过期即可，对于数据 B 不影响。</li>
+</ul>
+<h4 id="脑裂问题"><a href="#脑裂问题" class="headerlink" title="脑裂问题"></a>脑裂问题</h4><p>主备模式是实现高可用（HA）系统的一种方式，但是两个节点断开联系时，一个整体分裂为两个独立节点，节点之间争抢共享资源，导致系统紊乱数据错误等。</p>
+<p>心跳检测是判断主备服务器是否还建立链接的一个重要方式，但是心跳检测的不确定性也是导致脑裂的一个重要原因。例如：master 服务器暂时失联，slave 服务器上位开始接手工作，但是此时 master 又活过来了还在继续工作，这个就会导致两个服务器发生分裂对主备判断逻辑带来不确定因素。</p>
+<p>此时需要引入第三方检测服务器（Monitor），当 salve 要接管 master 时，由 Monitor 再 ping 一下 master，如果确实失联在切换。此时就需要 Monitor 的高可用保障。</p>
+<h4 id="Quorum-NWR"><a href="#Quorum-NWR" class="headerlink" title="Quorum NWR"></a>Quorum NWR</h4><p>分布式存储系统中控制一致性级别的策略。</p>
+<ul>
+<li><strong>N</strong>：同一份数据的拷贝份数</li>
+<li><strong>W</strong>：更新一个数据对象时确保成功更新的份数</li>
+<li><strong>R</strong>：读取一个对象时需要读取的拷贝份数</li>
+</ul>
+<p>具体的策略是：<br>$$<br>W &gt; N / 2<br>\<br>W + R &gt; N<br>$$<br>写操作要确保成功的份数应高于同一份数据拷贝总份数的一半；</p>
+<p>写操作加上读操作的总份数也要高于同一份数据拷贝总份数</p>
+<table>
+<thead>
+<tr>
+<th>N</th>
+<th>W</th>
+<th>R</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>单点问题，无法满足高可用</td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td>在一个节点故障后，退化为单点</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2，3</td>
+<td>1，2，3</td>
+<td>读越大，写性能越差；写越大，读性能越差</td>
+</tr>
+<tr>
+<td>4 或者更多</td>
+<td></td>
+<td></td>
+<td>服务器节点成本高</td>
+</tr>
+</tbody></table>
+<h4 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h4><p>多版本并发控制，一般把基于锁（行级锁）的并发控制称为悲观锁机制，MVCC 机制称为乐观锁机制。MVCC 是一种宽松的机制，读写互不阻塞。</p>
+<h4 id="Gossip"><a href="#Gossip" class="headerlink" title="Gossip"></a>Gossip</h4><p>分布式系统状态分布在集群中的各个节点上，集群的状态同步存在两个问题：</p>
+<ul>
+<li>每一个节点如何较快的得知集群状态全集的某些特征</li>
+<li>如何避免多个节点就某个状态发生分歧，是的集群的状态实时或者最终一致</li>
+</ul>
+<p>Gossip 是一个去中心化思路的分布式协议，通过信息的部分传递，达到全集群的状态信息传播，传播时间收敛在    $O(log(N))$ N 是节点数量。解决状态在集群中的传播和状态一致性的保证两个问题。</p>
+<h5 id="状态的传播"><a href="#状态的传播" class="headerlink" title="状态的传播"></a>状态的传播</h5><p>这种状态消息的传播类似于留言的传播，节点接收到消息后在传播给其他节点。每个节点起初可能只掌握整个集群的部分状态信息，通过传播达到全集状态的获取。</p>
+<h5 id="状态一致性"><a href="#状态一致性" class="headerlink" title="状态一致性"></a>状态一致性</h5><p>同一状态信息，不同的节点掌握的值可能不同，通过基于 Gossip 构建的协议包版本进行解决。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2020-06-22T13:56:09.344Z" itemprop="dateUpdated">2020-06-22 21:56:09</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/06/18/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/%E7%BC%93%E5%AD%98/Redis/Redis%E5%AD%A6%E4%B9%A0/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">数据存储/缓存/Redis/Redis学习</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
