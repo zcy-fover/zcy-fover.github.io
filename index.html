@@ -144,6 +144,62 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-java/Thread/thread"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2020-06-27 16:06:19" datetime="2020-06-27T08:06:19.339Z"  itemprop="datePublished">2020-06-27</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/Thread/">Thread</a></li></ul></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2020/06/27/java/Thread/thread/">java/Thread/thread</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        线程线程的状态new
+就绪
+阻塞
+运行
+结束
+start 和 run 的区别
+Thread.start() 启动新的线程，线程处于就绪（可运行）状态，线程获取到 CPU 资源之后，就执行该线程相应的 run 方法。同一个线程的 start 方法不能被重复调用。
+Thread.run() 方法内容是线程体，线程具体的执行步骤。run 只是一个方法调用，可以被重复多次调用，不会开辟新的线程。
+
+...
+    
+
+        <a href="/2020/06/27/java/Thread/thread/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Thread/" rel="tag">Thread</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-设计/分布式/01.分布式系统-概念"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -492,53 +548,6 @@ make 编译进入解压后的目录 redis-6.0.4，输入 make 回车，出现：
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-java/jvm/4.JVM-对象引用与回收"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2020-05-04 17:41:26" datetime="2020-05-04T09:41:26.048Z"  itemprop="datePublished">2020-05-04</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/JVM/">JVM</a></li></ul></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/05/04/java/jvm/4.JVM-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/">java/jvm/4.JVM-对象引用与回收</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        对象引用与回收在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是...
-    
-
-        <a href="/2020/05/04/java/jvm/4.JVM-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
             <article id="post-java/jvm/2.JVM-类加载器"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -588,14 +597,14 @@ make 编译进入解压后的目录 redis-6.0.4，输入 make 回车，出现：
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/MySQL 学习总结"
+            <article id="post-java/jvm/4.JVM-对象引用与回收"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2020-04-28 23:01:23" datetime="2020-04-28T15:01:23.967Z"  itemprop="datePublished">2020-04-28</time>
+        <time class="post-time" title="2020-05-04 17:41:26" datetime="2020-05-04T09:41:26.048Z"  itemprop="datePublished">2020-05-04</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/JVM/">JVM</a></li></ul></li></ul>
 
 
 
@@ -606,7 +615,7 @@ make 编译进入解压后的目录 redis-6.0.4，输入 make 回车，出现：
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/04/28/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/MySQL%20%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">数据存储/MySQL/MySQL 学习总结</a>
+      <a class="post-title-link" href="/2020/05/04/java/jvm/4.JVM-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/">java/jvm/4.JVM-对象引用与回收</a>
     </h3>
   
 
@@ -616,25 +625,17 @@ make 编译进入解压后的目录 redis-6.0.4，输入 make 回车，出现：
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        MySQL 学习总结MysQL 架构
-                
-                    
-                    
-                
-                MySQL架构图
-            
-
-InnoDB 不是 MySQL 自带的存储引擎，是一种可插拔的插件。InnoDB、MyISAM、MEMORY存储引擎是根据表来...
+        对象引用与回收在之前的文章中学习了 JVM 内存模型，程序寄存器、虚拟机栈、本地方法栈都是线程私有的，在内存管理上当线程结束时资源就会释放掉。这几个区域内存的分配和类结构相关，大概在编译器就可以决定，所以他们的内存分配和回收都具备确定性。但是堆和方法区是线程共享内存区域，线程结束内存不一定被回收，每个接口的实现类需要的内存不一样、方法运行期间才知道需要创建那些对象，这部分内存的分配和回收都是...
     
 
-        <a href="/2020/04/28/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/MySQL%20%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="post-more waves-effect waves-button">
+        <a href="/2020/05/04/java/jvm/4.JVM-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E4%B8%8E%E5%9B%9E%E6%94%B6/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL%E4%BA%8B%E5%8A%A1/" rel="tag">MySQL事务</a></li></ul>
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
 
     </div>
     
