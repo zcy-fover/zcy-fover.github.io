@@ -144,6 +144,62 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-设计/架构/亿级流量高可用高并发/交易系统设计原则"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2020-02-22 15:55:35" datetime="2020-02-22T07:55:35.873Z"  itemprop="datePublished">2020-02-22</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84/">系统架构</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2020/02/22/%E8%AE%BE%E8%AE%A1/%E6%9E%B6%E6%9E%84/%E4%BA%BF%E7%BA%A7%E6%B5%81%E9%87%8F%E9%AB%98%E5%8F%AF%E7%94%A8%E9%AB%98%E5%B9%B6%E5%8F%91/%E4%BA%A4%E6%98%93%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">设计/架构/亿级流量高可用高并发/交易系统设计原则</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        交易系统设计原则高并发原则
+无状态：应用无状态，配置文件有状态。应用要支持水平扩展
+
+拆分：大型系统设计时，要按照功能模块进行拆分，有以下几个维度
+
+系统维度：按照系统功能/业务拆分
+功能维度：对一个系统进行功能再拆分
+读写维度：根据读写比例特征进行拆分（读服务考虑使用缓存，写入量大考虑使用分库分表）
+AOP维度：根据访问特征，进行AOP拆分
+模块维度：按照基础或者代码模块拆分，基础模块分库...
+    
+
+        <a href="/2020/02/22/%E8%AE%BE%E8%AE%A1/%E6%9E%B6%E6%9E%84/%E4%BA%BF%E7%BA%A7%E6%B5%81%E9%87%8F%E9%AB%98%E5%8F%AF%E7%94%A8%E9%AB%98%E5%B9%B6%E5%8F%91/%E4%BA%A4%E6%98%93%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag">高可用</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" rel="tag">高并发</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-数据结构和算法/数据结构与算法之美/数据结构与算法"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -638,56 +694,6 @@ O(n)
     <div class="post-footer">
         
 	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-数据存储/MySQL/07.MySQL并发与事务"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2020-01-20 16:59:40" datetime="2020-01-20T08:59:40.000Z"  itemprop="datePublished">2020-01-20</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2020/01/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/07.MySQL%E5%B9%B6%E5%8F%91%E4%B8%8E%E4%BA%8B%E5%8A%A1/">数据存储/MySQL/07.MySQL并发与事务</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        MySQL并发与事务并发控制MySQL 通过锁解决并发问题，一般有两种类型共享锁、排他锁，也叫读锁、写锁。
-锁粒度加锁后就会影响系统的性能，需要在锁的性能损耗和数据安全性之间寻求平衡。
-表锁用户写数据时需要先获得写锁，这会阻碍该表的所有的读写操作，读锁之间互不影响。写锁可以插到锁队列的读锁前面，反之则不行。
-行级锁行级锁可以最大程度的支持并发处理，但这同时增大了锁的开销，MySQL 行级锁是...
-    
-
-        <a href="/2020/01/20/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/MySQL/07.MySQL%E5%B9%B6%E5%8F%91%E4%B8%8E%E4%BA%8B%E5%8A%A1/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL%E4%BA%8B%E5%8A%A1/" rel="tag">MySQL事务</a></li></ul>
 
     </div>
     
