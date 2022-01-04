@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>服务搭建/服务部署-Redis | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Redis部署">
+    <meta name="description" content="Redis单机搭建1、下载源包2、解压缩上传文件到 &#x2F;usr&#x2F;tools&#x2F;redisInstall&#x2F; 目录 1tar -zxvf redis-4.0.11.tar.gz  3、编译源码123456789cd &#x2F;usr&#x2F;tools&#x2F;redisInstall&#x2F;redis-4.0.11&#x2F;makecd src&#x2F;make install PREFIX&#x3D;&#x2F;usr&#x2F;tools&#x2F;rediscd &#x2F;usr&#x2F;tool">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务搭建&#x2F;服务部署-Redis">
+<meta property="og:url" content="https://zcy-fover.github.io/2021/08/20/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-Redis/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="Redis单机搭建1、下载源包2、解压缩上传文件到 &#x2F;usr&#x2F;tools&#x2F;redisInstall&#x2F; 目录 1tar -zxvf redis-4.0.11.tar.gz  3、编译源码123456789cd &#x2F;usr&#x2F;tools&#x2F;redisInstall&#x2F;redis-4.0.11&#x2F;makecd src&#x2F;make install PREFIX&#x3D;&#x2F;usr&#x2F;tools&#x2F;rediscd &#x2F;usr&#x2F;tool">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-08-20T02:47:24.000Z">
+<meta property="article:modified_time" content="2022-01-04T12:52:20.140Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="Redis部署">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/%E7%A7%91%E6%8A%80.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/resume"  >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">服务搭建/服务部署-Redis</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">服务搭建/服务部署-Redis</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2021-08-20T02:47:24.000Z" itemprop="datePublished" class="page-time">
+  2021-08-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/">服务部署</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Redis单机搭建"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis单机搭建</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、下载源包"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">1、下载源包</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、解压缩"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">2、解压缩</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3、编译源码"><span class="post-toc-number">2.</span> <span class="post-toc-text">3、编译源码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4、修改配置文件"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">4、修改配置文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#5、启动"><span class="post-toc-number">2.1.1.</span> <span class="post-toc-text">5、启动</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#主从配置"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">主从配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#redis-sentinel配置"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">redis sentinel配置</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-服务搭建/服务部署-Redis"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">服务搭建/服务部署-Redis</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2021-08-20 10:47:24" datetime="2021-08-20T02:47:24.000Z"  itemprop="datePublished">2021-08-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/">服务部署</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="Redis单机搭建"><a href="#Redis单机搭建" class="headerlink" title="Redis单机搭建"></a>Redis单机搭建</h3><h4 id="1、下载源包"><a href="#1、下载源包" class="headerlink" title="1、下载源包"></a>1、下载源包</h4><h4 id="2、解压缩"><a href="#2、解压缩" class="headerlink" title="2、解压缩"></a>2、解压缩</h4><p>上传文件到 <code>/usr/tools/redisInstall/</code> 目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf redis-4.0.11.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、编译源码"><a href="#3、编译源码" class="headerlink" title="3、编译源码"></a>3、编译源码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/tools/redisInstall/redis-4.0.11/</span><br><span class="line">make</span><br><span class="line">cd src/</span><br><span class="line">make install PREFIX=/usr/tools/redis</span><br><span class="line">cd /usr/tools/redis</span><br><span class="line">mkdir etc</span><br><span class="line">cd /usr/tools/redisInstall/redis-4.0.11/</span><br><span class="line">cp redis.conf /usr/tools/redis/etc/</span><br><span class="line">cp sentinel.conf /usr/tools/redis/etc/</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、修改配置文件"><a href="#4、修改配置文件" class="headerlink" title="4、修改配置文件"></a>4、修改配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bind 127.0.0.1    #注释掉</span><br><span class="line">protected-mode yes #改为 protected-mode no</span><br><span class="line">daemonize no   #改为daemonize yes</span><br></pre></td></tr></table></figure>
+
+<h5 id="5、启动"><a href="#5、启动" class="headerlink" title="5、启动"></a>5、启动</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;tools&#x2F;redis&#x2F;bin</span><br><span class="line">.&#x2F;redis-server ..&#x2F;etc&#x2F;redis.conf</span><br></pre></td></tr></table></figure>
+
+<p>搭建其他机器时，可以直接把编译安装好的文件夹打包拷贝过去，不用重新编译源码。</p>
+<h4 id="主从配置"><a href="#主从配置" class="headerlink" title="主从配置"></a>主从配置</h4><p>需要在从机的 <code>redis.conf</code> 文件中增加 <code>slaveof 主机IP 6379</code> 配置(新版本使用<code>replicaof</code>关键字)，然后启动从机即可。可以在主机上进行操作，验证数据是否同步到从机。</p>
+<p>如果主机设置了链接密码，需要配置 <code>masterauth</code></p>
+<p>使用客户端连接，执行 <code>info replation</code> 查看主从配置信息</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Replication</span></span><br><span class="line"><span class="attr">role</span>:<span class="string">master</span></span><br><span class="line"><span class="attr">connected_slaves</span>:<span class="string">1</span></span><br><span class="line"><span class="attr">slave0</span>:<span class="string">ip=ip,port=6379,state=online,offset=535,lag=0</span></span><br><span class="line"><span class="attr">master_replid</span>:<span class="string">7f74c4a4d037e5558bbc50443598762f745b0463</span></span><br><span class="line"><span class="attr">master_replid2</span>:<span class="string">0000000000000000000000000000000000000000</span></span><br><span class="line"><span class="attr">master_repl_offset</span>:<span class="string">535</span></span><br><span class="line"><span class="attr">second_repl_offset</span>:<span class="string">-1</span></span><br><span class="line"><span class="attr">repl_backlog_active</span>:<span class="string">1</span></span><br><span class="line"><span class="attr">repl_backlog_size</span>:<span class="string">1048576</span></span><br><span class="line"><span class="attr">repl_backlog_first_byte_offset</span>:<span class="string">1</span></span><br><span class="line"><span class="attr">repl_backlog_histlen</span>:<span class="string">535</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="redis-sentinel配置"><a href="#redis-sentinel配置" class="headerlink" title="redis sentinel配置"></a>redis sentinel配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">bind 127.0.0.1 192.168.1.1 #限定链接的客户端，可以注释掉</span><br><span class="line">protected-mode no #保护模式关闭</span><br><span class="line">daemonize yes #设置后台启动</span><br><span class="line">sentinel announce-ip &lt;ip&gt; #如果sentinel机器都是内网部署，但是机器之间网络不通或者要跨公网访问</span><br><span class="line">sentinel announce-port &lt;port&gt;#这里需要提供配置访问的出口IP和端口，一般情况下不需要配置</span><br><span class="line">sentinel monitor mymaster 127.0.0.1 6379 2 #指定监控的主机，mymaster是个名称，主机IP，端口，当有2台哨兵认为主机挂掉之后，进行容灾切换</span><br><span class="line">logfile .&#x2F;sentinel.log #日志文件</span><br><span class="line">sentinel auth-pass mymaster #Redis实例上是否启用了密码验证，启用的话这里需要配置密码</span><br><span class="line">sentinel down-after-milliseconds mymaster 3000 #主实例多长时间无响应则认为挂掉</span><br><span class="line">snetinel parallel-syncs mymaster 1 #发生容灾主备切换时，最多有一个从节点对新主节点进行数据同步</span><br><span class="line">sentinel failover-timeout mymaster 180000 #故障转移的超时时间</span><br></pre></td></tr></table></figure>
+
+<p>在 bin 目录下 <code>./redis-sentinel ../etc/sentinel.conf</code> 启动 sentinel</p>
+<p>使用客户端连接哨兵，执行 <code>info sentinel</code> 查看哨兵配置信息</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Sentinel</span></span><br><span class="line"><span class="attr">sentinel_masters</span>:<span class="string">1</span></span><br><span class="line"><span class="attr">sentinel_tilt</span>:<span class="string">0</span></span><br><span class="line"><span class="attr">sentinel_running_scripts</span>:<span class="string">0</span></span><br><span class="line"><span class="attr">sentinel_scripts_queue_length</span>:<span class="string">0</span></span><br><span class="line"><span class="attr">sentinel_simulate_failure_flags</span>:<span class="string">0</span></span><br><span class="line"><span class="attr">master0</span>:<span class="string">name=mymaster,status=ok,address=IP:6379,slaves=1,sentinels=3</span></span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2022-01-04T12:52:20.140Z" itemprop="dateUpdated">2022-01-04 20:52:20</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis%E9%83%A8%E7%BD%B2/" rel="tag">Redis部署</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2021/10/10/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-Nginx/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">服务搭建/服务部署-Nginx</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2021/08/19/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-JDK/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">服务搭建/服务部署-JDK</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2022</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

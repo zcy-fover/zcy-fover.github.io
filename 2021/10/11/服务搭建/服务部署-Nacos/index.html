@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>服务搭建/服务部署-Nacos | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Nacos部署">
+    <meta name="description" content="MySQL配置 创建用户 123456mysql -uroot -p #登录进入mysqluse mysql;create user nacos IDENTIFIED by &#39;nacos&#39;; #创建nacos用户show grants for &#39;nacos&#39;; #查看权限grant ALL PRIVILEGES on nacos_config.* to &#39;n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务搭建&#x2F;服务部署-Nacos">
+<meta property="og:url" content="https://zcy-fover.github.io/2021/10/11/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-Nacos/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="MySQL配置 创建用户 123456mysql -uroot -p #登录进入mysqluse mysql;create user nacos IDENTIFIED by &#39;nacos&#39;; #创建nacos用户show grants for &#39;nacos&#39;; #查看权限grant ALL PRIVILEGES on nacos_config.* to &#39;n">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-11T02:50:32.000Z">
+<meta property="article:modified_time" content="2022-01-04T12:50:29.541Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="Nacos部署">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/%E7%A7%91%E6%8A%80.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/resume"  >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">服务搭建/服务部署-Nacos</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">服务搭建/服务部署-Nacos</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2021-10-11T02:50:32.000Z" itemprop="datePublished" class="page-time">
+  2021-10-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/">服务部署</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#MySQL配置"><span class="post-toc-number">1.</span> <span class="post-toc-text">MySQL配置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#nacos-配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">nacos 配置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#启动"><span class="post-toc-number">3.</span> <span class="post-toc-text">启动</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#集群配置"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">集群配置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置-Nginx-代理"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">配置 Nginx 代理</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-服务搭建/服务部署-Nacos"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">服务搭建/服务部署-Nacos</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2021-10-11 10:50:32" datetime="2021-10-11T02:50:32.000Z"  itemprop="datePublished">2021-10-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/">服务部署</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="MySQL配置"><a href="#MySQL配置" class="headerlink" title="MySQL配置"></a>MySQL配置</h3><ul>
+<li><p>创建用户</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p #登录进入mysql</span><br><span class="line">use mysql;</span><br><span class="line">create user nacos IDENTIFIED by &#39;nacos&#39;; #创建nacos用户</span><br><span class="line">show grants for &#39;nacos&#39;; #查看权限</span><br><span class="line">grant ALL PRIVILEGES on nacos_config.* to &#39;nacos&#39; identified by &#39;nacos&#39;; # 授权</span><br><span class="line">show grants for nacos; #再次查看，权限未变重启mysql</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建数据库</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql -unacos -hlocalhost -p</span><br><span class="line">create database nacos_config;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建nacos表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql -unacos -pnacos -Dnacos_config &lt;  sql文件地址&#x2F;nacos-mysql.sql</span><br><span class="line">mysql -unacos -pnacos -Dnacos_config &lt;  sql文件地址&#x2F;1.4.0-ipv6_support-update.sql</span><br></pre></td></tr></table></figure>
+
+<h3 id="nacos-配置"><a href="#nacos-配置" class="headerlink" title="nacos 配置"></a>nacos 配置</h3><figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">spring.datasource.platform</span>=<span class="string">mysql</span></span><br><span class="line"></span><br><span class="line"><span class="meta">db.num</span>=<span class="string">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">db.url.0</span>=<span class="string">jdbc:mysql://127.0.0.1:3306/nacos_config?characterEncoding=utf8&amp;connectTimeout=1000&amp;socketTimeout=3000&amp;autoReconnect=true&amp;useUnicode=true&amp;useSSL=false&amp;serverTimezone=UTC</span></span><br><span class="line"><span class="meta">db.user.0</span>=<span class="string">nacos</span></span><br><span class="line"><span class="meta">db.password.0</span>=<span class="string">nacos</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.\startup.sh -m standalone</span><br><span class="line">.\shutdown.sh -m standalone</span><br></pre></td></tr></table></figure>
+
+<p>上述命令是单机启动，默认是集群模式启动</p>
+<h4 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h4><p>在 conf 文件夹下复制 <code>cp cluster.conf.example cluster.conf</code> 创建 cluster.conf 配置文件，然后把 nacos 服务器所有机器配置上去</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">IP</span>:<span class="string">8848</span></span><br><span class="line"><span class="attr">IP</span>:<span class="string">8848</span></span><br><span class="line"><span class="attr">IP</span>:<span class="string">8848</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置-Nginx-代理"><a href="#配置-Nginx-代理" class="headerlink" title="配置 Nginx 代理"></a>配置 Nginx 代理</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">yum install -y nginx #安装路径在 /usr/local/nginx</span><br><span class="line">cd /usr/local/nginx</span><br><span class="line">cd conf</span><br><span class="line">vi nginx.conf</span><br><span class="line"><span class="meta">#</span><span class="bash">在http的节点下添加</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> nacos cluster</span></span><br><span class="line">   upstream nacos_cluster &#123;</span><br><span class="line">       server IP:8848;</span><br><span class="line">       server IP:8848;</span><br><span class="line">       server IP:8848;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   server &#123;</span><br><span class="line">       listen       8848;</span><br><span class="line">       server_name  本机IP;</span><br><span class="line">       client_max_body_size 1024M;</span><br><span class="line"></span><br><span class="line">       location /nacos/ &#123;</span><br><span class="line">           proxy_pass http://nacos_cluster/;</span><br><span class="line">           proxy_set_header Host $host:$server_port;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2022-01-04T12:50:29.541Z" itemprop="dateUpdated">2022-01-04 20:50:29</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nacos%E9%83%A8%E7%BD%B2/" rel="tag">Nacos部署</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2021/11/06/go/Gin%E8%AE%B0%E5%BD%95/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">go/Gin记录</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2021/10/10/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-Nginx/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">服务搭建/服务部署-Nginx</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2022</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

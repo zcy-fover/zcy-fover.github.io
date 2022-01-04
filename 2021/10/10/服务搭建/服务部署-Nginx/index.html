@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>服务搭建/服务部署-Nginx | 冲鸭</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Nginx部署">
+    <meta name="description" content="nginx搭建1、下载源包需要安装 pcre、openssl、zlib 2、解压缩上传文件到 &#x2F;usr&#x2F;tools&#x2F; 目录 12345678tar -zxvf nginx-1.20.1.tar.gztar -zxvf pcre-8.45.tar.gztar -zxvf openssl-3.0.0.tar.gztar -zxvf zlib-1.2.11.tar.gzmv nginx-1.20.1 n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务搭建&#x2F;服务部署-Nginx">
+<meta property="og:url" content="https://zcy-fover.github.io/2021/10/10/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-Nginx/index.html">
+<meta property="og:site_name" content="冲鸭">
+<meta property="og:description" content="nginx搭建1、下载源包需要安装 pcre、openssl、zlib 2、解压缩上传文件到 &#x2F;usr&#x2F;tools&#x2F; 目录 12345678tar -zxvf nginx-1.20.1.tar.gztar -zxvf pcre-8.45.tar.gztar -zxvf openssl-3.0.0.tar.gztar -zxvf zlib-1.2.11.tar.gzmv nginx-1.20.1 n">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-10T08:48:48.000Z">
+<meta property="article:modified_time" content="2022-01-04T12:52:24.963Z">
+<meta property="article:author" content="zcy-fover">
+<meta property="article:tag" content="Nginx部署">
+<meta name="twitter:card" content="summary">
+    
+        <link rel="alternate" type="application/atom+xml" title="冲鸭" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/%E7%A7%91%E6%8A%80.png">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zcy-fover</h5>
+          <a href="mailto:zcyfover@163.com" title="zcyfover@163.com" class="mail">zcyfover@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zcy-fover" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/resume"  >
+                <i class="icon icon-lg icon-file-word-o"></i>
+                简历
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">服务搭建/服务部署-Nginx</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">服务搭建/服务部署-Nginx</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2021-10-10T08:48:48.000Z" itemprop="datePublished" class="page-time">
+  2021-10-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/">服务部署</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#nginx搭建"><span class="post-toc-number">1.</span> <span class="post-toc-text">nginx搭建</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1、下载源包"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">1、下载源包</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2、解压缩"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">2、解压缩</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3、编译源码"><span class="post-toc-number">2.</span> <span class="post-toc-text">3、编译源码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装-pcre"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">安装 pcre</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装openssl"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">安装openssl</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装-zlib"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">安装 zlib</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#安装-nginx"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">安装 nginx</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-服务搭建/服务部署-Nginx"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">服务搭建/服务部署-Nginx</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2021-10-10 16:48:48" datetime="2021-10-10T08:48:48.000Z"  itemprop="datePublished">2021-10-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2/">服务部署</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="nginx搭建"><a href="#nginx搭建" class="headerlink" title="nginx搭建"></a>nginx搭建</h3><h4 id="1、下载源包"><a href="#1、下载源包" class="headerlink" title="1、下载源包"></a>1、下载源包</h4><p>需要安装 pcre、openssl、zlib</p>
+<h4 id="2、解压缩"><a href="#2、解压缩" class="headerlink" title="2、解压缩"></a>2、解压缩</h4><p>上传文件到 <code>/usr/tools/</code> 目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf nginx-1.20.1.tar.gz</span><br><span class="line">tar -zxvf pcre-8.45.tar.gz</span><br><span class="line">tar -zxvf openssl-3.0.0.tar.gz</span><br><span class="line">tar -zxvf zlib-1.2.11.tar.gz</span><br><span class="line">mv nginx-1.20.1 nginx</span><br><span class="line">mv pcre-8.45.tar.gz pcre</span><br><span class="line">mv openssl-3.0.0 openssl</span><br><span class="line">mv zlib-1.2.11 zlib</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、编译源码"><a href="#3、编译源码" class="headerlink" title="3、编译源码"></a>3、编译源码</h3><h4 id="安装-pcre"><a href="#安装-pcre" class="headerlink" title="安装 pcre"></a>安装 pcre</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc-c++ #先安装编译器，已经安装可以跳过</span><br><span class="line">cd /usr/tools/pcre/</span><br><span class="line">./configure </span><br><span class="line">make &amp; make install</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装openssl"><a href="#安装openssl" class="headerlink" title="安装openssl"></a>安装openssl</h4><p>可先检查有没有openssl</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">openssl version # 有则不需要安装</span><br><span class="line"><span class="meta">#</span><span class="bash"> 没有的话</span></span><br><span class="line">cd /usr/tools/openssl/</span><br><span class="line">./config</span><br><span class="line">make &amp; make install</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装-zlib"><a href="#安装-zlib" class="headerlink" title="安装 zlib"></a>安装 zlib</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/tools/zlib/</span><br><span class="line">./configure</span><br><span class="line">make &amp; make install</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装-nginx"><a href="#安装-nginx" class="headerlink" title="安装 nginx"></a>安装 nginx</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/tools/nginx/</span><br><span class="line">which openssl #查找 openssl 安装位置</span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置  nginx ，准备安装</span></span><br><span class="line">./configure --with-pcre=../pcre --with-zlib=../zlib --with-openssl=/usr/bin/openssl</span><br><span class="line">make &amp; make install</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2022-01-04T12:52:24.963Z" itemprop="dateUpdated">2022-01-04 20:52:24</time>
+</span><br>
+
+
+        
+    </div>
+    
+    <footer>
+        <a href="https://zcy-fover.github.io">
+            <img src="https://pic.yupoo.com/zcyfover/782a3ab3/13a00e51.jpeg" alt="zcy-fover">
+            zcy-fover
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx%E9%83%A8%E7%BD%B2/" rel="tag">Nginx部署</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2021/10/11/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-Nacos/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">服务搭建/服务部署-Nacos</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2021/08/20/%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA/%E6%9C%8D%E5%8A%A1%E9%83%A8%E7%BD%B2-Redis/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">服务搭建/服务部署-Redis</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>zcy-fover &copy; 2019 - 2022</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
